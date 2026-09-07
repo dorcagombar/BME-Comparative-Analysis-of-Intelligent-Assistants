@@ -11,6 +11,7 @@ Required environment variables (set before launching):
     FIREWORKS_API_KEY   — Fireworks AI key (for Qwen2-7B, Qwen2.5-14B, Mistral-7B)
     OPENAI_API_KEY      — OpenAI key (for GPT-4o and Whisper transcription)
     GOOGLE_API_KEY      — Google AI key (for Gemini-2.5-Pro)
+    ANTHROPIC_API_KEY   — Anthropic key (for Claude)
 """
 
 import csv as csv_module
@@ -100,6 +101,28 @@ def _read_model_types() -> dict[str, str]:
         return {m["name"]: m["type"] for m in raw.get("models", [])}
     except Exception:
         return {}
+
+
+def _ensure_claude_model_config() -> None:
+    """Add a usable default Claude entry when the config has none."""
+    try:
+        with open(CONFIG_PATH, encoding="utf-8") as f:
+            raw = yaml.safe_load(f) or {}
+
+        models = raw.setdefault("models", [])
+        if any(m.get("type") in {"claude", "anthropic"} for m in models):
+            return
+
+        models.append({
+            "name": "Claude-Sonnet",
+            "type": "claude",
+            "model_id": "claude-sonnet-5",
+            "api_key": "${ANTHROPIC_API_KEY}",
+        })
+        with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+            yaml.dump(raw, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+    except Exception as exc:
+        print(f"WARNING: could not add the default Claude model to {CONFIG_PATH}: {exc}")
 
 
 def _existing_datasets() -> list[str]:
@@ -274,6 +297,8 @@ def _check_api_keys(selected_models: list[str], model_types: dict[str, str]) -> 
         "fireworks": ("FIREWORKS_API_KEY", "Fireworks AI"),
         "openai":    ("OPENAI_API_KEY",    "OpenAI"),
         "gemini":    ("GOOGLE_API_KEY",    "Google Gemini"),
+        "claude":     ("ANTHROPIC_API_KEY", "Anthropic Claude"),
+        "anthropic":  ("ANTHROPIC_API_KEY", "Anthropic Claude"),
     }
     seen = set()
     warnings = []
@@ -496,7 +521,7 @@ def _toggle_audio_section(input_mode):
     return gr.update(visible=(input_mode == "Audio"))
 
 
-_VALID_TYPES = {"fireworks", "openai", "gemini", "hf_local"}
+_VALID_TYPES = {"fireworks", "openai", "gemini", "claude", "hf_local"}
 
 
 def _load_config_df() -> pd.DataFrame:
@@ -822,6 +847,7 @@ def _clean_dataset(file):
 # UI layout
 # ---------------------------------------------------------------------------
 
+_ensure_claude_model_config()
 model_names    = _read_model_names()
 model_types    = _read_model_types()
 existing_files = _existing_datasets()
@@ -844,7 +870,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                 Results include **BLEU · METEOR · Token-F1 · ROUGE · BERTScore** and response latency.
                 In **Audio** mode, additional **Speech Clarity** metrics are computed: SNR(dB), Speech Ratio, Clarity Score, and Whisper Confidence.
 
-                **Supported models:** Qwen2-7B · Qwen2.5-14B · Mistral-7B (Fireworks AI) · GPT-4o (OpenAI) · Gemini-2.5-Pro (Google)
+                **Supported models:** Qwen2-7B · Qwen2.5-14B · Mistral-7B (Fireworks AI) · GPT-4o (OpenAI) · Gemini-2.5-Pro (Google) · Claude (Anthropic)
 
                 > **Voice Assistant Proxy Note:** Due to the absence of public programmatic APIs for
                 > proprietary voice assistants (Siri, Cortana, Bixby), this system evaluates their
@@ -865,6 +891,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                     set FIREWORKS_API_KEY=fw_xxx
                     set OPENAI_API_KEY=sk-xxx
                     set GOOGLE_API_KEY=AIza-xxx
+                    set ANTHROPIC_API_KEY=sk-ant-xxx
                     ```
                     `OPENAI_API_KEY` is also used for Whisper audio transcription.
                     """
@@ -933,7 +960,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                     else:
                         gr.Markdown(
                             "_No models found in `config/models.yaml`. "
-                            "Add entries with `type: fireworks`, `type: openai`, or `type: gemini`._"
+                            "Add entries with `type: fireworks`, `type: openai`, `type: gemini`, or `type: claude`._"
                         )
                         model_select = gr.CheckboxGroup(choices=[], label="Models")
 
@@ -1012,7 +1039,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
             gr.Markdown("### Progress")
             log_box = gr.Textbox(
                 label="Log", lines=15, max_lines=15,
-                interactive=False, 
+                interactive=False,
             )
 
             gr.Markdown("### Results")
@@ -1311,11 +1338,11 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                             )
                             new_model_id = gr.Textbox(
                                 label="Model ID",
-                                placeholder="e.g. accounts/org/deployedModels/my-deploy",
+                                placeholder="e.g. claude-sonnet-5",
                             )
                             new_api_key  = gr.Textbox(
                                 label="API Key",
-                                placeholder="e.g. ${FIREWORKS_API_KEY}",
+                                placeholder="e.g. ${ANTHROPIC_API_KEY}",
                             )
                         add_model_btn = gr.Button("+ Add Model", variant="secondary")
 

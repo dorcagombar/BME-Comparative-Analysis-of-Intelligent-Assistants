@@ -43,7 +43,7 @@ def _extract_qa(row: dict) -> tuple:
     keys = list(row.keys())
     q_key = _find_col(keys, _QUESTION_ALIASES)
     r_key = _find_col(keys, _REFERENCE_ALIASES)
-    q = row[q_key].strip() if q_key else ""
+    q = (row.get(q_key) or "").strip() if q_key else ""
     r = row[r_key].strip() if r_key else ""
     return q, r
 

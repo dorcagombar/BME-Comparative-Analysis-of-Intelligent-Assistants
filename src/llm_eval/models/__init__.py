@@ -1,7 +1,7 @@
 """
 Model factory: loads models.yaml, resolves env vars, instantiates adapters.
 
-Cloud model adapters (openai, gemini) are imported lazily so their SDKs
+Cloud model adapters (openai, gemini, fireworks, claude) are imported lazily so their SDKs
 don't need to be installed when you're only running hf_local models.
 """
 
@@ -56,9 +56,19 @@ def _get_class(model_type: str, model_name: str):
                 "Install it with: pip install openai"
             )
 
+    if model_type in {"claude", "anthropic"}:
+        try:
+            from .claude_model import ClaudeModel
+            return ClaudeModel
+        except ImportError:
+            raise ImportError(
+                f"Model '{model_name}' requires the anthropic package. "
+                "Install it with: pip install anthropic"
+            )
+
     raise ValueError(
         f"Unknown model type '{model_type}' for model '{model_name}'. "
-        f"Valid types: hf_local, openai, gemini, fireworks"
+        f"Valid types: hf_local, openai, gemini, fireworks, claude"
     )
 
 

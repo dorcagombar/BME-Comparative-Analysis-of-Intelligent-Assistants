@@ -1,77 +1,35 @@
-# Multi-Model LLM Evaluation Configuration
-# ==========================================
-# Cloud API models — set the corresponding environment variable for each key.
-#
-# Required environment variables:
-#   export FIREWORKS_API_KEY=fw_xxx      # from fireworks.ai → Account Settings → API Keys
-#   export OPENAI_API_KEY=sk-xxx
-#   export GOOGLE_API_KEY=AIza-xxx
-#
-# Fireworks model IDs:
-#   Serverless access : accounts/fireworks/models/<model-slug>
-#   Custom deployment : accounts/<account_id>/deployedModels/<deployment_name>
-#   Update model_id below if you created your own deployment in the Fireworks console.
-
 defaults:
-  timeout: 120        # seconds before giving up on a single response
-  max_tokens: 2048    # max new tokens to generate
-  temperature: 0.0    # 0 = greedy decoding (required for reproducibility)
-
+  timeout: 120
+  max_tokens: 2048
+  temperature: 0.0
 models:
-
-  # --- Fireworks AI (OpenAI-compatible endpoint) ---
-
-  - name: Qwen2-7B
-    type: fireworks
-    model_id: accounts/fireworks/models/qwen2-7b-instruct
-    api_key: "${FIREWORKS_API_KEY}"
-
-  - name: Qwen2.5-14B
-    type: fireworks
-    model_id: accounts/fireworks/models/qwen2p5-14b-instruct
-    api_key: "${FIREWORKS_API_KEY}"
-
-  - name: Mistral-7B
-    type: fireworks
-    model_id: accounts/fireworks/models/mistral-7b-instruct
-    api_key: "${FIREWORKS_API_KEY}"
-
-  # --- OpenAI API ---
-
-  - name: GPT-4o
-    type: openai
-    model_id: gpt-4o-audio-preview
-    api_key: "${OPENAI_API_KEY}"
-
-  # --- Google Gemini API ---
-
-  - name: Gemini-2.5-Pro
-    type: gemini
-    model_id: gemini-2.5-pro
-    api_key: "${GOOGLE_API_KEY}"
-
-  # --- Local HuggingFace models (optional, requires GPU) ---
-  # Uncomment and set model_path to use local inference.
-
-  # - name: Mistral-7B-Local
-  #   type: hf_local
-  #   model_id: mistralai/Mistral-7B-Instruct-v0.3
-  #   model_path: /root/autodl-tmp/Mistral-7B-Instruct-v0.3
-
-  # - name: Qwen2.5-7B-Local
-  #   type: hf_local
-  #   model_id: Qwen/Qwen2.5-7B-Instruct
-  #   model_path: /root/autodl-tmp/Qwen2.5-7B-Instruct
-
-  # - name: ChatGLM4-9B-Local
-  #   type: hf_local
-  #   model_id: THUDM/glm-4-9b-chat
-  #   model_path: /root/autodl-tmp/glm-4-9b-chat
-
+- name: Qwen2-7B
+  type: fireworks
+  model_id: accounts/fireworks/models/qwen2-7b-instruct
+  api_key: ${FIREWORKS_API_KEY}
+- name: Qwen2.5-14B
+  type: fireworks
+  model_id: accounts/fireworks/models/qwen2p5-14b-instruct
+  api_key: ${FIREWORKS_API_KEY}
+- name: Mistral-7B
+  type: fireworks
+  model_id: accounts/fireworks/models/mistral-7b-instruct
+  api_key: ${FIREWORKS_API_KEY}
+- name: GPT-4o
+  type: openai
+  model_id: gpt-4o
+  api_key: ${OPENAI_API_KEY}
+- name: Gemini-2.5-Pro
+  type: gemini
+  model_id: gemini-2.5-pro
+  api_key: ${GOOGLE_API_KEY}
+- name: Claude-Sonnet
+  type: claude
+  model_id: claude-sonnet-5
+  api_key: ${ANTHROPIC_API_KEY}
 evaluation:
-  bertscore_lang: "en"   # change to "zh" for Chinese datasets
-  bertscore_model: null  # null = auto-select based on language
-
+  bertscore_lang: en
+  bertscore_model: null
 output:
-  csv_path: "results/eval_results.csv"
+  csv_path: results/eval_results.csv
   show_table: true

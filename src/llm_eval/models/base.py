@@ -10,7 +10,7 @@ from typing import Optional
 class ModelConfig:
     """Configuration for a single model instance."""
     name: str
-    type: str           # "hf_local" | "openai" | "gemini" | "fireworks"
+    type: str           # "hf_local" | "openai" | "gemini" | "fireworks" | "claude"
     model_id: str
     # For hf_local: path to the downloaded snapshot directory on disk.
     # For cloud APIs: unused (set to same as model_id for consistency).
