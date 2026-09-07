@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "llm-eval"
+version = "0.1.0"
+description = "Multi-model LLM evaluation CLI for QA datasets"
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.30.0",
+    "google-generativeai>=0.7.0",
+    "rouge-score>=0.1.2",
+    "nltk>=3.8.1",
+    "bert-score>=0.3.13",
+    "rich>=13.7.0",
+    "pyyaml>=6.0.1",
+    "pandas>=2.2.0",
+]
+
+[project.scripts]
+llm-eval = "llm_eval.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
