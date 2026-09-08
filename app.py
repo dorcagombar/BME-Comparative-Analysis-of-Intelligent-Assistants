@@ -32,16 +32,16 @@ import yaml
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from llm_eval.dataset_cleaner import (
+from src.llm_eval.dataset_cleaner import (
     analyze as _dc_analyze,
     clean as _dc_clean,
     pairs_to_dataframe as _dc_to_df,
     save_cleaned as _dc_save,
 )
-from llm_eval.metrics.evaluator import Evaluator
-from llm_eval.models import load_models_from_config
-from llm_eval.output.exporter import export_csv, export_summary_csv
-from llm_eval.runner import (
+from src.llm_eval.metrics.evaluator import Evaluator
+from src.llm_eval.models import load_models_from_config
+from src.llm_eval.output.exporter import export_csv, export_summary_csv
+from src.llm_eval.runner import (
     EvalRunner,
     _AUDIO_FILE_ALIASES,
     _QUESTION_ALIASES,
@@ -1159,11 +1159,11 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
 
                 def _thread():
                     try:
-                        from llm_eval.models import load_models_from_config
-                        from llm_eval.metrics.evaluator import Evaluator
-                        from llm_eval.runner import EvalRunner
-                        from llm_eval.noise_augment import generate_noise_variants
-                        from llm_eval.output.exporter import export_csv
+                        from src.llm_eval.models import load_models_from_config
+                        from src.llm_eval.metrics.evaluator import Evaluator
+                        from src.llm_eval.runner import EvalRunner
+                        from src.llm_eval.noise_augment import generate_noise_variants
+                        from src.llm_eval.output.exporter import export_csv
 
                         all_models = load_models_from_config(CONFIG_PATH)
                         models = [m for m in all_models if m.name in nr_models]
@@ -1181,7 +1181,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                         whisper_fn = None
                         if nr_whisper:
                             try:
-                                from llm_eval.transcriber import make_whisper_transcriber
+                                from src.llm_eval.transcriber import make_whisper_transcriber
                                 whisper_fn = make_whisper_transcriber()
                                 q.put(("log", "Whisper transcriber ready."))
                             except Exception as e:
@@ -1203,7 +1203,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                             if snr is None:
                                 level_dataset = dataset
                             else:
-                                from llm_eval.runner import QAPair
+                                from src.llm_eval.runner import QAPair
                                 level_dataset = []
                                 for qa in dataset:
                                     if qa.audio_path:
