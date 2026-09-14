@@ -84,6 +84,109 @@ def _build_audio_files_map(folder_name: str, selected_files: list[str]) -> dict[
         if (folder / filename).is_file()
     }
 
+
+def _read_csv_audio_filenames(dataset_path: str) -> list[str]:
+    """Read the audio filenames declared by the selected CSV."""
+    if not dataset_path or Path(str(dataset_path)).suffix.lower() != ".csv":
+        return []
+
+    try:
+        with open(str(dataset_path), encoding="utf-8-sig", newline="") as f:
+            reader = csv_module.DictReader(f)
+            headers = list(reader.fieldnames or [])
+            audio_col = _find_col(headers, _AUDIO_FILE_ALIASES)
+            if not audio_col:
+                return []
+            return [
+                Path((row.get(audio_col) or "").strip()).name
+                for row in reader
+                if (row.get(audio_col) or "").strip()
+            ]
+    except Exception:
+        return []
+
+
+def _match_dataset_audio(dataset_path: str):
+    """Find the voice-sample folder with the largest real filename overlap."""
+    csv_files = _read_csv_audio_filenames(dataset_path)
+    if not csv_files:
+        return None, [], 0
+
+    wanted = set(csv_files)
+    best_folder = None
+    best_matches = []
+
+    for folder_name in _get_voice_sample_folders():
+        available = set(_get_voice_files(folder_name))
+        matches = sorted(wanted & available)
+        if len(matches) > len(best_matches):
+            best_folder = folder_name
+            best_matches = matches
+
+    return best_folder, best_matches, len(wanted)
+
+
+def _voice_folder_display_name(folder_name: str) -> str:
+    """Return a clear UI name for a repository voice folder."""
+    if not folder_name:
+        return ""
+    language_names = {
+        "EN": "English", "DE": "German", "HE": "Hebrew", "HU": "Hungarian",
+        "ZH": "Chinese", "CN": "Chinese", "ES": "Spanish", "FR": "French",
+        "IT": "Italian", "PT": "Portuguese", "JA": "Japanese", "JP": "Japanese",
+        "KO": "Korean", "AR": "Arabic", "RU": "Russian", "UK": "Ukrainian",
+    }
+    code = folder_name.upper().split("-")[-1]
+    return f"{language_names.get(code, code)} ({folder_name})"
+
+
+def _audio_auto_status(folder_name, matches, total):
+    if total == 0:
+        return _status_err(
+            "Audio mode requires a CSV with an audio filename column "
+            f"({', '.join(sorted(_AUDIO_FILE_ALIASES))})."
+        )
+    if not folder_name or not matches:
+        return _status_err(
+            f"0 / {total} CSV audio files were found in data/voice_samples/."
+        )
+
+    missing = total - len(matches)
+    if missing:
+        return _status_warn(
+            f"Matched automatically: <b>{_voice_folder_display_name(folder_name)}</b> — "
+            f"{len(matches)} / {total} recordings available ({missing} missing)."
+        )
+    return _status_ok(
+        f"Matched automatically: <b>{_voice_folder_display_name(folder_name)}</b> — "
+        f"{len(matches)} / {total} recordings available."
+    )
+
+
+def _auto_match_audio(dataset_path):
+    """Populate the audio selector directly from the selected dataset."""
+    folder, matches, total = _match_dataset_audio(dataset_path)
+    return (
+        folder or "",
+        gr.update(choices=matches, value=matches),
+        _audio_selection_preview(matches),
+        _audio_auto_status(folder, matches, total),
+    )
+
+
+def _select_all_matched_voice_files(folder_name):
+    """Select all valid CSV-matched files, not every file in the folder."""
+    # The checkbox choices are already restricted to the CSV/repository intersection.
+    # This callback is replaced below with a dataset-aware callback.
+    files = _get_voice_files(folder_name) if folder_name else []
+    return gr.update(value=files), _audio_selection_preview(files)
+
+
+def _select_all_for_dataset(dataset_path):
+    folder, matches, _ = _match_dataset_audio(dataset_path)
+    return gr.update(choices=matches, value=matches), _audio_selection_preview(matches)
+
+
 def _on_voice_folder_change(folder_name):
     """Refresh the multi-select when a different language folder is chosen."""
     files = _get_voice_files(folder_name)
@@ -453,16 +556,32 @@ def run_evaluation(
 
     audio_files_map: dict = {}
     if input_mode == "Audio":
-        if not voice_folder:
-            yield "Please select a language / voice folder.", None, None, gr.update(interactive=True)
-            return
-        if not selected_audio_files:
-            yield "Please select at least one audio question.", None, None, gr.update(interactive=True)
+        # Resolve the audio folder from the CSV automatically. There is no
+        # user-selectable language/folder dropdown, so mismatched combinations
+        # cannot be created in the UI.
+        matched_folder, matched_files, csv_audio_count = _match_dataset_audio(dataset_path)
+
+        if csv_audio_count == 0:
+            yield (
+                "Audio mode requires a CSV containing an audio filename column."
+            ), None, None, gr.update(interactive=True)
             return
 
-        audio_files_map = _build_audio_files_map(voice_folder, selected_audio_files)
+        if not matched_folder or not matched_files:
+            yield (
+                "No matching repository audio was found for this CSV under "
+                "data/voice_samples/."
+            ), None, None, gr.update(interactive=True)
+            return
+
+        valid = set(matched_files)
+        chosen = [name for name in (selected_audio_files or []) if name in valid]
+        # If the user has not chosen a subset, use all valid matched recordings.
+        chosen = chosen or matched_files
+
+        audio_files_map = _build_audio_files_map(matched_folder, chosen)
         if not audio_files_map:
-            yield "None of the selected audio files could be found in the chosen folder.", None, None, gr.update(interactive=True)
+            yield "No valid matched audio files are available.", None, None, gr.update(interactive=True)
             return
 
     # ---- run in background thread ---------------------------------------
@@ -942,12 +1061,149 @@ def _clean_dataset(file):
 # UI layout
 # ---------------------------------------------------------------------------
 
+
+APP_CSS = """
+.gradio-container {
+    max-width: 1180px !important;
+    margin: 0 auto !important;
+    padding: 0 28px 48px !important;
+}
+
+/* Header */
+.app-hero {
+    padding: 28px 0 20px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--border-color-primary);
+}
+.app-hero h1 {
+    margin: 0 0 6px !important;
+    font-size: 1.8rem !important;
+    font-weight: 680 !important;
+    letter-spacing: -0.03em;
+}
+.app-hero p {
+    margin: 0 !important;
+    max-width: 800px;
+    opacity: .66;
+    font-size: .96rem;
+    line-height: 1.55;
+}
+
+/* Main research workflow */
+.step-card, .run-card {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 10px 0 22px !important;
+}
+.step-title {
+    margin-bottom: 14px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--border-color-primary);
+}
+.step-title h3 {
+    margin: 0 0 3px !important;
+    font-size: 1.02rem !important;
+    font-weight: 660 !important;
+    letter-spacing: -0.012em;
+}
+.step-title p {
+    margin: 0 !important;
+    opacity: .61;
+    font-size: .86rem;
+    line-height: 1.45;
+}
+
+/* Audio is visually subordinate to modality, not another full card */
+.audio-card {
+    border: 0 !important;
+    border-left: 3px solid var(--primary-500) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 10px 4px 10px 18px !important;
+    margin: 10px 0 4px;
+}
+.audio-summary {
+    margin: 8px 0 10px;
+}
+
+/* Parameter area */
+.run-card {
+    border-top: 1px solid var(--border-color-primary) !important;
+    margin-top: 12px;
+    padding-top: 22px !important;
+}
+.settings-row {
+    gap: 12px !important;
+    margin: 4px 0 16px !important;
+}
+.run-button {
+    min-height: 48px !important;
+    font-size: 1rem !important;
+    font-weight: 670 !important;
+    border-radius: 7px !important;
+}
+
+/* Output */
+.output-section {
+    margin-top: 14px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid var(--border-color-primary);
+}
+.output-heading h2 {
+    margin-bottom: 3px !important;
+    font-size: 1.2rem !important;
+}
+.output-heading p {
+    margin-top: 0 !important;
+    opacity: .6;
+    font-size: .86rem;
+}
+
+.output-section > div {
+    gap: 8px !important;
+}
+.output-heading {
+    margin: 0 !important;
+    padding: 2px 0 4px !important;
+}
+.output-heading h2 {
+    margin: 0 0 2px !important;
+}
+.output-heading p {
+    margin: 0 !important;
+}
+
+#evaluation-log textarea {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-size: .84rem !important;
+    line-height: 1.5 !important;
+}
+#research-results {
+    margin-top: 8px;
+}
+#research-results table {
+    font-size: .9rem;
+}
+footer { opacity: .5; }
+"""
+
+
 _ensure_claude_model_config()
 model_names    = _read_model_names()
 model_types    = _read_model_types()
 existing_files = _existing_datasets()
 
-with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
+# Resolve audio for the initially selected existing dataset immediately.
+# Gradio does not fire .change() just because a Dropdown starts with a value.
+_initial_dataset = existing_files[0] if existing_files else None
+_initial_audio_folder, _initial_audio_files, _initial_audio_total = (
+    _match_dataset_audio(_initial_dataset) if _initial_dataset else (None, [], 0)
+)
+
+with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as demo:
 
     model_types_state = gr.State(model_types)
 
@@ -958,67 +1214,55 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
         # ================================================================
         with gr.Tab("Evaluation"):
 
-            gr.Markdown(
+            gr.HTML(
                 """
-                # LLM Evaluation Dashboard
-                Evaluate cloud-hosted models on a QA dataset and compare results side-by-side.
-                Results include **BLEU · METEOR · Token-F1 · ROUGE · BERTScore** and response latency.
-                In **Audio** mode, additional **Speech Clarity** metrics are computed: SNR(dB), Speech Ratio, Clarity Score, and Whisper Confidence.
-
-                **Supported models:** Qwen2-7B · Qwen2.5-14B · Mistral-7B (Fireworks AI) · GPT-4o (OpenAI) · gemini-3.1-pro-preview (Google) · Claude (Anthropic)
-
-                > **Voice Assistant Proxy Note:** Due to the absence of public programmatic APIs for
-                > proprietary voice assistants (Siri, Cortana, Bixby), this system evaluates their
-                > equivalent foundation models as proxies — **GPT-4o** serves as the OpenAI Voice
-                > Assistant proxy, and **gemini-3.1-pro-preview** serves as the Google Assistant proxy.
-                > This follows standard practice in comparative NLP evaluation research when
-                > direct system access is unavailable.
+                <div class="app-hero">
+                    <h1>LLM Evaluation</h1>
+                    <p>Comparative evaluation of language models across text and audio question-answering datasets, with consistent scoring and reproducible run parameters.</p>
+                </div>
                 """
             )
 
-            with gr.Accordion("API Key Setup", open=False):
+            with gr.Accordion("Environment & API configuration", open=False):
                 gr.Markdown(
                     """
-                    Set these environment variables **before** launching `app.py`:
+                    Set the required environment variables before launching the app:
+                    `FIREWORKS_API_KEY` · `OPENAI_API_KEY` · `GOOGLE_API_KEY` · `ANTHROPIC_API_KEY`
 
-                    **Windows (Anaconda Prompt):**
-                    ```
-                    set FIREWORKS_API_KEY=fw_xxx
-                    set OPENAI_API_KEY=sk-xxx
-                    set GOOGLE_API_KEY=AIza-xxx
-                    set ANTHROPIC_API_KEY=sk-ant-xxx
-                    ```
-                    `OPENAI_API_KEY` is also used for Whisper audio transcription.
+                    `OPENAI_API_KEY` is also used for Whisper transcription.
                     """
                 )
 
-            # ---- Dataset + Model selection ------------------------------
-            with gr.Row():
-                with gr.Column(scale=1):
-                    gr.Markdown("### Dataset")
+            # ---- Step 1: Dataset + Models --------------------------------
+            with gr.Row(equal_height=True):
+                with gr.Column(scale=1, elem_classes=["step-card"]):
+                    gr.HTML(
+                        '<div class="step-title"><h3>1. Evaluation dataset</h3>'
+                        '<p>Select the dataset that defines the evaluation questions and reference answers.</p></div>'
+                    )
                     dataset_source = gr.Radio(
-                        choices=["Upload file", "Use existing file"],
-                        value="Upload file" if not existing_files else "Use existing file",
-                        label="Source",
+                        choices=["Use existing file", "Upload file"],
+                        value="Use existing file" if existing_files else "Upload file",
+                        label="Dataset source",
                     )
                     with gr.Group(visible=not existing_files) as upload_group:
                         upload_box = gr.File(
-                            label="Upload dataset(s) (.json / .jsonl / .csv / .txt)",
+                            label="Upload dataset",
                             file_types=[".json", ".jsonl", ".csv", ".txt"],
                             file_count="multiple",
                         )
                         dataset_picker = gr.Dropdown(
                             choices=[],
-                            label="Select dataset to run (shown when multiple files uploaded)",
+                            label="Dataset",
                             visible=False,
                         )
                     existing_box = gr.Dropdown(
                         choices=existing_files,
                         value=existing_files[0] if existing_files else None,
-                        label="Select from data/ folder",
+                        label="Dataset",
+                        info="Files found in data/",
                         visible=bool(existing_files),
                     )
-                    # Dataset status indicator (green / yellow / red)
                     dataset_status = gr.HTML(visible=False)
 
                     dataset_source.change(
@@ -1031,8 +1275,6 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                         inputs=upload_box,
                         outputs=dataset_picker,
                     )
-                    # Validate on picker change (covers both single-file auto-select
-                    # and manual multi-file selection)
                     dataset_picker.change(
                         _validate_dataset_file,
                         inputs=dataset_picker,
@@ -1044,110 +1286,126 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                         outputs=dataset_status,
                     )
 
-                with gr.Column(scale=1):
-                    gr.Markdown("### Models")
+                with gr.Column(scale=1, elem_classes=["step-card"]):
+                    gr.HTML(
+                        '<div class="step-title"><h3>2. Model cohort</h3>'
+                        '<p>Select the models included in this experimental run.</p></div>'
+                    )
                     if model_names:
                         model_select = gr.CheckboxGroup(
                             choices=model_names,
                             value=[model_names[0]],
-                            label="Select models to evaluate",
+                            label="Models included in evaluation",
                         )
                     else:
                         gr.Markdown(
-                            "_No models found in `config/models.yaml`. "
-                            "Add entries with `type: fireworks`, `type: openai`, `type: gemini`, or `type: claude`._"
+                            "_No models found in `config/models.yaml`. Add a model in the Models tab._"
                         )
                         model_select = gr.CheckboxGroup(choices=[], label="Models")
 
-            # ---- Input mode --------------------------------------------
-            with gr.Row():
+            # ---- Step 3: Input -------------------------------------------
+            with gr.Group(elem_classes=["step-card"]):
+                gr.HTML(
+                    '<div class="step-title"><h3>3. Evaluation modality</h3>'
+                    '<p>Choose text or speech input. Audio recordings are matched to the dataset automatically.</p></div>'
+                )
                 input_mode = gr.Radio(
                     choices=["Text", "Audio"],
                     value="Text",
-                    label="Input mode",
+                    label="Modality",
                 )
+                audio_warning = gr.HTML(visible=False)
 
-            audio_warning = gr.HTML(visible=False)
-
-            # ---- Audio selection section --------------------------------
-            with gr.Group(visible=False) as audio_section:
-                gr.Markdown("### Audio Dataset")
-                gr.Markdown(
-                    "Select a language folder from `data/voice_samples/`, then choose one or more "
-                    "recordings. The selected dataset CSV above supplies the matching metadata and reference answers."
-                )
-                use_whisper = gr.Checkbox(
-                    value=True,
-                    label="Enable Whisper transcription for non-audio models (Qwen, Mistral → Whisper → text → model)",
-                )
-                gr.HTML(
-                    '<div style="color:#856404;background:#fff3cd;border:1px solid #ffc107;'
-                    'border-radius:6px;padding:8px 12px;margin-top:4px;">'
-                    '⚠ <b>Chinese audio note:</b> Whisper outputs <b>Traditional Chinese</b> for Mandarin audio. '
-                    'Use the Script Converter in the Tools tab to convert to Simplified Chinese.'
-                    '</div>'
-                )
-
-                voice_folders = _get_voice_sample_folders()
-                voice_folder_box = gr.Dropdown(
-                    choices=voice_folders,
-                    value=voice_folders[0] if voice_folders else None,
-                    label="Language / voice folder",
-                )
-                initial_voice_files = _get_voice_files(voice_folders[0]) if voice_folders else []
-
-                gr.Markdown("#### Audio questions")
-
-                audio_selection_preview = gr.HTML(
-                    value=_audio_selection_preview([]),
-                )
-
-                with gr.Row():
-                    select_all_audio_btn = gr.Button(
-                        "Select all",
-                        variant="primary",
-                        size="sm",
-                    )
-                    clear_audio_btn = gr.Button(
-                        "Clear",
-                        variant="secondary",
-                        size="sm",
+                with gr.Group(visible=False, elem_classes=["audio-card"]) as audio_section:
+                    gr.Markdown("### Audio sample selection")
+                    gr.Markdown(
+                        "Recordings are matched automatically to the selected dataset. "
+                        "All valid matched samples are included by default."
                     )
 
-                with gr.Accordion("Choose / edit audio files", open=False):
-                    voice_files_box = gr.Dropdown(
-                        choices=initial_voice_files,
-                        value=[],
-                        multiselect=True,
-                        label="Audio files",
-                        info="Search and select individual recordings. Close this panel when finished.",
-                        filterable=True,
+                    voice_folder_box = gr.State(_initial_audio_folder or "")
+                    audio_match_status = gr.HTML(
+                        value=(
+                            _audio_auto_status(
+                                _initial_audio_folder,
+                                _initial_audio_files,
+                                _initial_audio_total,
+                            )
+                            if _initial_dataset
+                            else _status_warn("Select a CSV dataset to match audio automatically.")
+                        )
+                    )
+                    initial_voice_files = _initial_audio_files
+
+                    audio_selection_preview = gr.HTML(
+                        value=_audio_selection_preview(initial_voice_files),
+                        elem_classes=["audio-summary"],
                     )
 
-                voice_folder_box.change(
-                    fn=_on_voice_folder_change,
-                    inputs=voice_folder_box,
-                    outputs=[voice_files_box, audio_selection_preview],
-                )
+                    with gr.Row():
+                        select_all_audio_btn = gr.Button("Select all", size="sm")
+                        clear_audio_btn = gr.Button("Clear", size="sm")
 
-                voice_files_box.change(
-                    fn=_audio_selection_preview,
-                    inputs=voice_files_box,
-                    outputs=audio_selection_preview,
-                )
+                    with gr.Accordion("Review / modify audio samples", open=False):
+                        voice_files_box = gr.Dropdown(
+                            choices=initial_voice_files,
+                            value=initial_voice_files,
+                            multiselect=True,
+                            label="Recordings",
+                            info="Only recordings matched to the active dataset are available.",
+                            filterable=True,
+                        )
 
-                select_all_audio_btn.click(
-                    fn=_select_all_voice_files,
-                    inputs=voice_folder_box,
-                    outputs=[voice_files_box, audio_selection_preview],
-                )
+                    use_whisper = gr.Checkbox(
+                        value=True,
+                        label="Enable Whisper fallback for text-only models",
+                        info="Audio → Whisper transcription → text model",
+                    )
 
-                clear_audio_btn.click(
-                    fn=_clear_voice_files,
-                    outputs=[voice_files_box, audio_selection_preview],
-                )
+                    with gr.Accordion("Audio notes", open=False):
+                        gr.Markdown(
+                            "For Mandarin audio, Whisper may return Traditional Chinese. "
+                            "Use **Tools → Script Converter** when Simplified Chinese is required."
+                        )
 
-            # Wire audio section + warning
+                    voice_files_box.change(
+                        fn=_audio_selection_preview,
+                        inputs=voice_files_box,
+                        outputs=audio_selection_preview,
+                    )
+                    select_all_audio_btn.click(
+                        fn=lambda source, uploaded, existing: _select_all_for_dataset(
+                            uploaded if source == "Upload file" else existing
+                        ),
+                        inputs=[dataset_source, dataset_picker, existing_box],
+                        outputs=[voice_files_box, audio_selection_preview],
+                    )
+                    clear_audio_btn.click(
+                        fn=_clear_voice_files,
+                        outputs=[voice_files_box, audio_selection_preview],
+                    )
+
+                    existing_box.change(
+                        fn=_auto_match_audio,
+                        inputs=existing_box,
+                        outputs=[
+                            voice_folder_box,
+                            voice_files_box,
+                            audio_selection_preview,
+                            audio_match_status,
+                        ],
+                    )
+                    dataset_picker.change(
+                        fn=_auto_match_audio,
+                        inputs=dataset_picker,
+                        outputs=[
+                            voice_folder_box,
+                            voice_files_box,
+                            audio_selection_preview,
+                            audio_match_status,
+                        ],
+                    )
+
             input_mode.change(_toggle_audio_section, inputs=input_mode, outputs=audio_section)
             for _comp in [input_mode, model_select]:
                 _comp.change(
@@ -1161,28 +1419,65 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                 outputs=audio_warning,
             )
 
-            # ---- Generation / evaluation settings ----------------------
-            with gr.Row():
-                max_tokens_box   = gr.Number(value=512,  label="Max tokens",  precision=0, minimum=1)
-                temperature_box  = gr.Number(value=0.0,  label="Temperature", precision=2, minimum=0.0)
-                limit_box        = gr.Textbox(value="",  label="Question limit (blank = all)",
-                                              placeholder="e.g. 10")
-                no_bertscore_box = gr.Checkbox(value=True, label="Skip BERTScore (faster)")
+            # ---- Step 4: Settings + Run ---------------------------------
+            with gr.Group(elem_classes=["run-card"]):
+                gr.HTML(
+                    '<div class="step-title"><h3>4. Evaluation parameters</h3>'
+                    '<p>Set generation, sample-limit, and scoring parameters before starting the run.</p></div>'
+                )
+                with gr.Row(elem_classes=["settings-row"]):
+                    max_tokens_box = gr.Number(
+                        value=512, label="Max tokens", precision=0, minimum=1
+                    )
+                    temperature_box = gr.Number(
+                        value=0.0, label="Temperature", precision=2, minimum=0.0
+                    )
+                    limit_box = gr.Textbox(
+                        value="",
+                        label="Question limit",
+                        placeholder="Blank = all questions",
+                    )
+                    no_bertscore_box = gr.Checkbox(
+                        value=True,
+                        label="Skip BERTScore",
+                        info="Recommended for faster runs",
+                    )
 
-            run_btn = gr.Button("▶  Run Evaluation", variant="primary", size="lg")
+                run_btn = gr.Button(
+                    "Run evaluation",
+                    variant="primary",
+                    size="lg",
+                    elem_classes=["run-button"],
+                )
 
-            gr.Markdown("### Progress")
-            log_box = gr.Textbox(
-                label="Log", lines=15, max_lines=15,
-                interactive=False,
-            )
+            with gr.Group(elem_classes=["output-section"]):
+                gr.HTML(
+                    '<div class="output-heading"><h2>Execution</h2>'
+                    '<p>Live run status and model-processing messages.</p></div>'
+                )
+                log_box = gr.Textbox(
+                    label="Run log",
+                    lines=8,
+                    max_lines=15,
+                    interactive=False,
+                    elem_id="evaluation-log",
+                )
 
-            gr.Markdown("### Results")
-            results_table = gr.Dataframe(
-                label="Per-model summary (mean scores)",
-                interactive=False, wrap=True,
-            )
-            download_btn = gr.File(label="Download full results CSV", interactive=False)
+            with gr.Group(elem_classes=["output-section"]):
+                gr.HTML(
+                    '<div class="output-heading"><h2>Evaluation results</h2>'
+                    '<p>Mean scores across successfully evaluated samples.</p></div>'
+                )
+                results_table = gr.Dataframe(
+                    label="Comparative model summary",
+                    interactive=False,
+                    wrap=True,
+                    elem_id="research-results",
+                )
+                download_btn = gr.File(
+                    label="Export full results (CSV)",
+                    interactive=False,
+                )
 
             run_btn.click(
                 fn=run_evaluation,
