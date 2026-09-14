@@ -52,6 +52,91 @@ from src.llm_eval.runner import (
 CONFIG_PATH = "config/models.yaml"
 RESULTS_DIR = "results"
 DATA_DIR    = "data"
+VOICE_SAMPLES_DIR = Path(DATA_DIR) / "voice_samples"
+SUPPORTED_AUDIO = {".wav", ".mp3", ".m4a", ".ogg", ".flac", ".webm"}
+
+def _get_voice_sample_folders() -> list[str]:
+    """Return language/voice folders stored under data/voice_samples/."""
+    if not VOICE_SAMPLES_DIR.exists():
+        return []
+    return sorted(folder.name for folder in VOICE_SAMPLES_DIR.iterdir() if folder.is_dir())
+
+def _get_voice_files(folder_name: str) -> list[str]:
+    """Return supported audio filenames from one selected language folder."""
+    if not folder_name:
+        return []
+    folder = VOICE_SAMPLES_DIR / folder_name
+    if not folder.exists():
+        return []
+    return sorted(
+        file.name for file in folder.iterdir()
+        if file.is_file() and file.suffix.lower() in SUPPORTED_AUDIO
+    )
+
+def _build_audio_files_map(folder_name: str, selected_files: list[str]) -> dict[str, str]:
+    """Build the filename -> local path mapping for only the selected recordings."""
+    if not folder_name or not selected_files:
+        return {}
+    folder = VOICE_SAMPLES_DIR / folder_name
+    return {
+        filename: str(folder / filename)
+        for filename in selected_files
+        if (folder / filename).is_file()
+    }
+
+def _on_voice_folder_change(folder_name):
+    """Refresh the multi-select when a different language folder is chosen."""
+    files = _get_voice_files(folder_name)
+    return gr.update(choices=files, value=[]), _audio_selection_preview([])
+
+
+def _audio_selection_preview(selected_files):
+    """Compact summary: count + first four selected filenames."""
+    import html
+
+    files = list(selected_files or [])
+    count = len(files)
+
+    if not files:
+        return (
+            "<div style='padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;"
+            "background:#fafafa;color:#6b7280;font-size:0.92em;'>"
+            "<b>0 selected</b> &nbsp;·&nbsp; Open the selector below or choose Select all."
+            "</div>"
+        )
+
+    tags = "".join(
+        "<span style='display:inline-block;padding:5px 9px;margin:3px 4px 3px 0;"
+        "border:1px solid #d9dce3;border-radius:6px;background:white;"
+        "font-size:0.92em;white-space:nowrap;'>"
+        f"{html.escape(name)}</span>"
+        for name in files[:4]
+    )
+    remainder = count - 4
+    more = (
+        f"<span style='display:inline-block;margin-left:4px;color:#6b7280;"
+        f"font-size:0.9em;'>+{remainder} more</span>"
+        if remainder > 0 else ""
+    )
+
+    return (
+        "<div style='padding:9px 12px;border:1px solid #e5e7eb;border-radius:8px;"
+        "background:#fafafa;'>"
+        f"<div style='font-weight:600;margin-bottom:4px;'>{count} audio file"
+        f"{'s' if count != 1 else ''} selected</div>"
+        f"<div>{tags}{more}</div>"
+        "</div>"
+    )
+
+def _clear_voice_files():
+    """Clear all selected audio files."""
+    return gr.update(value=[]), _audio_selection_preview([])
+
+
+def _select_all_voice_files(folder_name):
+    """Select all audio files in the currently selected voice folder."""
+    files = _get_voice_files(folder_name)
+    return gr.update(choices=files, value=files), _audio_selection_preview(files)
 
 _AUDIO_CAPABLE_TYPES = {"openai", "gemini"}
 
@@ -331,13 +416,14 @@ def run_evaluation(
     limit_text,
     no_bertscore,
     input_mode,
-    audio_csv_file,
-    audio_uploads,
+    voice_folder,
+    selected_audio_files,
     use_whisper,
 ):
     # ---- resolve dataset path -------------------------------------------
+    # Text and Audio modes use the same selected metadata dataset.
     if dataset_source == "Upload file":
-        dataset_path = audio_csv_file if input_mode == "Audio" else selected_dataset
+        dataset_path = selected_dataset
     else:
         dataset_path = existing_path
 
@@ -366,9 +452,18 @@ def run_evaluation(
     use_bertscore = not no_bertscore
 
     audio_files_map: dict = {}
-    if input_mode == "Audio" and audio_uploads:
-        uploads = audio_uploads if isinstance(audio_uploads, list) else [audio_uploads]
-        audio_files_map = {Path(p).name: p for p in uploads if p}
+    if input_mode == "Audio":
+        if not voice_folder:
+            yield "Please select a language / voice folder.", None, None, gr.update(interactive=True)
+            return
+        if not selected_audio_files:
+            yield "Please select at least one audio question.", None, None, gr.update(interactive=True)
+            return
+
+        audio_files_map = _build_audio_files_map(voice_folder, selected_audio_files)
+        if not audio_files_map:
+            yield "None of the selected audio files could be found in the chosen folder.", None, None, gr.update(interactive=True)
+            return
 
     # ---- run in background thread ---------------------------------------
     q: queue_module.Queue = queue_module.Queue()
@@ -974,12 +1069,12 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
 
             audio_warning = gr.HTML(visible=False)
 
-            # ---- Audio upload section ----------------------------------
+            # ---- Audio selection section --------------------------------
             with gr.Group(visible=False) as audio_section:
                 gr.Markdown("### Audio Dataset")
                 gr.Markdown(
-                    "Upload a **metadata CSV** (columns: `audio_file`, `reference_answer`) "
-                    "and the matching **audio files** below."
+                    "Select a language folder from `data/voice_samples/`, then choose one or more "
+                    "recordings. The selected dataset CSV above supplies the matching metadata and reference answers."
                 )
                 use_whisper = gr.Checkbox(
                     value=True,
@@ -992,24 +1087,64 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                     'Use the Script Converter in the Tools tab to convert to Simplified Chinese.'
                     '</div>'
                 )
+
+                voice_folders = _get_voice_sample_folders()
+                voice_folder_box = gr.Dropdown(
+                    choices=voice_folders,
+                    value=voice_folders[0] if voice_folders else None,
+                    label="Language / voice folder",
+                )
+                initial_voice_files = _get_voice_files(voice_folders[0]) if voice_folders else []
+
+                gr.Markdown("#### Audio questions")
+
+                audio_selection_preview = gr.HTML(
+                    value=_audio_selection_preview([]),
+                )
+
                 with gr.Row():
-                    with gr.Column():
-                        audio_csv_box = gr.File(
-                            label="Audio metadata CSV",
-                            file_types=[".csv"],
-                            file_count="single",
-                        )
-                        audio_csv_status = gr.HTML(visible=False)
-                    audio_files_box = gr.File(
-                        label="Audio files (.wav / .mp3 / .m4a)",
-                        file_types=[".wav", ".mp3", ".m4a", ".ogg", ".flac", ".webm"],
-                        file_count="multiple",
+                    select_all_audio_btn = gr.Button(
+                        "Select all",
+                        variant="primary",
+                        size="sm",
+                    )
+                    clear_audio_btn = gr.Button(
+                        "Clear",
+                        variant="secondary",
+                        size="sm",
                     )
 
-                audio_csv_box.upload(
-                    _validate_audio_csv,
-                    inputs=audio_csv_box,
-                    outputs=audio_csv_status,
+                with gr.Accordion("Choose / edit audio files", open=False):
+                    voice_files_box = gr.Dropdown(
+                        choices=initial_voice_files,
+                        value=[],
+                        multiselect=True,
+                        label="Audio files",
+                        info="Search and select individual recordings. Close this panel when finished.",
+                        filterable=True,
+                    )
+
+                voice_folder_box.change(
+                    fn=_on_voice_folder_change,
+                    inputs=voice_folder_box,
+                    outputs=[voice_files_box, audio_selection_preview],
+                )
+
+                voice_files_box.change(
+                    fn=_audio_selection_preview,
+                    inputs=voice_files_box,
+                    outputs=audio_selection_preview,
+                )
+
+                select_all_audio_btn.click(
+                    fn=_select_all_voice_files,
+                    inputs=voice_folder_box,
+                    outputs=[voice_files_box, audio_selection_preview],
+                )
+
+                clear_audio_btn.click(
+                    fn=_clear_voice_files,
+                    outputs=[voice_files_box, audio_selection_preview],
                 )
 
             # Wire audio section + warning
@@ -1055,7 +1190,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                     dataset_source, dataset_picker, existing_box,
                     model_select, max_tokens_box, temperature_box,
                     limit_box, no_bertscore_box,
-                    input_mode, audio_csv_box, audio_files_box, use_whisper,
+                    input_mode, voice_folder_box, voice_files_box, use_whisper,
                 ],
                 outputs=[log_box, results_table, download_btn, run_btn],
             )

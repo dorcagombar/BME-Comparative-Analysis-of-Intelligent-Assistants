@@ -186,10 +186,16 @@ class EvalRunner:
                 ref      = row[r_key].strip()  if r_key  else ""
                 full_path = audio_files.get(filename, audio_files.get(Path(filename).name, ""))
 
+                # In repository-selection mode, audio_files contains only the
+                # recordings selected in the UI. Skip every other CSV row so
+                # the evaluation runs exactly the chosen questions.
+                if not full_path:
+                    continue
+
                 pairs.append(QAPair(
                     question=filename,
                     reference_answer=ref,
-                    audio_path=full_path or None,
+                    audio_path=full_path,
                 ))
         return pairs
 
@@ -217,6 +223,21 @@ class EvalRunner:
         all_records: List[EvalRecord] = []
         total_steps = len(self.models) * len(dataset)
         done = 0
+
+        # Stop cleanly when no rows were loaded/matched. In audio mode this
+        # usually means the selected filenames did not match the CSV audio_file
+        # values. This also prevents division-by-zero in progress reporting.
+        if not dataset:
+            if on_progress:
+                on_progress(
+                    0.0,
+                    "No evaluation samples were loaded. "
+                    "In audio mode, check that the selected filenames exactly match "
+                    "the CSV audio_file column.",
+                )
+            return pd.DataFrame(
+                columns=list(EvalRecord.__dataclass_fields__.keys())
+            )
 
         for model in self.models:
             # --- notify: loading ---
@@ -290,7 +311,7 @@ class EvalRunner:
                     whisper_confidences.append(wconf)
                     done += 1
                     on_progress(
-                        done / total_steps,
+                        done / max(total_steps, 1),
                         f"[{model.name}]  question {j + 1}/{len(dataset)}  "
                         f"({response.latency_seconds:.1f}s)"
                         + (f"  ⚠ {response.error}" if response.error else ""),
@@ -320,7 +341,7 @@ class EvalRunner:
 
             model.unload()
             if on_progress:
-                on_progress(done / total_steps, f"{model.name} unloaded.")
+                on_progress(done / max(total_steps, 1), f"{model.name} unloaded.")
 
             # --- BERTScore in one batch for this model ---
             bs_map: dict = {}
@@ -332,7 +353,7 @@ class EvalRunner:
                 if valid_indices:
                     if on_progress:
                         on_progress(
-                            done / total_steps,
+                            done / max(total_steps, 1),
                             f"[{model.name}] Computing BERTScore for "
                             f"{len(valid_indices)} predictions…"
                         )
