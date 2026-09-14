@@ -10,7 +10,7 @@ Then open http://localhost:6006 in your browser.
 Required environment variables (set before launching):
     FIREWORKS_API_KEY   — Fireworks AI key (for Qwen2-7B, Qwen2.5-14B, Mistral-7B)
     OPENAI_API_KEY      — OpenAI key (for GPT-4o and Whisper transcription)
-    GOOGLE_API_KEY      — Google AI key (for Gemini-2.5-Pro)
+    GOOGLE_API_KEY      — Google AI key (for gemini-3.1-pro-preview)
     ANTHROPIC_API_KEY   — Anthropic key (for Claude)
 """
 
@@ -870,12 +870,12 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft()) as demo:
                 Results include **BLEU · METEOR · Token-F1 · ROUGE · BERTScore** and response latency.
                 In **Audio** mode, additional **Speech Clarity** metrics are computed: SNR(dB), Speech Ratio, Clarity Score, and Whisper Confidence.
 
-                **Supported models:** Qwen2-7B · Qwen2.5-14B · Mistral-7B (Fireworks AI) · GPT-4o (OpenAI) · Gemini-2.5-Pro (Google) · Claude (Anthropic)
+                **Supported models:** Qwen2-7B · Qwen2.5-14B · Mistral-7B (Fireworks AI) · GPT-4o (OpenAI) · gemini-3.1-pro-preview (Google) · Claude (Anthropic)
 
                 > **Voice Assistant Proxy Note:** Due to the absence of public programmatic APIs for
                 > proprietary voice assistants (Siri, Cortana, Bixby), this system evaluates their
                 > equivalent foundation models as proxies — **GPT-4o** serves as the OpenAI Voice
-                > Assistant proxy, and **Gemini-2.5-Pro** serves as the Google Assistant proxy.
+                > Assistant proxy, and **gemini-3.1-pro-preview** serves as the Google Assistant proxy.
                 > This follows standard practice in comparative NLP evaluation research when
                 > direct system access is unavailable.
                 """

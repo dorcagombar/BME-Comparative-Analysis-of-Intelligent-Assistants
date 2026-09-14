@@ -76,7 +76,7 @@ Then open **http://localhost:6006** in your browser.
 | Model | Provider | Key Required |
 |---|---|---|
 | GPT-4o (Audio) | OpenAI | `OPENAI_API_KEY` |
-| Gemini-2.5-Pro | Google | `GOOGLE_API_KEY` |
+| gemini-3.1-pro-preview | Google | `GOOGLE_API_KEY` |
 | Qwen2-7B | Fireworks AI | `FIREWORKS_API_KEY` |
 | Qwen2.5-14B | Fireworks AI | `FIREWORKS_API_KEY` |
 | Mistral-7B | Fireworks AI | `FIREWORKS_API_KEY` |
