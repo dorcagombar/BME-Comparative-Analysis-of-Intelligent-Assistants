@@ -3,17 +3,17 @@ defaults:
   max_tokens: 2048
   temperature: 0.0
 models:
-- name: Qwen2.5-7B
+- name: MiniMax M3
   type: fireworks
-  model_id: accounts/fireworks/models/qwen2p5-7b
+  model_id: accounts/fireworks/models/minimax-m3
   api_key: ${FIREWORKS_API_KEY}
-- name: Qwen2.5-14B
+- name: DeepSeek V4.1 Flash
   type: fireworks
-  model_id: accounts/fireworks/models/qwen2p5-coder-14b
+  model_id: accounts/fireworks/models/deepseek-v4p1-flash
   api_key: ${FIREWORKS_API_KEY}
-- name: Mistral-7B
+- name: Qwen 3.8 Max
   type: fireworks
-  model_id: accounts/fireworks/models/mistral-7b-instruct-v3
+  model_id: accounts/fireworks/models/qwen3p8-max
   api_key: ${FIREWORKS_API_KEY}
 - name: GPT-4o
   type: openai
