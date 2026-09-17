@@ -1,0 +1,847 @@
+[
+  {
+    "audio_file": "A-HU-Q001.m4a",
+    "question": "Milyen díj a Turing-díj?",
+    "reference_answer": "A Turing-díj az ACM legmagasabb informatikai kitüntetése, amelyet gyakran a számítástechnika Nobel-díjának neveznek."
+  },
+  {
+    "audio_file": "A-HU-Q002.m4a",
+    "question": "Melyik az ókori Kína négy nagy találmánya?",
+    "reference_answer": "Az ókori Kína négy nagy találmánya a papírgyártás, a nyomtatás, a puskapor és az iránytű."
+  },
+  {
+    "audio_file": "A-HU-Q003.m4a",
+    "question": "Ki írta a \"A három királyság regénye\" című művet?",
+    "reference_answer": "A három királyság regényét Luo Guanzhong írta."
+  },
+  {
+    "audio_file": "A-HU-Q004.m4a",
+    "question": "Athén ókori civilizáció?",
+    "reference_answer": "Athén város, nem civilizáció; az ókori görög civilizáció egyik vezető városállama volt."
+  },
+  {
+    "audio_file": "A-HU-Q005.m4a",
+    "question": "Hua Mulan valódi alakja a kínai történelemnek?",
+    "reference_answer": "Valószínűleg nem; Mulan legendás hősnő, akinek valós történelmi létezését nem bizonyították."
+  },
+  {
+    "audio_file": "A-HU-Q006.m4a",
+    "question": "Mi a Nemzetközi Vöröskereszt megalakulásának háttere?",
+    "reference_answer": "A mozgalom Henry Dunant 1859-es solferinói tapasztalataiból indult, majd 1863-ban létrejött az ICRC, 1864-ben pedig az első genfi egyezmény."
+  },
+  {
+    "audio_file": "A-HU-Q007.m4a",
+    "question": "Melyik évben alapították a Ming-dinasztiát?",
+    "reference_answer": "A Ming-dinasztiát 1368-ban alapították."
+  },
+  {
+    "audio_file": "A-HU-Q008.m4a",
+    "question": "Melyik a világ legmagasabb hegye?",
+    "reference_answer": "A világ legmagasabb hegye a Mount Everest."
+  },
+  {
+    "audio_file": "A-HU-Q009.m4a",
+    "question": "Melyik ország fővárosa Párizs?",
+    "reference_answer": "Párizs Franciaország fővárosa."
+  },
+  {
+    "audio_file": "A-HU-Q010.m4a",
+    "question": "Hány etnikai csoport él Kínában?",
+    "reference_answer": "Kína hivatalosan 56 etnikai csoportot ismer el."
+  },
+  {
+    "audio_file": "A-HU-Q011.m4a",
+    "question": "Ki volt az Amerikai Egyesült Államok első elnöke?",
+    "reference_answer": "Az Egyesült Államok első elnöke George Washington volt."
+  },
+  {
+    "audio_file": "A-HU-Q012.m4a",
+    "question": "Mennyi a víz forráspontja?",
+    "reference_answer": "A víz forráspontja normál légnyomáson 100 °C."
+  },
+  {
+    "audio_file": "A-HU-Q013.m4a",
+    "question": "Mi Olaszország fővárosa?",
+    "reference_answer": "Olaszország fővárosa Róma."
+  },
+  {
+    "audio_file": "A-HU-Q014.m4a",
+    "question": "A Titanic minden utasa meghalt?",
+    "reference_answer": "Nem; körülbelül 710 ember túlélte, mintegy 1500 pedig meghalt."
+  },
+  {
+    "audio_file": "A-HU-Q015.m4a",
+    "question": "Mi volt a legelső mesterséges műhold, amelyet az űrbe bocsátottak?",
+    "reference_answer": "Az első mesterséges műhold a Szputnyik–1 volt, amelyet a Szovjetunió 1957. október 4-én indított."
+  },
+  {
+    "audio_file": "A-HU-Q016.m4a",
+    "question": "Hány tagállama van jelenleg az Európai Uniónak?",
+    "reference_answer": "Az Európai Uniónak jelenleg 27 tagállama van."
+  },
+  {
+    "audio_file": "A-HU-Q017.m4a",
+    "question": "Mi India fővárosa?",
+    "reference_answer": "India fővárosa Újdelhi."
+  },
+  {
+    "audio_file": "A-HU-Q018.m4a",
+    "question": "Hol található földrajzilag Sanghaj?",
+    "reference_answer": "Sanghaj Kína keleti partján, a Jangce torkolatánál, a Kelet-kínai-tenger partján fekszik."
+  },
+  {
+    "audio_file": "A-HU-Q019.m4a",
+    "question": "Melyik a világ legkisebb országa, és mekkora a területe?",
+    "reference_answer": "A világ legkisebb országa a Vatikán, területe körülbelül 0,49 km²."
+  },
+  {
+    "audio_file": "A-HU-Q020.m4a",
+    "question": "Miért fontos a Panama-csatorna, és milyen hatással lenne a globális kereskedelemre, ha lezárnák?",
+    "reference_answer": "A Panama-csatorna összeköti az Atlanti- és a Csendes-óceánt; lezárása késéseket, magasabb költségeket és ellátási zavarokat okozna."
+  },
+  {
+    "audio_file": "A-HU-Q021.m4a",
+    "question": "Melyik Kína három legnagyobb tartománya?",
+    "reference_answer": "Terület szerint Hszincsiang, Tibet és Belső-Mongólia a legnagyobb; mindhárom autonóm terület, nem szűk értelemben vett tartomány."
+  },
+  {
+    "audio_file": "A-HU-Q022.m4a",
+    "question": "Melyik város Irán fővárosa?",
+    "reference_answer": "Irán fővárosa Teherán."
+  },
+  {
+    "audio_file": "A-HU-Q023.m4a",
+    "question": "Melyek a Naprendszer bolygói?",
+    "reference_answer": "A bolygók: Merkúr, Vénusz, Föld, Mars, Jupiter, Szaturnusz, Uránusz és Neptunusz."
+  },
+  {
+    "audio_file": "A-HU-Q024.m4a",
+    "question": "Ki volt az ókori Róma első császára?",
+    "reference_answer": "Az ókori Róma első császára Augustus volt."
+  },
+  {
+    "audio_file": "A-HU-Q025.m4a",
+    "question": "Mikor volt a Kínai Népköztársaság megalakulásának dátuma?",
+    "reference_answer": "A Kínai Népköztársaságot 1949. október 1-jén alapították."
+  },
+  {
+    "audio_file": "A-HU-Q026.m4a",
+    "question": "Mikor bomlott fel a Szovjetunió?",
+    "reference_answer": "A Szovjetunió 1991. december 26-án hivatalosan megszűnt."
+  },
+  {
+    "audio_file": "A-HU-Q027.m4a",
+    "question": "A második világháború alatt melyik volt a szövetségesek normandiai Partraszállásának pontos dátuma?",
+    "reference_answer": "A normandiai partraszállás 1944. június 6-án, a D-napon történt."
+  },
+  {
+    "audio_file": "A-HU-Q028.m4a",
+    "question": "Milyen hosszú a kínai nagy fal?",
+    "reference_answer": "Az összes szakasz hivatalosan mért hossza körülbelül 21 196 kilométer."
+  },
+  {
+    "audio_file": "A-HU-Q029.m4a",
+    "question": "Melyek voltak a legfőbb forradalmi események Európában 1848-ban?",
+    "reference_answer": "Az 1848-as események közé tartozott a francia februári forradalom, a német és olasz forradalmak, valamint a Habsburg Birodalom felkelései."
+  },
+  {
+    "audio_file": "A-HU-Q030.m4a",
+    "question": "Melyik dinasztia idején nyitották meg először a Selyemutat?",
+    "reference_answer": "A Selyemutat a Han-dinasztia idején, különösen Vu császár alatt, a Kr. e. 2. században nyitották meg."
+  },
+  {
+    "audio_file": "A-HU-Q031.m4a",
+    "question": "Mi okozza a köszvényt?",
+    "reference_answer": "A köszvényt az ízületekben lerakódó urátkristályok okozzák, amikor tartósan magas a vér húgysavszintje."
+  },
+  {
+    "audio_file": "A-HU-Q032.m4a",
+    "question": "Melyik a Biblia leghosszabb fejezete?",
+    "reference_answer": "A Biblia leghosszabb fejezete a 119. zsoltár, 176 verssel."
+  },
+  {
+    "audio_file": "A-HU-Q033.m4a",
+    "question": "Mi Spongyabob háziállata?",
+    "reference_answer": "SpongyaBob háziállata Gary, a csiga."
+  },
+  {
+    "audio_file": "A-HU-Q034.m4a",
+    "question": "Hány császár uralkodott a Ming-dinasztiában?",
+    "reference_answer": "A Ming-dinasztia alatt 16 császár uralkodott."
+  },
+  {
+    "audio_file": "A-HU-Q035.m4a",
+    "question": "Hogyan keletkeznek a fekete lyukak?",
+    "reference_answer": "A legtöbb fekete lyuk nagy tömegű csillagok összeomlásakor keletkezik; mások egyesüléssel vagy közvetlen összeomlással jöhetnek létre."
+  },
+  {
+    "audio_file": "A-HU-Q036.m4a",
+    "question": "Mi Franciaország hivatalos nyelve?",
+    "reference_answer": "Franciaország hivatalos nyelve a francia."
+  },
+  {
+    "audio_file": "A-HU-Q037.m4a",
+    "question": "Mi a fő vallás Franciaországban?",
+    "reference_answer": "A legnagyobb vallás a kereszténység, történelmileg a katolicizmus, bár Franciaország erősen szekuláris."
+  },
+  {
+    "audio_file": "A-HU-Q038.m4a",
+    "question": "Mondana néhány történeti hátteret az Alpokról?",
+    "reference_answer": "Az Alpok az afrikai és eurázsiai lemezek ütközésével alakult ki, és régóta formálja Európa kereskedelmét, háborúit, településeit és turizmusát."
+  },
+  {
+    "audio_file": "A-HU-Q039.m4a",
+    "question": "Kérjük, írja le részletesen az Alpok ökológiai környezetét!",
+    "reference_answer": "Az Alpokban magassági éghajlati övek, erdők, rétek, gleccserek, tavak és endemikus fajok vannak; a felmelegedés gyorsan zsugorítja a gleccsereket."
+  },
+  {
+    "audio_file": "A-HU-Q040.m4a",
+    "question": "Sorolja fel az Alpok öt fő országát!",
+    "reference_answer": "Az öt fő alpesi ország Franciaország, Svájc, Olaszország, Ausztria és Németország; a régióhoz Szlovénia, Liechtenstein és Monaco is tartozik."
+  },
+  {
+    "audio_file": "A-HU-Q041.m4a",
+    "question": "Ki az Amerikai Egyesült Államok 39. elnöke?",
+    "reference_answer": "Az Egyesült Államok 39. elnöke Jimmy Carter volt."
+  },
+  {
+    "audio_file": "A-HU-Q042.m4a",
+    "question": "Milyen időzónában van New York város?",
+    "reference_answer": "New York a keleti időzónában van: télen UTC−5, nyári időszámításkor UTC−4."
+  },
+  {
+    "audio_file": "A-HU-Q043.m4a",
+    "question": "Mekkora az időeltérés New York időzónája és Kína között?",
+    "reference_answer": "New York téli ideje alatt Kína 13 órával előrébb jár."
+  },
+  {
+    "audio_file": "A-HU-Q044.m4a",
+    "question": "Alkalmaznak-e nyári időszámítást New Yorkban? Mekkora az időeltérés Kínával a nyári időszámítás alatt?",
+    "reference_answer": "Igen; New York nyári időszámítása alatt Kína 12 órával előrébb jár."
+  },
+  {
+    "audio_file": "A-HU-Q045.m4a",
+    "question": "Milyen részekből állnak az emberi sejtek?",
+    "reference_answer": "Egy tipikus emberi sejt sejthártyából, sejtszervecskéket tartalmazó citoplazmából és általában DNS-t tartalmazó sejtmagból áll."
+  },
+  {
+    "audio_file": "A-HU-Q046.m4a",
+    "question": "Kína melyik korszakában alapították a Nyugati Han-dinasztiát?",
+    "reference_answer": "A Nyugati Han-dinasztiát Kr. e. 202-ben, a Csin-dinasztia bukása és a Csu–Han háború után alapították."
+  },
+  {
+    "audio_file": "A-HU-Q047.m4a",
+    "question": "Mi volt a normandiai partraszállás kódneve?",
+    "reference_answer": "Az invázió fedőneve Overlord hadművelet, a tengeri szakaszé Neptune hadművelet volt."
+  },
+  {
+    "audio_file": "A-HU-Q048.m4a",
+    "question": "Mikor épült a Louvre?",
+    "reference_answer": "A Louvre 1190 körül erődként épült; a mai palota a 16. századtól kezdődő átépítések során alakult ki."
+  },
+  {
+    "audio_file": "A-HU-Q049.m4a",
+    "question": "Melyik dinasztiához tartozott Wu Zetian császárnő a kínai történelemben?",
+    "reference_answer": "Vu Ce-tien a Tang-korszakban uralkodott, de 690 és 705 között saját Csou-dinasztiát alapított."
+  },
+  {
+    "audio_file": "A-HU-Q050.m4a",
+    "question": "Melyik az emberi test legnagyobb szerve?",
+    "reference_answer": "Az emberi test legnagyobb szerve a bőr."
+  },
+  {
+    "audio_file": "A-HU-Q051.m4a",
+    "question": "Mennyi a Föld és a Hold közötti átlagos távolság?",
+    "reference_answer": "A Föld és a Hold átlagos távolsága körülbelül 384 400 kilométer."
+  },
+  {
+    "audio_file": "A-HU-Q052.m4a",
+    "question": "A Föld magja teljes egészében vasból áll?",
+    "reference_answer": "Nem; a földmag főként vasból, továbbá nikkelből és könnyebb elemekből áll."
+  },
+  {
+    "audio_file": "A-HU-Q053.m4a",
+    "question": "Jelenleg melyik vallásnak van a legtöbb követője a világon?",
+    "reference_answer": "Jelenleg a kereszténységnek van a legtöbb követője a világon."
+  },
+  {
+    "audio_file": "A-HU-Q054.m4a",
+    "question": "Mi az a kvantumszámítógép?",
+    "reference_answer": "A kvantumszámítógép qubiteket, szuperpozíciót és összefonódást használ bizonyos számításokhoz."
+  },
+  {
+    "audio_file": "A-HU-Q055.m4a",
+    "question": "A közigazgatási felosztás szerint hány tartományi jogú város (municípium) van Kínában?",
+    "reference_answer": "Kínának négy közvetlen irányítású városa van: Peking, Sanghaj, Tiencsin és Csungking."
+  },
+  {
+    "audio_file": "A-HU-Q056.m4a",
+    "question": "Honnan származik az édes mandula és a keserű mandula?",
+    "reference_answer": "Az édes és keserű mandula a Prunus dulcis változataiból származik; a keserű fajták több amigdalint tartalmaznak."
+  },
+  {
+    "audio_file": "A-HU-Q057.m4a",
+    "question": "Milyen sorrendben helyezkednek el az elemek a kémiai elemek periódusos rendszerében?",
+    "reference_answer": "Az elemek növekvő rendszám, vagyis a mag protonszáma szerint vannak rendezve."
+  },
+  {
+    "audio_file": "A-HU-Q058.m4a",
+    "question": "A növény melyik részében megy végbe a fotoszintézis?",
+    "reference_answer": "A fotoszintézis főként a kloroplasztiszokban, különösen a levelek mezofillumsejtjeiben zajlik."
+  },
+  {
+    "audio_file": "A-HU-Q059.m4a",
+    "question": "Mikor történt a 2008-as venchuani földrengés?",
+    "reference_answer": "A vencsuani földrengés 2008. május 12-én 14:28-kor történt kínai idő szerint."
+  },
+  {
+    "audio_file": "A-HU-Q060.m4a",
+    "question": "Melyik a világ legmagasabb hegye?",
+    "reference_answer": "A világ legmagasabb hegye a Mount Everest."
+  },
+  {
+    "audio_file": "A-HU-Q061.m4a",
+    "question": "Mi Szingapúr fővárosa?",
+    "reference_answer": "Szingapúr fővárosa Szingapúr."
+  },
+  {
+    "audio_file": "A-HU-Q062.m4a",
+    "question": "Mi a különbség a szol és a lotion között?",
+    "reference_answer": "A szol szilárd részecskék kolloid szuszpenziója folyadékban; a testápoló a bőrre szánt folyadék vagy emulzió."
+  },
+  {
+    "audio_file": "A-HU-Q063.m4a",
+    "question": "Hány kapuja van a Tiltott Városnak? Melyek a neveik? Melyek a fő épületek a Tiltott Város központi tengelyén?",
+    "reference_answer": "A négy fő kapu a Déli, az Isteni Hatalom, a Keleti Dicsőség és a Nyugati Dicsőség kapuja; a középtengelyen állnak a Legfőbb Harmónia és a Mennyei Tisztaság fő épületei."
+  },
+  {
+    "audio_file": "A-HU-Q064.m4a",
+    "question": "A négy nagy találmány közül melyik volt a legkorábbi?",
+    "reference_answer": "A papírgyártást tekintik a négy nagy találmány közül a legkorábbinak."
+  },
+  {
+    "audio_file": "A-HU-Q065.m4a",
+    "question": "Ankang város Senhszi (Shaanxi) tartomány fővárosa?",
+    "reference_answer": "Nem; Ankang prefektúraszintű város, Senhszi fővárosa pedig Hszian."
+  },
+  {
+    "audio_file": "A-HU-Q066.m4a",
+    "question": "Melyik dinasztiában vált a kancellári írás (lishu) hivatalos írásmóddá? Melyik írásmódból fejlődött ki?",
+    "reference_answer": "A hivatalnoki írás a Han-dinasztia alatt lett hivatalos írás, és a pecsétírásból fejlődött ki."
+  },
+  {
+    "audio_file": "A-HU-Q067.m4a",
+    "question": "Mikor van Mao Ce-tung halálának évfordulója?",
+    "reference_answer": "Mao Ce-tung halálának évfordulója szeptember 9.; 1976. szeptember 9-én halt meg."
+  },
+  {
+    "audio_file": "A-HU-Q068.m4a",
+    "question": "Melyik az emberi anatómia leghosszabb csontja?",
+    "reference_answer": "Az emberi test leghosszabb csontja a combcsont."
+  },
+  {
+    "audio_file": "A-HU-Q069.m4a",
+    "question": "Melyik évben épült a Tower Bridge?",
+    "reference_answer": "A Tower Bridge építése 1886-ban kezdődött, és 1894-ben nyitották meg."
+  },
+  {
+    "audio_file": "A-HU-Q070.m4a",
+    "question": "Melyek a TCP háromutas kézfogás lépései?",
+    "reference_answer": "A kliens SYN-t küld, a szerver SYN-ACK-kal válaszol, majd a kliens ACK-t küld."
+  },
+  {
+    "audio_file": "A-HU-Q071.m4a",
+    "question": "Milyen hegymászási engedélyt kaphatok a Mount Everest megmászásához?",
+    "reference_answer": "A déli útvonalhoz a nepáli turisztikai hivatal, az északihoz a Kínai Tibeti Hegymászó Szövetség engedélye kell."
+  },
+  {
+    "audio_file": "A-HU-Q072.m4a",
+    "question": "Mikor volt a második ópiumháború pontos dátuma?",
+    "reference_answer": "A második ópiumháború 1856. október 8-tól 1860. október 24-ig tartott."
+  },
+  {
+    "audio_file": "A-HU-Q073.m4a",
+    "question": "Honnan ered a 12 órás időszámítási rendszer?",
+    "reference_answer": "A rendszer abból az ókori gyakorlatból ered, amely a nappalt és az éjszakát 12 részre osztotta, különösen Egyiptomban és később a görög–római világban."
+  },
+  {
+    "audio_file": "A-HU-Q074.m4a",
+    "question": "Hány négyzetszám van 5 és 7 között?",
+    "reference_answer": "Öt és hét között nincs egész négyzetszám."
+  },
+  {
+    "audio_file": "A-HU-Q075.m4a",
+    "question": "Mi az emlősök verejtékmirigyeinek funkciója?",
+    "reference_answer": "A verejtékmirigyek párologtatással hűtik a testet, és kis mennyiségű vizet, sót és salakanyagot választanak ki."
+  },
+  {
+    "audio_file": "A-HU-Q076.m4a",
+    "question": "Melyik a világ legmagasabb hegycsúcsa?",
+    "reference_answer": "A tengerszint felett legmagasabb hegy a Mount Everest."
+  },
+  {
+    "audio_file": "A-HU-Q077.m4a",
+    "question": "Melyek a négy ókori civilizáció?",
+    "reference_answer": "A négy ókori civilizáció a mezopotámiai, az egyiptomi, az Indus-völgyi és a kínai civilizáció."
+  },
+  {
+    "audio_file": "A-HU-Q078.m4a",
+    "question": "Tudna mesélni a pajzsmirigy funkciójáról?",
+    "reference_answer": "A pajzsmirigy T4- és T3-hormonokat termel, amelyek szabályozzák az anyagcserét, növekedést, hőmérsékletet és energiafelhasználást; kalcitonint is termel."
+  },
+  {
+    "audio_file": "A-HU-Q079.m4a",
+    "question": "Hol található az Apple székhelye?",
+    "reference_answer": "Az Apple központja az Apple Parkban, a kaliforniai Cupertinóban található."
+  },
+  {
+    "audio_file": "A-HU-Q080.m4a",
+    "question": "Melyik a harmadik bolygó a Naprendszerben?",
+    "reference_answer": "A Naprendszer harmadik bolygója a Föld."
+  },
+  {
+    "audio_file": "A-HU-Q081.m4a",
+    "question": "Mi az a Jogok Nyilatkozata (Bill of Rights)?",
+    "reference_answer": "A jognyilatkozat védett szabadságjogok hivatalos listája; az USA-ban az alkotmány első tíz kiegészítését jelenti."
+  },
+  {
+    "audio_file": "A-HU-Q082.m4a",
+    "question": "El tudja magyarázni, mi az a kvantum-összefonódás?",
+    "reference_answer": "A kvantum-összefonódás olyan közös kvantumállapot, amelyben elkülönült részecskék mérései klasszikusan nem magyarázható korrelációkat mutatnak."
+  },
+  {
+    "audio_file": "A-HU-Q083.m4a",
+    "question": "Mi a Maldív-szigetek fővárosa?",
+    "reference_answer": "A Maldív-szigetek fővárosa Malé."
+  },
+  {
+    "audio_file": "A-HU-Q084.m4a",
+    "question": "Milyen pénznemet használnak a Maldív-szigeteken?",
+    "reference_answer": "A Maldív-szigetek pénzneme a maldív rúfia, kódja MVR."
+  },
+  {
+    "audio_file": "A-HU-Q085.m4a",
+    "question": "Melyek a fő turisztikai látványosságok a Maldív-szigeteken?",
+    "reference_answer": "A fő látnivalók az üdülőszigetek, korallzátonyok, búvárhelyek, strandok, a Hanifaru-öböl és Malé kulturális helyszínei."
+  },
+  {
+    "audio_file": "A-HU-Q086.m4a",
+    "question": "Mi a Montreali Jegyzőkönyv?",
+    "reference_answer": "A Montreali Jegyzőkönyv egy 1987-es nemzetközi egyezmény az ózonkárosító anyagok fokozatos megszüntetéséről."
+  },
+  {
+    "audio_file": "A-HU-Q087.m4a",
+    "question": "Melyek az Egyesült Nemzetek Alapokmányának főbb pontjai?",
+    "reference_answer": "Az ENSZ Alapokmánya meghatározza a célokat, elveket, tagságot, szerveket, békés vitarendezést, kollektív biztonságot és együttműködést."
+  },
+  {
+    "audio_file": "A-HU-Q088.m4a",
+    "question": "Mikor alapították a Nemzetközi Vöröskeresztet?",
+    "reference_answer": "A Vöröskereszt Nemzetközi Bizottságát 1863. február 17-én alapították."
+  },
+  {
+    "audio_file": "A-HU-Q089.m4a",
+    "question": "A Turing-díj vezette be a mesterséges intelligencia fogalmát?",
+    "reference_answer": "Nem; a Turing-díj informatikai eredményeket ismer el, a mesterséges intelligencia fogalma pedig ettől függetlenül, különösen az 1956-os dartmouthi konferencián alakult ki."
+  },
+  {
+    "audio_file": "A-HU-Q090.m4a",
+    "question": "Melyek az univerzum alapvető tulajdonságai?",
+    "reference_answer": "Az univerzum tágul, nagy léptékben közel homogén és izotróp, továbbá anyagot, energiát, téridőt és alapvető kölcsönhatásokat tartalmaz."
+  },
+  {
+    "audio_file": "A-HU-Q091.m4a",
+    "question": "Mi az a légiforgalmi irányítás?",
+    "reference_answer": "A légiforgalmi irányítás a földön és az ellenőrzött légtérben koordinálja a repülőgépeket az ütközések elkerülésére és a biztonságos forgalom fenntartására."
+  },
+  {
+    "audio_file": "A-HU-Q092.m4a",
+    "question": "Milyen típusú mikroszkópok léteznek?",
+    "reference_answer": "Fő típusai az optikai, elektron-, pásztázószondás és röntgenmikroszkópok."
+  },
+  {
+    "audio_file": "A-HU-Q093.m4a",
+    "question": "Sanghaj Kína melyik tartományának a fővárosa?",
+    "reference_answer": "Egyiknek sem; Sanghaj közvetlen irányítású város, nem tartományi főváros."
+  },
+  {
+    "audio_file": "A-HU-Q094.m4a",
+    "question": "Kérjük, magyarázza el, mit jelent a karbonsemlegesség!",
+    "reference_answer": "A karbonsemlegesség azt jelenti, hogy az emberi CO₂-kibocsátást azonos mennyiségű eltávolítás ellensúlyozza, így a nettó kibocsátás nulla."
+  },
+  {
+    "audio_file": "A-HU-Q095.m4a",
+    "question": "Mennyi idő alatt tesz meg a Föld egy teljes fordulatot a tengelye körül?",
+    "reference_answer": "A Föld a csillagokhoz képest 23 óra 56 perc alatt fordul meg, a közepes nap 24 óra."
+  },
+  {
+    "audio_file": "A-HU-Q096.m4a",
+    "question": "Hány aranyérmet nyert Kína a 2022-es téli olimpiai játékokon?",
+    "reference_answer": "Kína kilenc aranyérmet nyert a 2022-es téli olimpián."
+  },
+  {
+    "audio_file": "A-HU-Q097.m4a",
+    "question": "Mi a lebegő mágnesvasút (maglev) működési elve?",
+    "reference_answer": "A maglev mágneses erőkkel lebegteti és vezeti a vonatot, a változó mágneses tér pedig hajtóerőt hoz létre."
+  },
+  {
+    "audio_file": "A-HU-Q098.m4a",
+    "question": "Mi a szelén szerepe az enzimkatalitikus aktivitásban?",
+    "reference_answer": "A szelén szelenociszteinként épül be enzimekbe, például a glutation-peroxidázba, és redoxkatalízist, valamint antioxidáns védelmet tesz lehetővé."
+  },
+  {
+    "audio_file": "A-HU-Q099.m4a",
+    "question": "Mi a Pekingi Egyetem címe?",
+    "reference_answer": "A Pekingi Egyetem címe: Yiheyuan út 5., Haidian kerület, Peking 100871, Kína."
+  },
+  {
+    "audio_file": "A-HU-Q100.m4a",
+    "question": "Mikor alapították a Pekingi Egyetemet?",
+    "reference_answer": "A Pekingi Egyetemet 1898-ban alapították Pekingi Császári Egyetem néven."
+  },
+  {
+    "audio_file": "A-HU-Q101.m4a",
+    "question": "Milyen híres épületeket építettek az egyiptomi fáraók?",
+    "reference_answer": "A fáraók piramisokat és monumentális templom- és sírkomplexumokat építettek, például Gízában, Karnakban és Luxorban."
+  },
+  {
+    "audio_file": "A-HU-Q102.m4a",
+    "question": "Melyik országban található Drezda?",
+    "reference_answer": "Drezda Németországban található."
+  },
+  {
+    "audio_file": "A-HU-Q103.m4a",
+    "question": "Melyik a világ legmagasabb épülete?",
+    "reference_answer": "A világ legmagasabb épülete a dubaji Burdzs Kalifa, 828 méter magas."
+  },
+  {
+    "audio_file": "A-HU-Q104.m4a",
+    "question": "Hol található Kínában a legnagyobb sós tó?",
+    "reference_answer": "A Csinghaj-tó Csinghaj tartományban Kína legnagyobb sós vizű tava."
+  },
+  {
+    "audio_file": "A-HU-Q105.m4a",
+    "question": "Részt vettek kínai mérnökök a Bitcoin fejlesztésében?",
+    "reference_answer": "A Bitcoint Satoshi Nakamoto álnéven mutatták be; nincs igazolt bizonyíték arra, hogy az eredeti fejlesztők kínai mérnökök voltak."
+  },
+  {
+    "audio_file": "A-HU-Q106.m4a",
+    "question": "Hogyan született Athéné a görög mitológiában?",
+    "reference_answer": "A mítosz szerint Athéné felnőtten és felfegyverkezve pattant ki Zeusz fejéből, miután Zeusz lenyelte az anyját, Métiszt."
+  },
+  {
+    "audio_file": "A-HU-Q107.m4a",
+    "question": "Melyek a mandzsu daru fő élőhelyei?",
+    "reference_answer": "A mandzsu darvak főként Északkelet-Kína és az orosz Távol-Kelet vizes élőhelyein költenek; más populációk Hokkaidón élnek vagy Kínában és Koreában telelnek."
+  },
+  {
+    "audio_file": "A-HU-Q108.m4a",
+    "question": "Hol található a Notre-Dame-székesegyház?",
+    "reference_answer": "A Notre-Dame a párizsi Île de la Cité szigetén található."
+  },
+  {
+    "audio_file": "A-HU-Q109.m4a",
+    "question": "Mennyi ideig tartott a párizsi Notre-Dame felépítése?",
+    "reference_answer": "Az építkezés 1163-ban kezdődött és a 14. század közepére nagyrészt befejeződött, így körülbelül 180 évig tartott."
+  },
+  {
+    "audio_file": "A-HU-Q110.m4a",
+    "question": "Azt hallottam, hogy a sok vízivás nem feltétlenül csökkenti a bőr szárazságát. Ez igaz?",
+    "reference_answer": "Igen; ha valaki nem dehidratált, a több víz önmagában általában nem szünteti meg a száraz bőrt, a hidratálók és az ok kezelése hatásosabb."
+  },
+  {
+    "audio_file": "A-HU-Q111.m4a",
+    "question": "Mi az a \"földelés\" az elektrotechnikában?",
+    "reference_answer": "A védővezető az érinthető vezető részeket a földhöz vagy referencia-potenciálhoz köti, és kis ellenállású hibaáram-utat biztosít."
+  },
+  {
+    "audio_file": "A-HU-Q112.m4a",
+    "question": "Mi az egyik módja annak, hogy megvédjük a berendezéseket az elektromos hálózatban az összetett elektromágneses interferenciától?",
+    "reference_answer": "Az elektromágneses árnyékolás megfelelő földeléssel és szűréssel együtt védi az érzékeny berendezéseket a zavaroktól."
+  },
+  {
+    "audio_file": "A-HU-Q113.m4a",
+    "question": "Milyen volt az ókori Róma politikai rendszere?",
+    "reference_answer": "Róma monarchiából köztársasággá, majd császársággá alakult; a köztársaságban magistratusok, szenátus és népgyűlések működtek, később a császárok összpontosították a hatalmat."
+  },
+  {
+    "audio_file": "A-HU-Q114.m4a",
+    "question": "Ki volt a legfőbb tisztségviselő a köztársaság korában az ókori Rómában?",
+    "reference_answer": "A két évente választott konzul volt a Római Köztársaság legmagasabb rendes tisztségviselője."
+  },
+  {
+    "audio_file": "A-HU-Q115.m4a",
+    "question": "Mi az a Crohn-betegség? Melyek a tünetei és hogyan diagnosztizálják?",
+    "reference_answer": "A Crohn-betegség krónikus gyulladásos bélbetegség hasi fájdalommal, hasmenéssel, fogyással és fáradtsággal; vizsgálatokkal, endoszkópiával, biopsziával és képalkotással diagnosztizálják."
+  },
+  {
+    "audio_file": "A-HU-Q116.m4a",
+    "question": "A Crohn-betegség könnyen vérszegénységhez vezethet?",
+    "reference_answer": "Igen; a vérzés, gyulladás és a vas, B12-vitamin vagy folát rossz felszívódása vérszegénységet okozhat."
+  },
+  {
+    "audio_file": "A-HU-Q117.m4a",
+    "question": "Melyek a fő vallások Kínában?",
+    "reference_answer": "Kínában jelen van a buddhizmus, taoizmus, iszlám, protestantizmus, katolicizmus és a népi vallások; sokan vallástalanok."
+  },
+  {
+    "audio_file": "A-HU-Q118.m4a",
+    "question": "Mondaná el a természetes konvekció és a kényszerített konvekció fogalmát és különbségeit?",
+    "reference_answer": "A természetes konvekciót a hőmérséklet miatti sűrűségkülönbség és felhajtóerő, a kényszerített konvekciót ventilátor, szivattyú vagy külső áramlás hajtja."
+  },
+  {
+    "audio_file": "A-HU-Q119.m4a",
+    "question": "Mi a szupravezető anyagok definíciója?",
+    "reference_answer": "A szupravezető a kritikus hőmérséklet alatt, megfelelő tér- és áramhatárok között nulla ellenállású és kiszorítja a mágneses fluxust."
+  },
+  {
+    "audio_file": "A-HU-Q120.m4a",
+    "question": "A kínai történelemben melyik császár volt az egyetlen nő, aki áldozatot mutatott be a Tai-hegyen?",
+    "reference_answer": "A Taj-hegyi szertartással kapcsolatba hozott egyetlen női kínai császár Vu Ce-tien volt."
+  },
+  {
+    "audio_file": "A-HU-Q121.m4a",
+    "question": "Mit jelent a köbméter?",
+    "reference_answer": "A köbméter egy egy méter élhosszúságú kocka térfogata."
+  },
+  {
+    "audio_file": "A-HU-Q122.m4a",
+    "question": "Mi a kapcsolat a köbméter és a köbcenti között?",
+    "reference_answer": "Egy köbméter 1 000 000 köbcentiméter."
+  },
+  {
+    "audio_file": "A-HU-Q123.m4a",
+    "question": "Körülbelül mennyit nyom egy köbméter víz?",
+    "reference_answer": "Egy köbméter víz szobahőmérsékleten körülbelül 1000 kilogramm, vagyis egy tonna."
+  },
+  {
+    "audio_file": "A-HU-Q124.m4a",
+    "question": "Mi Norvégia fővárosa?",
+    "reference_answer": "Norvégia fővárosa Oslo."
+  },
+  {
+    "audio_file": "A-HU-Q125.m4a",
+    "question": "Miért nem szabad fémedényeket használni a mikrohullámú sütőben?",
+    "reference_answer": "A fém visszaverheti a mikrohullámokat, élein szikrákat és ívet hozhat létre, ami károsíthatja a sütőt vagy tüzet okozhat."
+  },
+  {
+    "audio_file": "A-HU-Q126.m4a",
+    "question": "Mi volt a Google Maps elődje? Hogy hívták, mielőtt a Google felvásárolta?",
+    "reference_answer": "A Google Maps a Where 2 Technologies Expedition nevű asztali térképprogramjából származik, miután a Google 2004-ben felvásárolta a céget."
+  },
+  {
+    "audio_file": "A-HU-Q127.m4a",
+    "question": "Tudja, mekkora a Plútó tömege?",
+    "reference_answer": "A Plútó tömege körülbelül 1,303 × 10²² kilogramm."
+  },
+  {
+    "audio_file": "A-HU-Q128.m4a",
+    "question": "Mi az az internetprotokoll (IP)?",
+    "reference_answer": "Az internetprotokoll csomagokat címez és irányít összekapcsolt hálózatokon; fő változatai az IPv4 és IPv6."
+  },
+  {
+    "audio_file": "A-HU-Q129.m4a",
+    "question": "Van az állatoknak empátiájuk?",
+    "reference_answer": "Igen; főemlősöknél, elefántoknál, rágcsálóknál és egyes madaraknál empátiaszerű viselkedést figyeltek meg."
+  },
+  {
+    "audio_file": "A-HU-Q130.m4a",
+    "question": "Évente hányszor adják át a Nobel-díjakat?",
+    "reference_answer": "A Nobel-díjakat évente egyszer, hat kategóriában adják át."
+  },
+  {
+    "audio_file": "A-HU-Q131.m4a",
+    "question": "Van rá példa, hogy többen megosztva kapták ugyanazt a díjat az éves Nobel-díj átadásakor?",
+    "reference_answer": "Igen; egy Nobel-díjon legfeljebb három díjazott osztozhat, és ez sokszor megtörtént."
+  },
+  {
+    "audio_file": "A-HU-Q132.m4a",
+    "question": "Mikor kezdődött és mikor ért véget az Ókori Egyiptom tizennyolcadik dinasztiája?",
+    "reference_answer": "Az ókori Egyiptom XVIII. dinasztiáját általában Kr. e. 1550–1292 közé teszik."
+  },
+  {
+    "audio_file": "A-HU-Q133.m4a",
+    "question": "Ki volt az Ókori Római Birodalom első császára?",
+    "reference_answer": "A Római Birodalom első császára Augustus volt."
+  },
+  {
+    "audio_file": "A-HU-Q134.m4a",
+    "question": "Elnézést, mi az a Planck-állandó?",
+    "reference_answer": "A Planck-állandó h = 6,62607015 × 10⁻³⁴ joule-másodperc, és a foton energiáját kapcsolja össze a frekvenciájával."
+  },
+  {
+    "audio_file": "A-HU-Q135.m4a",
+    "question": "Melyik században kezdték el használni a geocentrikus világképet?",
+    "reference_answer": "A geocentrikus modellek az ókorból származnak; görög rendszereik Kr. e. a 4. században jelentek meg, Ptolemaiosz pedig Kr. u. a 2. században formalizálta őket."
+  },
+  {
+    "audio_file": "A-HU-Q136.m4a",
+    "question": "Newton korábban a geocentrikus világkép elveit vallotta?",
+    "reference_answer": "Nem; Newton a heliocentrizmust támogatta, és a mechanikával, valamint a gravitációval megadta fizikai alapját."
+  },
+  {
+    "audio_file": "A-HU-Q137.m4a",
+    "question": "A gergely-naptár szerinti 2023. október 1-jének megfelelő holdnaptári dátum:",
+    "reference_answer": "2023. október 1. a Nyúl évének nyolcadik holdhónapja 17. napjának felelt meg."
+  },
+  {
+    "audio_file": "A-HU-Q138.m4a",
+    "question": "Mi a csillagjegye a gergely-naptár szerinti 2023. október 1-jének?",
+    "reference_answer": "2023. október 1. csillagjegye a Mérleg."
+  },
+  {
+    "audio_file": "A-HU-Q139.m4a",
+    "question": "Hol vannak hangosabb ünnepségek a gergely-naptár szerinti 2023. október 1-jén?",
+    "reference_answer": "Kínában a nemzeti ünnep legnagyobb rendezvényei Pekingben, különösen a Tienanmen téren, valamint országszerte turisztikai városokban zajlanak."
+  },
+  {
+    "audio_file": "A-HU-Q140.m4a",
+    "question": "Ismeri Párizs híres látnivalóit?",
+    "reference_answer": "Párizs híres látnivalói az Eiffel-torony, Louvre, Notre-Dame, Diadalív, Champs-Élysées, Sacré-Cœur, Musée d'Orsay és a Szajna."
+  },
+  {
+    "audio_file": "A-HU-Q141.m4a",
+    "question": "Mikor épült a Louvre?",
+    "reference_answer": "A Louvre 1190 körül erődként épült; a mai palota a 16. századtól kezdődő átépítések során alakult ki."
+  },
+  {
+    "audio_file": "A-HU-Q142.m4a",
+    "question": "Mumbai India fővárosa?",
+    "reference_answer": "Nem; India fővárosa Újdelhi, Mumbai pedig Mahárástra fővárosa."
+  },
+  {
+    "audio_file": "A-HU-Q143.m4a",
+    "question": "India melyik államában található Váránaszi?",
+    "reference_answer": "Varánaszi Uttar Prades indiai államban található."
+  },
+  {
+    "audio_file": "A-HU-Q144.m4a",
+    "question": "Mi az a rugalmas ütközés?",
+    "reference_answer": "Rugalmas ütközésben a teljes lendület és a teljes mozgási energia is megmarad."
+  },
+  {
+    "audio_file": "A-HU-Q145.m4a",
+    "question": "Hány kerülete (arrondissement) van Párizsnak?",
+    "reference_answer": "Párizsnak 20 kerülete van."
+  },
+  {
+    "audio_file": "A-HU-Q146.m4a",
+    "question": "A tenger gyümölcsein és a belsőségeken kívül milyen egyéb ételek kapcsolódnak a köszvényhez?",
+    "reference_answer": "A köszvénnyel összefügg a vörös hús, a cukros vagy fruktózos italok, a sör, más alkoholok és egyes purinban gazdag halak vagy vadhúsok fogyasztása."
+  },
+  {
+    "audio_file": "A-HU-Q147.m4a",
+    "question": "Mi az a kvantummechanika?",
+    "reference_answer": "A kvantummechanika az anyagot és energiát atomi és szubatomi szinten, kvantált állapotokkal, hullámfüggvényekkel és valószínűségekkel írja le."
+  },
+  {
+    "audio_file": "A-HU-Q148.m4a",
+    "question": "Mi az a kvantumszámítógép?",
+    "reference_answer": "A kvantumszámítógép qubiteket, szuperpozíciót és összefonódást használ egyes feladatok klasszikus számítógépektől eltérő megoldására."
+  },
+  {
+    "audio_file": "A-HU-Q149.m4a",
+    "question": "Mutassa be a ChatGPT alapvető koncepcióit!",
+    "reference_answer": "A ChatGPT nagy nyelvi modellre épülő társalgási MI-rendszer; tanult nyelvi mintákból válaszol, de hibázhat."
+  },
+  {
+    "audio_file": "A-HU-Q150.m4a",
+    "question": "Milyen elemekből áll a víz?",
+    "reference_answer": "A víz hidrogénből és oxigénből áll, kettő az egyhez arányban: H₂O."
+  },
+  {
+    "audio_file": "A-HU-Q151.m4a",
+    "question": "Melyik országhoz tartozik a Bajkál-tó?",
+    "reference_answer": "A Bajkál-tó Oroszországban található."
+  },
+  {
+    "audio_file": "A-HU-Q152.m4a",
+    "question": "Melyek a leggyakoribb elemek a természetben?",
+    "reference_answer": "A földkéregben az oxigén és a szilícium, az univerzumban a hidrogén és a hélium a leggyakoribb."
+  },
+  {
+    "audio_file": "A-HU-Q153.m4a",
+    "question": "Melyek Európa főbb tengerei?",
+    "reference_answer": "Európa fő tengerei közé tartozik a Földközi-, Balti-, Északi-, Norvég-, Barents-, Fekete-, Adriai-, Égei-, Jón-, Tirrén- és Kelta-tenger."
+  },
+  {
+    "audio_file": "A-HU-Q154.m4a",
+    "question": "Melyik szakterülethez tartozik a relativitáselmélet?",
+    "reference_answer": "A relativitáselmélet a fizika területéhez tartozik."
+  },
+  {
+    "audio_file": "A-HU-Q155.m4a",
+    "question": "Az E-vitamin hatékony antioxidáns, de miért kevésbé hatékony, mint a szelén a sejtek oxidatív stressz elleni védelmében?",
+    "reference_answer": "Az E-vitamin a membránok oxidációs láncait szakítja meg, míg a szelén olyan katalitikus enzimek része, amelyek ismételten bontják a peroxidokat; szerepük kiegészíti egymást."
+  },
+  {
+    "audio_file": "A-HU-Q156.m4a",
+    "question": "Mi az a Fermi-paradoxon?",
+    "reference_answer": "A Fermi-paradoxon az idegen civilizációk várható gyakorisága és a bizonyított nyomok vagy kapcsolat hiánya közötti ellentmondás."
+  },
+  {
+    "audio_file": "A-HU-Q157.m4a",
+    "question": "A relativitáselmélet szerint mi a kapcsolat a tömeg és az energia között?",
+    "reference_answer": "A tömeg és az energia egyenértékű; a nyugalmi energiára E = mc²."
+  },
+  {
+    "audio_file": "A-HU-Q158.m4a",
+    "question": "Üdvözlöm! El tudná magyarázni a Föld forgástengelyének ferdeségét?",
+    "reference_answer": "A Föld forgástengelye körülbelül 23,44°-kal dől a pályasík merőlegeséhez képest, ez okozza az évszakokat."
+  },
+  {
+    "audio_file": "A-HU-Q159.m4a",
+    "question": "Milyen hatással lesz az éghajlatváltozás a mezőgazdaságra?",
+    "reference_answer": "A felmelegedés eltolja a termőterületeket, módosítja a csapadékot, fokozza a hőt, aszályt és kártevőket, és sok terméshozamot csökkenthet."
+  },
+  {
+    "audio_file": "A-HU-Q160.m4a",
+    "question": "Kérjük, magyarázza el a fekete lyuk fogalmát!",
+    "reference_answer": "A fekete lyuk olyan térség, ahol a gravitáció annyira erős, hogy az eseményhorizonton belülről még a fény sem juthat ki."
+  },
+  {
+    "audio_file": "A-HU-Q161.m4a",
+    "question": "Mi az a kvantum-összefonódás?",
+    "reference_answer": "A kvantum-összefonódás közös kvantumállapot, amely klasszikusan nem magyarázható korrelációt hoz létre elkülönült részecskék között."
+  },
+  {
+    "audio_file": "A-HU-Q162.m4a",
+    "question": "Mi az a relativitáselmélet?",
+    "reference_answer": "A relativitáselmélet speciális és általános relativitásból áll, és a teret, időt, mozgást, gravitációt, valamint a tömeg és energia egyenértékűségét írja le."
+  },
+  {
+    "audio_file": "A-HU-Q163.m4a",
+    "question": "Mi az a blokklánc-technológia?",
+    "reference_answer": "A blokklánc elosztott, csak bővíthető főkönyv, amelynek rekordjai kriptográfiailag összekapcsolt blokkokban vannak, és hálózati konszenzus hitelesíti őket."
+  },
+  {
+    "audio_file": "A-HU-Q164.m4a",
+    "question": "Mi az a kvantummechanika?",
+    "reference_answer": "A kvantummechanika az anyag és energia atomi és szubatomi viselkedésének valószínűségi elmélete."
+  },
+  {
+    "audio_file": "A-HU-Q165.m4a",
+    "question": "Ki fedezte fel az oxigént?",
+    "reference_answer": "Az oxigént Carl Wilhelm Scheele és Joseph Priestley egymástól függetlenül állította elő; Antoine Lavoisier később elemként azonosította és nevezte el."
+  },
+  {
+    "audio_file": "A-HU-Q166.m4a",
+    "question": "Ki javasolta az egyetemes tömegvonzás törvényét?",
+    "reference_answer": "Az általános tömegvonzás törvényét Isaac Newton fogalmazta meg."
+  },
+  {
+    "audio_file": "A-HU-Q167.m4a",
+    "question": "Hogyan született az univerzum?",
+    "reference_answer": "A vezető kozmológiai modell szerint az univerzum körülbelül 13,8 milliárd éve egy rendkívül forró és sűrű kezdeti állapotból, az ősrobbanásból tágult ki."
+  },
+  {
+    "audio_file": "A-HU-Q168.m4a",
+    "question": "Melyek Newton három törvényei?",
+    "reference_answer": "Egy test nettó erő nélkül nyugalomban vagy egyenletes mozgásban marad; a gyorsulás az erő és tömeg hányadosa; minden hatásnak azonos nagyságú ellentétes ellenhatása van."
+  },
+  {
+    "audio_file": "A-HU-Q169.m4a",
+    "question": "Mi az az éghajlatváltozás?",
+    "reference_answer": "Az éghajlatváltozás az éghajlati minták tartós módosulása; a mai gyors felmelegedést főként az emberi üvegházgáz-kibocsátás okozza."
+  }
+]

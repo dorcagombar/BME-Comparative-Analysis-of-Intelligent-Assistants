@@ -19,7 +19,7 @@ import os
 from typing import Callable, Tuple
 
 
-def make_whisper_transcriber(api_key: str = None) -> Callable[[str], Tuple[str, float]]:
+def make_whisper_transcriber(api_key: str = None, model: str = None) -> Callable[[str], Tuple[str, float]]:
     """
     Return a transcribe(audio_path) → (text, whisper_confidence) function
     backed by OpenAI Whisper API.
@@ -28,6 +28,7 @@ def make_whisper_transcriber(api_key: str = None) -> Callable[[str], Tuple[str, 
     Raises ValueError if no key is available.
     """
     key = api_key or os.environ.get("OPENAI_API_KEY", "")
+    transcription_model = model or os.environ.get("OPENAI_TRANSCRIPTION_MODEL", "gpt-4o-transcribe")
     if not key:
         raise ValueError(
             "Whisper transcription requires OPENAI_API_KEY to be set. "
@@ -40,14 +41,14 @@ def make_whisper_transcriber(api_key: str = None) -> Callable[[str], Tuple[str, 
     def transcribe(audio_path: str) -> Tuple[str, float]:
         with open(audio_path, "rb") as f:
             result = client.audio.transcriptions.create(
-                model="whisper-1",
+                model=transcription_model,
                 file=f,
-                response_format="verbose_json",
             )
 
         text = result.text if hasattr(result, "text") else ""
 
-        # Compute confidence from per-segment no_speech_prob
+        # Newer transcription models may not expose Whisper segment-level
+        # no_speech_prob. Keep 1.0 when that metadata is unavailable.
         confidence = 1.0
         try:
             segments = result.segments if hasattr(result, "segments") else []

@@ -30,7 +30,9 @@ _AUDIO_FILE_ALIASES = {"audio_file", "audio", "file", "filename", "audio_path"}
 def _find_col(keys: List[str], aliases: set) -> Optional[str]:
     """Return the first key whose lowercased name is in aliases, else None."""
     for k in keys:
-        if k.lower().strip() in aliases:
+        # csv.DictReader can produce a None key for malformed/extra columns.
+        # Ignore non-string keys instead of crashing on .lower().
+        if isinstance(k, str) and k.lower().strip() in aliases:
             return k
     return None
 
@@ -164,39 +166,79 @@ class EvalRunner:
 
     def load_audio_dataset(
         self,
-        csv_path: str,
+        dataset_path: str,
         audio_files: Dict[str, str],
     ) -> List[QAPair]:
         """
-        Load an audio dataset.
+        Load an audio QA dataset from JSON, JSONL, or CSV.
 
-        csv_path:    path to a CSV with flexible column names:
-                       - audio filename column (aliases: audio_file, audio, file, filename, audio_path)
-                       - reference answer column (aliases: same as _REFERENCE_ALIASES)
-        audio_files: {filename: full_path} mapping built from uploaded files
+        Each row/object may contain flexible aliases for the audio filename,
+        question, and reference answer. ``audio_files`` maps repository
+        filenames to their resolved local paths. Rows whose audio file was not
+        selected/found are skipped.
         """
+        dataset_path = str(dataset_path)
+
+        def _open(p):
+            raw = open(p, "rb").read(4)
+            if raw[:2] in (b'\xff\xfe', b'\xfe\xff'):
+                enc = "utf-16"
+            elif raw[:3] == b'\xef\xbb\xbf':
+                enc = "utf-8-sig"
+            else:
+                enc = "utf-8"
+            return open(p, encoding=enc, newline="")
+
+        suffix = Path(dataset_path).suffix.lower()
+        if suffix == ".json":
+            with _open(dataset_path) as f:
+                rows = json.load(f)
+            if isinstance(rows, dict):
+                # Support common wrapped forms such as {"data": [...]} while
+                # retaining compatibility with the text dataset loader.
+                rows = next((v for v in rows.values() if isinstance(v, list)), [])
+        elif suffix == ".jsonl":
+            with _open(dataset_path) as f:
+                rows = [json.loads(line) for line in f if line.strip()]
+        elif suffix == ".csv":
+            with _open(dataset_path) as f:
+                rows = list(csv.DictReader(f))
+        else:
+            raise ValueError(
+                f"Unsupported audio dataset format: '{dataset_path}'. "
+                "Use .json, .jsonl, or .csv"
+            )
+
+        if not isinstance(rows, list):
+            raise ValueError("Audio dataset must contain a list of row objects.")
+
         pairs: List[QAPair] = []
-        with open(csv_path, encoding="utf-8-sig") as f:
-            for row in csv.DictReader(f):
-                keys = list(row.keys())
-                af_key = _find_col(keys, _AUDIO_FILE_ALIASES)
-                r_key  = _find_col(keys, _REFERENCE_ALIASES)
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
 
-                filename = row[af_key].strip() if af_key else ""
-                ref      = row[r_key].strip()  if r_key  else ""
-                full_path = audio_files.get(filename, audio_files.get(Path(filename).name, ""))
+            keys = list(row.keys())
+            af_key = _find_col(keys, _AUDIO_FILE_ALIASES)
+            if not af_key:
+                continue
 
-                # In repository-selection mode, audio_files contains only the
-                # recordings selected in the UI. Skip every other CSV row so
-                # the evaluation runs exactly the chosen questions.
-                if not full_path:
-                    continue
+            raw_filename = row.get(af_key)
+            filename = str(raw_filename or "").strip()
+            if not filename:
+                continue
 
-                pairs.append(QAPair(
-                    question=filename,
-                    reference_answer=ref,
-                    audio_path=full_path,
-                ))
+            basename = Path(filename).name
+            full_path = audio_files.get(filename) or audio_files.get(basename, "")
+            if not full_path:
+                continue
+
+            question, ref = _extract_qa(row)
+            pairs.append(QAPair(
+                question=question or basename,
+                reference_answer=ref,
+                audio_path=full_path,
+            ))
+
         return pairs
 
     # ------------------------------------------------------------------

@@ -1,0 +1,847 @@
+[
+  {
+    "audio_file": "A-EN-Q001.m4a",
+    "question": "What kind of award is a Turing award?",
+    "reference_answer": "It is the ACM's highest distinction in computer science, often called the Nobel Prize of computing."
+  },
+  {
+    "audio_file": "A-EN-Q002.m4a",
+    "question": "What are the four great inventions of ancient China?",
+    "reference_answer": "The four great inventions of ancient China are papermaking, printing, gunpowder, and the compass."
+  },
+  {
+    "audio_file": "A-EN-Q003.m4a",
+    "question": "Who wrote \"The Romance of the Three Kingdoms\"?",
+    "reference_answer": "The Romance of the Three Kingdoms was written by Luo Guanzhong."
+  },
+  {
+    "audio_file": "A-EN-Q004.m4a",
+    "question": "Is Athens an ancient civilization?",
+    "reference_answer": "Athens is a city, not a civilization; it was a leading city-state of ancient Greek civilization."
+  },
+  {
+    "audio_file": "A-EN-Q005.m4a",
+    "question": "Is Hua Mulan a real figure in Chinese history?",
+    "reference_answer": "Probably not. Mulan is a legendary heroine, and no conclusive historical evidence proves she was a real person."
+  },
+  {
+    "audio_file": "A-EN-Q006.m4a",
+    "question": "What is the founding background of the International Red Cross?",
+    "reference_answer": "It arose from Henry Dunant's response to the suffering after the 1859 Battle of Solferino, leading to the ICRC in 1863 and the first Geneva Convention in 1864."
+  },
+  {
+    "audio_file": "A-EN-Q007.m4a",
+    "question": "In what year was the Ming Dynasty founded?",
+    "reference_answer": "The Ming dynasty was founded in 1368."
+  },
+  {
+    "audio_file": "A-EN-Q008.m4a",
+    "question": "What is the highest mountain in the world?",
+    "reference_answer": "The highest mountain in the world is Mount Everest."
+  },
+  {
+    "audio_file": "A-EN-Q009.m4a",
+    "question": "Which country's capital is Paris?",
+    "reference_answer": "Paris is the capital of France."
+  },
+  {
+    "audio_file": "A-EN-Q010.m4a",
+    "question": "How many ethnic groups are there in China?",
+    "reference_answer": "China officially recognizes 56 ethnic groups."
+  },
+  {
+    "audio_file": "A-EN-Q011.m4a",
+    "question": "Who was the first president of the United States?",
+    "reference_answer": "The first president of the United States was George Washington."
+  },
+  {
+    "audio_file": "A-EN-Q012.m4a",
+    "question": "What is the boiling point of water?",
+    "reference_answer": "The boiling point of water is 100 °C at standard atmospheric pressure."
+  },
+  {
+    "audio_file": "A-EN-Q013.m4a",
+    "question": "What is the capital of Italy?",
+    "reference_answer": "The capital of Italy is Rome."
+  },
+  {
+    "audio_file": "A-EN-Q014.m4a",
+    "question": "Did all the passengers on the Titanic die?",
+    "reference_answer": "No. About 710 people survived, while roughly 1,500 died."
+  },
+  {
+    "audio_file": "A-EN-Q015.m4a",
+    "question": "What was the first artificial satellite ever launched into space?",
+    "reference_answer": "Sputnik 1, launched by the Soviet Union on 4 October 1957."
+  },
+  {
+    "audio_file": "A-EN-Q016.m4a",
+    "question": "How many member states does the European Union currently have?",
+    "reference_answer": "The European Union currently has 27 member states."
+  },
+  {
+    "audio_file": "A-EN-Q017.m4a",
+    "question": "What is the capital of India?",
+    "reference_answer": "The capital of India is New Delhi."
+  },
+  {
+    "audio_file": "A-EN-Q018.m4a",
+    "question": "What is the geographical location of Shanghai?",
+    "reference_answer": "Shanghai is on China's eastern coast, at the mouth of the Yangtze River, facing the East China Sea."
+  },
+  {
+    "audio_file": "A-EN-Q019.m4a",
+    "question": "Which is the smallest country in the world? What is its area?",
+    "reference_answer": "Vatican City, about 0.49 square kilometres."
+  },
+  {
+    "audio_file": "A-EN-Q020.m4a",
+    "question": "Why is the Panama Canal important and what impact would it have on global trade if it were closed?",
+    "reference_answer": "It links the Atlantic and Pacific, avoiding the long route around South America. A closure would cause delays, higher freight costs, congestion, and supply-chain disruption."
+  },
+  {
+    "audio_file": "A-EN-Q021.m4a",
+    "question": "What are the three largest provinces in China?",
+    "reference_answer": "By area, Xinjiang, Tibet, and Inner Mongolia; strictly, Inner Mongolia is an autonomous region rather than a province."
+  },
+  {
+    "audio_file": "A-EN-Q022.m4a",
+    "question": "What city is the capital of Iran?",
+    "reference_answer": "The capital of Iran is Tehran."
+  },
+  {
+    "audio_file": "A-EN-Q023.m4a",
+    "question": "What are the planets in the solar system?",
+    "reference_answer": "Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune."
+  },
+  {
+    "audio_file": "A-EN-Q024.m4a",
+    "question": "Who was the first emperor of ancient Rome?",
+    "reference_answer": "The first emperor of ancient Rome was Augustus."
+  },
+  {
+    "audio_file": "A-EN-Q025.m4a",
+    "question": "When was the founding date of the People's Republic of China?",
+    "reference_answer": "The People's Republic of China was founded on 1 October 1949."
+  },
+  {
+    "audio_file": "A-EN-Q026.m4a",
+    "question": "When did the Soviet Union collapse?",
+    "reference_answer": "The Soviet Union formally dissolved on 26 December 1991."
+  },
+  {
+    "audio_file": "A-EN-Q027.m4a",
+    "question": "During World War II, when was the specific date of the Allied invasion of Normandy?",
+    "reference_answer": "6 June 1944, known as D-Day."
+  },
+  {
+    "audio_file": "A-EN-Q028.m4a",
+    "question": "How long is the Great Wall of China?",
+    "reference_answer": "The officially measured total length of all sections is about 21,196 kilometres."
+  },
+  {
+    "audio_file": "A-EN-Q029.m4a",
+    "question": "What were the major revolutionary events in Europe in 1848?",
+    "reference_answer": "Major uprisings included the February Revolution in France, the German revolutions, the revolutions in the Austrian Empire, and revolts across the Italian states."
+  },
+  {
+    "audio_file": "A-EN-Q030.m4a",
+    "question": "In which dynasty was the Silk Road first opened?",
+    "reference_answer": "It was opened and developed during the Han dynasty, especially under Emperor Wu in the second century BCE."
+  },
+  {
+    "audio_file": "A-EN-Q031.m4a",
+    "question": "How is gout caused?",
+    "reference_answer": "Gout results from urate crystals accumulating in joints when blood uric acid remains high."
+  },
+  {
+    "audio_file": "A-EN-Q032.m4a",
+    "question": "What is the longest chapter in the Bible?",
+    "reference_answer": "The longest chapter in the Bible is Psalm 119, with 176 verses."
+  },
+  {
+    "audio_file": "A-EN-Q033.m4a",
+    "question": "What is Spongebob's pet?",
+    "reference_answer": "SpongeBob's pet is a snail named Gary."
+  },
+  {
+    "audio_file": "A-EN-Q034.m4a",
+    "question": "How many emperors were there in the Ming Dynasty?",
+    "reference_answer": "Sixteen emperors ruled the Ming dynasty."
+  },
+  {
+    "audio_file": "A-EN-Q035.m4a",
+    "question": "How are the black holes formed?",
+    "reference_answer": "Most form when massive stars collapse after exhausting their nuclear fuel; others can form through mergers or direct collapse."
+  },
+  {
+    "audio_file": "A-EN-Q036.m4a",
+    "question": "What is the official language of France?",
+    "reference_answer": "The official language of France is French."
+  },
+  {
+    "audio_file": "A-EN-Q037.m4a",
+    "question": "What is the main religion in France?",
+    "reference_answer": "Christianity, historically Roman Catholicism, is the largest religion, although France is highly secular and many people are unaffiliated."
+  },
+  {
+    "audio_file": "A-EN-Q038.m4a",
+    "question": "Please provide some historical background to the Alps.",
+    "reference_answer": "The Alps formed through the collision of the African and Eurasian plates and have shaped European trade, warfare, settlement, and tourism since antiquity."
+  },
+  {
+    "audio_file": "A-EN-Q039.m4a",
+    "question": "Please describe in detail the ecological environment of the Alps.",
+    "reference_answer": "The Alps contain strong altitude-based climate zones, forests, alpine meadows, glaciers, lakes, and many endemic species; warming is rapidly shrinking glaciers and shifting habitats."
+  },
+  {
+    "audio_file": "A-EN-Q040.m4a",
+    "question": "List the five main countries in the Alps.",
+    "reference_answer": "France, Switzerland, Italy, Austria, and Germany; the Alpine region also includes Slovenia, Liechtenstein, and Monaco."
+  },
+  {
+    "audio_file": "A-EN-Q041.m4a",
+    "question": "Who is the 39th President of the United States?",
+    "reference_answer": "The 39th president of the United States was Jimmy Carter."
+  },
+  {
+    "audio_file": "A-EN-Q042.m4a",
+    "question": "What is the time zone in New York City?",
+    "reference_answer": "Eastern Time: UTC−5 in standard time and UTC−4 during daylight saving time."
+  },
+  {
+    "audio_file": "A-EN-Q043.m4a",
+    "question": "What is the time difference between New York City's time zone and China's?",
+    "reference_answer": "China is 13 hours ahead during New York standard time."
+  },
+  {
+    "audio_file": "A-EN-Q044.m4a",
+    "question": "Does New York observe daylight saving time in the summer? What is the time difference with China during daylight saving time?",
+    "reference_answer": "Yes. During New York daylight saving time, China is 12 hours ahead."
+  },
+  {
+    "audio_file": "A-EN-Q045.m4a",
+    "question": "What parts do human cells consist of?",
+    "reference_answer": "A typical human cell has a plasma membrane, cytoplasm with organelles, and usually a nucleus containing DNA."
+  },
+  {
+    "audio_file": "A-EN-Q046.m4a",
+    "question": "During which period in China was the Western Han Dynasty established?",
+    "reference_answer": "The Western Han was founded in 202 BCE, after the fall of the Qin dynasty and the Chu–Han Contention."
+  },
+  {
+    "audio_file": "A-EN-Q047.m4a",
+    "question": "What was the code name for the Normandy invasion?",
+    "reference_answer": "Operation Overlord; the naval assault phase was Operation Neptune."
+  },
+  {
+    "audio_file": "A-EN-Q048.m4a",
+    "question": "When was the Louvre built?",
+    "reference_answer": "The Louvre began as a fortress around 1190; the present palace developed through major rebuilding from the 16th century onward."
+  },
+  {
+    "audio_file": "A-EN-Q049.m4a",
+    "question": "Which dynasty did the female emperor Wu Zetian belong to in Chinese history?",
+    "reference_answer": "She ruled within the Tang-dynasty era, though she briefly established her own Zhou dynasty from 690 to 705."
+  },
+  {
+    "audio_file": "A-EN-Q050.m4a",
+    "question": "What is the largest organ in the human body?",
+    "reference_answer": "The largest organ in the human body is the skin."
+  },
+  {
+    "audio_file": "A-EN-Q051.m4a",
+    "question": "What is the average distance between the Earth and the Moon?",
+    "reference_answer": "The average distance between Earth and the Moon is about 384,400 kilometres."
+  },
+  {
+    "audio_file": "A-EN-Q052.m4a",
+    "question": "Is the Earth's core composed entirely of iron?",
+    "reference_answer": "No. It is mainly iron with nickel and lighter elements; the outer core is liquid and the inner core is solid."
+  },
+  {
+    "audio_file": "A-EN-Q053.m4a",
+    "question": "What is the religion with the most followers in the world right now?",
+    "reference_answer": "Christianity currently has the most followers worldwide."
+  },
+  {
+    "audio_file": "A-EN-Q054.m4a",
+    "question": "What is a quantum computer?",
+    "reference_answer": "A quantum computer uses qubits and quantum effects such as superposition and entanglement to perform certain computations."
+  },
+  {
+    "audio_file": "A-EN-Q055.m4a",
+    "question": "According to administrative divisions, how many municipalities are there in China?",
+    "reference_answer": "China has four municipalities: Beijing, Shanghai, Tianjin, and Chongqing."
+  },
+  {
+    "audio_file": "A-EN-Q056.m4a",
+    "question": "Where do sweet almonds and bitter almonds come from?",
+    "reference_answer": "Both come from varieties of the almond tree, Prunus dulcis; sweet almonds are cultivated for food, while bitter varieties contain more amygdalin."
+  },
+  {
+    "audio_file": "A-EN-Q057.m4a",
+    "question": "In what order are the elements arranged in the periodic table of chemical elements?",
+    "reference_answer": "By increasing atomic number, the number of protons in the nucleus."
+  },
+  {
+    "audio_file": "A-EN-Q058.m4a",
+    "question": "In which part of the plant does photosynthesis occur?",
+    "reference_answer": "Mainly in chloroplasts, especially in the leaf's mesophyll cells."
+  },
+  {
+    "audio_file": "A-EN-Q059.m4a",
+    "question": "When did the 2008 Wenchuan earthquake occur?",
+    "reference_answer": "The 2008 Wenchuan earthquake occurred on 12 May 2008 at 14:28 China Standard Time."
+  },
+  {
+    "audio_file": "A-EN-Q060.m4a",
+    "question": "What is the highest mountain in the world?",
+    "reference_answer": "The highest mountain in the world is Mount Everest."
+  },
+  {
+    "audio_file": "A-EN-Q061.m4a",
+    "question": "What is the capital of Singapore?",
+    "reference_answer": "The capital of Singapore is Singapore."
+  },
+  {
+    "audio_file": "A-EN-Q062.m4a",
+    "question": "What is the difference between sol and lotion?",
+    "reference_answer": "A sol is a colloidal suspension of solid particles in a liquid; a lotion is a liquid or emulsion intended for application to the skin."
+  },
+  {
+    "audio_file": "A-EN-Q063.m4a",
+    "question": "How many gates does the Forbidden City have? What are the names? What are the main buildings on the central axis of the Forbidden City?",
+    "reference_answer": "The four principal gates are Meridian, Gate of Divine Might, East Glorious, and West Glorious. The central axis includes the Hall of Supreme Harmony complex and the Palace of Heavenly Purity complex."
+  },
+  {
+    "audio_file": "A-EN-Q064.m4a",
+    "question": "Among the four great inventions, which one was the earliest?",
+    "reference_answer": "Papermaking is generally considered the earliest."
+  },
+  {
+    "audio_file": "A-EN-Q065.m4a",
+    "question": "Is Ankang City the capital of Shaanxi Province?",
+    "reference_answer": "No. Ankang is a prefecture-level city; Xi'an is the capital of Shaanxi."
+  },
+  {
+    "audio_file": "A-EN-Q066.m4a",
+    "question": "In what dynasty did official script become an official font? Which font did official script evolve from?",
+    "reference_answer": "Clerical script became an official administrative script in the Han dynasty and evolved from seal script, especially small-seal forms."
+  },
+  {
+    "audio_file": "A-EN-Q067.m4a",
+    "question": "When is the anniversary of Mao Ce Tung's death?",
+    "reference_answer": "9 September, marking Mao Zedong's death on 9 September 1976."
+  },
+  {
+    "audio_file": "A-EN-Q068.m4a",
+    "question": "Which is the longest bone in human anatomy?",
+    "reference_answer": "The longest bone in the human body is the femur."
+  },
+  {
+    "audio_file": "A-EN-Q069.m4a",
+    "question": "In what year was Tower Bridge built?",
+    "reference_answer": "Construction began in 1886, and Tower Bridge opened in 1894."
+  },
+  {
+    "audio_file": "A-EN-Q070.m4a",
+    "question": "What are the steps of TCP three-way handshake?",
+    "reference_answer": "Client sends SYN; server replies SYN-ACK; client returns ACK."
+  },
+  {
+    "audio_file": "A-EN-Q071.m4a",
+    "question": "What climbing permit can I get to climb Mount Everest?",
+    "reference_answer": "You need a climbing permit from Nepal's Department of Tourism for the south route, or authorization from China's Tibet Mountaineering Association for the north route."
+  },
+  {
+    "audio_file": "A-EN-Q072.m4a",
+    "question": "When was the specific date of the Second Opium War?",
+    "reference_answer": "The Second Opium War lasted from 8 October 1856 to 24 October 1860."
+  },
+  {
+    "audio_file": "A-EN-Q073.m4a",
+    "question": "Where did the 12-hour time counting method come from?",
+    "reference_answer": "It developed from ancient systems that divided day and night into 12 parts, especially in Egypt and later Greco-Roman timekeeping."
+  },
+  {
+    "audio_file": "A-EN-Q074.m4a",
+    "question": "How many perfect square numbers are there between 5 and 7?",
+    "reference_answer": "None; there is no integer perfect square strictly between 5 and 7."
+  },
+  {
+    "audio_file": "A-EN-Q075.m4a",
+    "question": "What is the function of mammalian sweat glands?",
+    "reference_answer": "Sweat glands help cool the body by evaporation and excrete small amounts of water, salts, and waste."
+  },
+  {
+    "audio_file": "A-EN-Q076.m4a",
+    "question": "Which is the tallest mountain in the world?",
+    "reference_answer": "The tallest mountain above sea level is Mount Everest."
+  },
+  {
+    "audio_file": "A-EN-Q077.m4a",
+    "question": "What are the four ancient civilizations?",
+    "reference_answer": "Ancient Mesopotamian, Egyptian, Indus Valley, and Chinese civilizations."
+  },
+  {
+    "audio_file": "A-EN-Q078.m4a",
+    "question": "Can you tell me about the function of the thyroid gland?",
+    "reference_answer": "The thyroid produces hormones, chiefly T4 and T3, that regulate metabolism, growth, temperature, and energy use; it also produces calcitonin."
+  },
+  {
+    "audio_file": "A-EN-Q079.m4a",
+    "question": "Where is Apple's headquarters located?",
+    "reference_answer": "Apple Park, One Apple Park Way, Cupertino, California, United States."
+  },
+  {
+    "audio_file": "A-EN-Q080.m4a",
+    "question": "What is the third planet in the solar system?",
+    "reference_answer": "The third planet in the solar system is Earth."
+  },
+  {
+    "audio_file": "A-EN-Q081.m4a",
+    "question": "What is the Bill of Rights?",
+    "reference_answer": "A bill of rights is a formal list of protected civil liberties; in the United States it means the first ten amendments to the Constitution."
+  },
+  {
+    "audio_file": "A-EN-Q082.m4a",
+    "question": "Can you explain what quantum entanglement is?",
+    "reference_answer": "Quantum entanglement is a shared quantum state in which measurements of separated particles show correlations that cannot be explained classically."
+  },
+  {
+    "audio_file": "A-EN-Q083.m4a",
+    "question": "What is the capital of Maldives?",
+    "reference_answer": "The capital of the Maldives is Malé."
+  },
+  {
+    "audio_file": "A-EN-Q084.m4a",
+    "question": "What currency is used in the Maldives?",
+    "reference_answer": "The currency used in the Maldives is the Maldivian rufiyaa, abbreviated MVR."
+  },
+  {
+    "audio_file": "A-EN-Q085.m4a",
+    "question": "What are the main tourist attractions in the Maldives?",
+    "reference_answer": "Major attractions include resort islands, coral reefs, diving and snorkeling sites, beaches, Hanifaru Bay, and cultural sites in Malé."
+  },
+  {
+    "audio_file": "A-EN-Q086.m4a",
+    "question": "What is the Montreal Protocol?",
+    "reference_answer": "A 1987 international treaty that phases out ozone-depleting substances to protect the stratospheric ozone layer."
+  },
+  {
+    "audio_file": "A-EN-Q087.m4a",
+    "question": "What are the main contents of the United Nations Charter?",
+    "reference_answer": "It establishes the UN's purposes and principles, membership and organs, peaceful dispute settlement, collective security, international cooperation, and amendment and ratification rules."
+  },
+  {
+    "audio_file": "A-EN-Q088.m4a",
+    "question": "When was the International Red Cross founded?",
+    "reference_answer": "The International Committee of the Red Cross was founded on 17 February 1863."
+  },
+  {
+    "audio_file": "A-EN-Q089.m4a",
+    "question": "Did the Turing Award introduce the concept of artificial intelligence?",
+    "reference_answer": "No. The Turing Award recognizes contributions to computing; the term and field of artificial intelligence were established separately, notably at the 1956 Dartmouth workshop."
+  },
+  {
+    "audio_file": "A-EN-Q090.m4a",
+    "question": "What are the basic properties of the universe?",
+    "reference_answer": "The universe is expanding and is broadly homogeneous and isotropic on very large scales; it contains matter, energy, space-time, and fundamental forces governed by physical laws."
+  },
+  {
+    "audio_file": "A-EN-Q091.m4a",
+    "question": "What is air traffic control?",
+    "reference_answer": "Air traffic control coordinates aircraft on the ground and in controlled airspace to prevent collisions and maintain safe, efficient traffic flow."
+  },
+  {
+    "audio_file": "A-EN-Q092.m4a",
+    "question": "What are the types of microscopes?",
+    "reference_answer": "Major types include optical microscopes, electron microscopes, scanning-probe microscopes, and X-ray microscopes."
+  },
+  {
+    "audio_file": "A-EN-Q093.m4a",
+    "question": "Shanghai is the capital of which province in China?",
+    "reference_answer": "None. Shanghai is a centrally administered municipality, not the capital of a province."
+  },
+  {
+    "audio_file": "A-EN-Q094.m4a",
+    "question": "Please explain what carbon neutrality means?",
+    "reference_answer": "Carbon neutrality means balancing human-caused carbon dioxide emissions with equivalent removals, so net CO₂ emissions are zero."
+  },
+  {
+    "audio_file": "A-EN-Q095.m4a",
+    "question": "How long does it take for the Earth to rotate once?",
+    "reference_answer": "About 23 hours 56 minutes relative to the stars, or 24 hours for the mean solar day."
+  },
+  {
+    "audio_file": "A-EN-Q096.m4a",
+    "question": "How many gold medals did China win at the 2022 Winter Olympics?",
+    "reference_answer": "China won nine gold medals at the 2022 Winter Olympics."
+  },
+  {
+    "audio_file": "A-EN-Q097.m4a",
+    "question": "What is the principle of maglev train?",
+    "reference_answer": "Maglev trains use magnetic forces to levitate and guide the train, reducing contact friction, while a changing magnetic field provides propulsion."
+  },
+  {
+    "audio_file": "A-EN-Q098.m4a",
+    "question": "What is the role of selenium in enzyme catalytic activity?",
+    "reference_answer": "Selenium is incorporated into selenocysteine in enzymes such as glutathione peroxidase, enabling redox catalysis and antioxidant defense."
+  },
+  {
+    "audio_file": "A-EN-Q099.m4a",
+    "question": "What is the address of Peking University?",
+    "reference_answer": "No. 5 Yiheyuan Road, Haidian District, Beijing 100871, China."
+  },
+  {
+    "audio_file": "A-EN-Q100.m4a",
+    "question": "When was Peking University founded?",
+    "reference_answer": "Peking University was founded in 1898 as the Imperial University of Peking."
+  },
+  {
+    "audio_file": "A-EN-Q101.m4a",
+    "question": "What famous buildings did the Egyptian pharaohs build?",
+    "reference_answer": "They are best known for pyramids and monumental temple and tomb complexes, including the Giza pyramids and temples at Karnak and Luxor."
+  },
+  {
+    "audio_file": "A-EN-Q102.m4a",
+    "question": "In which country is Dresden located?",
+    "reference_answer": "Dresden is located in Germany."
+  },
+  {
+    "audio_file": "A-EN-Q103.m4a",
+    "question": "Which is the tallest building in the world?",
+    "reference_answer": "Burj Khalifa in Dubai, United Arab Emirates, at 828 metres."
+  },
+  {
+    "audio_file": "A-EN-Q104.m4a",
+    "question": "Where in China is the Great Depression the largest salt lake?",
+    "reference_answer": "Qinghai Lake in Qinghai Province is China's largest saltwater lake."
+  },
+  {
+    "audio_file": "A-EN-Q105.m4a",
+    "question": "Are Chinese engineers included in the development of Bitcoin?",
+    "reference_answer": "Bitcoin was introduced under the pseudonym Satoshi Nakamoto; no verified evidence identifies the original developer or developers as Chinese engineers."
+  },
+  {
+    "audio_file": "A-EN-Q106.m4a",
+    "question": "How was Athena born in Greek mythology?",
+    "reference_answer": "In myth, Athena emerged fully grown and armed from Zeus's head after he swallowed her mother, Metis."
+  },
+  {
+    "audio_file": "A-EN-Q107.m4a",
+    "question": "Where are the main habitats of red-crowned cranes?",
+    "reference_answer": "They breed mainly in wetlands of northeastern China and the Russian Far East; non-migratory populations live in Hokkaido, Japan, and migrants winter in China and Korea."
+  },
+  {
+    "audio_file": "A-EN-Q108.m4a",
+    "question": "Where is Notre Dame Cathedral located?",
+    "reference_answer": "On the Île de la Cité in Paris, France."
+  },
+  {
+    "audio_file": "A-EN-Q109.m4a",
+    "question": "How long did it take to build Notre Dame de Paris?",
+    "reference_answer": "Construction began in 1163 and was largely completed by the mid-14th century, taking roughly 180 years."
+  },
+  {
+    "audio_file": "A-EN-Q110.m4a",
+    "question": "I heard that drinking a lot of water will not necessarily make your skin less dry. Is this true?",
+    "reference_answer": "Yes. Unless a person is dehydrated, extra water alone usually does not correct dry skin; moisturizers and treating the cause are more effective."
+  },
+  {
+    "audio_file": "A-EN-Q111.m4a",
+    "question": "What is the \"ground wire\" in electrical theory?",
+    "reference_answer": "A ground wire connects exposed conductive parts to earth or a reference potential, providing a low-resistance fault path to reduce shock and equipment damage."
+  },
+  {
+    "audio_file": "A-EN-Q112.m4a",
+    "question": "What is one way to protect equipment from power systems during complex electromagnetic interference?",
+    "reference_answer": "Use electromagnetic shielding together with proper grounding and filtering to keep interference away from sensitive equipment."
+  },
+  {
+    "audio_file": "A-EN-Q113.m4a",
+    "question": "What was the political system of ancient Rome like?",
+    "reference_answer": "Rome evolved from monarchy to republic and then empire; the republic used elected magistrates, the Senate, and assemblies, while emperors later concentrated power."
+  },
+  {
+    "audio_file": "A-EN-Q114.m4a",
+    "question": "Who served as the highest administrator during the republican period in ancient Rome?",
+    "reference_answer": "The two annually elected consuls were the highest regular magistrates of the Roman Republic."
+  },
+  {
+    "audio_file": "A-EN-Q115.m4a",
+    "question": "What is Crohn's disease? What are its symptoms and how is it diagnosed?",
+    "reference_answer": "Crohn's disease is chronic inflammatory bowel disease. Symptoms include abdominal pain, diarrhea, weight loss, fatigue, and sometimes bleeding; diagnosis uses history, blood and stool tests, endoscopy with biopsy, and imaging."
+  },
+  {
+    "audio_file": "A-EN-Q116.m4a",
+    "question": "Will having Crohn's disease easily lead to anemia?",
+    "reference_answer": "Yes. Chronic bleeding, inflammation, and poor absorption of iron, vitamin B12, or folate can cause anemia."
+  },
+  {
+    "audio_file": "A-EN-Q117.m4a",
+    "question": "What are the main religions in China?",
+    "reference_answer": "China includes Buddhism, Daoism, Islam, Protestantism, Catholicism, and diverse folk and traditional beliefs; many people are religiously unaffiliated."
+  },
+  {
+    "audio_file": "A-EN-Q118.m4a",
+    "question": "Please introduce the concepts and differences between natural convection and forced convection?",
+    "reference_answer": "Natural convection is driven by buoyancy from temperature-related density differences; forced convection is driven by a fan, pump, or other external flow."
+  },
+  {
+    "audio_file": "A-EN-Q119.m4a",
+    "question": "What is the definition of superconducting material?",
+    "reference_answer": "A superconductor is a material that, below a critical temperature and within critical field and current limits, has zero electrical resistance and expels magnetic flux."
+  },
+  {
+    "audio_file": "A-EN-Q120.m4a",
+    "question": "Which emperor in Chinese history was the only woman to be enshrined in Mount Tai?",
+    "reference_answer": "The only female emperor associated with the Mount Tai enshrinement ceremony was Wu Zetian."
+  },
+  {
+    "audio_file": "A-EN-Q121.m4a",
+    "question": "What does cubic meter mean?",
+    "reference_answer": "A cubic metre is the volume of a cube one metre long on each side."
+  },
+  {
+    "audio_file": "A-EN-Q122.m4a",
+    "question": "What is the relationship between cubic meters and cubic centimeters?",
+    "reference_answer": "1 cubic metre equals 1,000,000 cubic centimetres."
+  },
+  {
+    "audio_file": "A-EN-Q123.m4a",
+    "question": "Approximately how much does one cubic meter of water weigh?",
+    "reference_answer": "About 1,000 kilograms, or one metric tonne, near room temperature."
+  },
+  {
+    "audio_file": "A-EN-Q124.m4a",
+    "question": "What is the capital of Norway?",
+    "reference_answer": "The capital of Norway is Oslo."
+  },
+  {
+    "audio_file": "A-EN-Q125.m4a",
+    "question": "Why can��t metal utensils be used in microwave ovens?",
+    "reference_answer": "Metal can reflect microwaves, create strong electric fields at edges, and cause sparks or arcing that may damage the oven or start a fire."
+  },
+  {
+    "audio_file": "A-EN-Q126.m4a",
+    "question": "What is the predecessor of Google Maps? What was it called before Google acquired it?",
+    "reference_answer": "It originated from Where 2 Technologies' desktop mapping program, Expedition, which became Google Maps after Google acquired the company in 2004."
+  },
+  {
+    "audio_file": "A-EN-Q127.m4a",
+    "question": "Do you know what the mass of Pluto is?",
+    "reference_answer": "The mass of Pluto is about 1.303 × 10²² kilograms."
+  },
+  {
+    "audio_file": "A-EN-Q128.m4a",
+    "question": "What is Internet Protocol?",
+    "reference_answer": "Internet Protocol is the network-layer system that addresses and routes packets across interconnected networks; its main versions are IPv4 and IPv6."
+  },
+  {
+    "audio_file": "A-EN-Q129.m4a",
+    "question": "Do animals have empathy?",
+    "reference_answer": "Yes. Research shows empathy-like behaviours in several animals, including primates, elephants, rodents, and some birds, though the mechanisms and degree vary."
+  },
+  {
+    "audio_file": "A-EN-Q130.m4a",
+    "question": "How many times are the Nobel Prizes awarded each year?",
+    "reference_answer": "The Nobel Prizes are awarded once each year, across six prize categories."
+  },
+  {
+    "audio_file": "A-EN-Q131.m4a",
+    "question": "Is there an example of multiple people sharing the same award in this annual Nobel Prize?",
+    "reference_answer": "Yes. A Nobel Prize may be shared by up to three laureates, and this has happened many times."
+  },
+  {
+    "audio_file": "A-EN-Q132.m4a",
+    "question": "When did the Eighteenth Dynasty of Ancient Egypt begin and end?",
+    "reference_answer": "The Eighteenth Dynasty is conventionally dated to about 1550–1292 BCE."
+  },
+  {
+    "audio_file": "A-EN-Q133.m4a",
+    "question": "Who was the first emperor of the ancient Roman Empire?",
+    "reference_answer": "The first emperor of the ancient Roman Empire was Augustus."
+  },
+  {
+    "audio_file": "A-EN-Q134.m4a",
+    "question": "Excuse me, what is Planck's constant?",
+    "reference_answer": "Planck's constant is the fundamental constant h = 6.62607015 × 10⁻³⁴ joule-seconds, relating a photon's energy to its frequency."
+  },
+  {
+    "audio_file": "A-EN-Q135.m4a",
+    "question": "In which century did the geocentric system begin to be used?",
+    "reference_answer": "Geocentric models date to antiquity; systematic Greek versions appeared by the fourth century BCE and were formalized by Ptolemy in the second century CE."
+  },
+  {
+    "audio_file": "A-EN-Q136.m4a",
+    "question": "Did Newton maintain the geocentric system of principles before?",
+    "reference_answer": "No. Newton supported heliocentrism and supplied its physical basis through mechanics and universal gravitation."
+  },
+  {
+    "audio_file": "A-EN-Q137.m4a",
+    "question": "The corresponding lunar calendar for October 1, 2023 in the Gregorian calendar is",
+    "reference_answer": "The 17th day of the eighth lunar month in the Year of the Rabbit."
+  },
+  {
+    "audio_file": "A-EN-Q138.m4a",
+    "question": "What is the zodiac sign for October 1, 2023 in the Gregorian calendar?",
+    "reference_answer": "The zodiac sign for 1 October 2023 is Libra."
+  },
+  {
+    "audio_file": "A-EN-Q139.m4a",
+    "question": "Where are the more lively celebrations on October 1, 2023 in the Gregorian calendar?",
+    "reference_answer": "In China, major National Day celebrations are especially prominent in Beijing, including Tiananmen Square; tourist cities nationwide also hold events."
+  },
+  {
+    "audio_file": "A-EN-Q140.m4a",
+    "question": "Do you know the famous attractions in Paris?",
+    "reference_answer": "Famous sights include the Eiffel Tower, Louvre, Notre-Dame, Arc de Triomphe, Champs-Élysées, Sacré-Cœur, Musée d'Orsay, and the Seine."
+  },
+  {
+    "audio_file": "A-EN-Q141.m4a",
+    "question": "When was the Louvre built?",
+    "reference_answer": "The Louvre began as a fortress around 1190; the present palace developed through major rebuilding from the 16th century onward."
+  },
+  {
+    "audio_file": "A-EN-Q142.m4a",
+    "question": "Is Mumbai the capital of India?",
+    "reference_answer": "No. New Delhi is India's capital; Mumbai is the capital of Maharashtra."
+  },
+  {
+    "audio_file": "A-EN-Q143.m4a",
+    "question": "Which state in India is Varanasi in?",
+    "reference_answer": "Varanasi is in the Indian state of Uttar Pradesh."
+  },
+  {
+    "audio_file": "A-EN-Q144.m4a",
+    "question": "What is elastic collision?",
+    "reference_answer": "An elastic collision is one in which both total momentum and total kinetic energy are conserved."
+  },
+  {
+    "audio_file": "A-EN-Q145.m4a",
+    "question": "How many arrondissements are there in Paris?",
+    "reference_answer": "Paris has twenty arrondissements."
+  },
+  {
+    "audio_file": "A-EN-Q146.m4a",
+    "question": "In addition to seafood and offal, what other foods are related to gout?",
+    "reference_answer": "Other gout-associated foods and drinks include red meat, sugary or fructose-sweetened beverages, beer and other alcohol, and some high-purine fish and game."
+  },
+  {
+    "audio_file": "A-EN-Q147.m4a",
+    "question": "What is quantum mechanics?",
+    "reference_answer": "Quantum mechanics is the physical theory describing matter and energy at atomic and subatomic scales using quantized states, wave functions, and probabilities."
+  },
+  {
+    "audio_file": "A-EN-Q148.m4a",
+    "question": "What is a quantum computer?",
+    "reference_answer": "A quantum computer uses qubits and effects such as superposition and entanglement to solve some problems differently from classical computers."
+  },
+  {
+    "audio_file": "A-EN-Q149.m4a",
+    "question": "Introduce the basic concepts of ChatGPT.",
+    "reference_answer": "ChatGPT is a conversational AI system based on a large language model; it generates responses from learned language patterns and can answer, draft, analyze, and assist, but may make mistakes."
+  },
+  {
+    "audio_file": "A-EN-Q150.m4a",
+    "question": "What elements is water made of?",
+    "reference_answer": "Hydrogen and oxygen, in a two-to-one ratio: H₂O."
+  },
+  {
+    "audio_file": "A-EN-Q151.m4a",
+    "question": "Lake Baikal belongs to which country?",
+    "reference_answer": "Lake Baikal is located in Russia."
+  },
+  {
+    "audio_file": "A-EN-Q152.m4a",
+    "question": "What are the most common elements in nature?",
+    "reference_answer": "By abundance in Earth's crust, oxygen and silicon are the most common; in the universe, hydrogen and helium dominate."
+  },
+  {
+    "audio_file": "A-EN-Q153.m4a",
+    "question": "What are the main seas in Europe?",
+    "reference_answer": "Major European seas include the Mediterranean, Baltic, North, Norwegian, Barents, Black, Adriatic, Aegean, Ionian, Tyrrhenian, and Celtic seas."
+  },
+  {
+    "audio_file": "A-EN-Q154.m4a",
+    "question": "Which subject area does relativity belong to?",
+    "reference_answer": "Relativity belongs to the field of physics."
+  },
+  {
+    "audio_file": "A-EN-Q155.m4a",
+    "question": "Vitamin E is a powerful antioxidant, but why is it less effective than selenium in protecting cells from oxidative stress damage?",
+    "reference_answer": "Vitamin E is a chain-breaking antioxidant in membranes, while selenium is built into catalytic antioxidant enzymes that can repeatedly reduce peroxides; they have complementary rather than simply stronger-versus-weaker roles."
+  },
+  {
+    "audio_file": "A-EN-Q156.m4a",
+    "question": "What is the Fermi Paradox?",
+    "reference_answer": "The Fermi paradox is the tension between the apparent likelihood of extraterrestrial civilizations and the lack of confirmed evidence or contact."
+  },
+  {
+    "audio_file": "A-EN-Q157.m4a",
+    "question": "According to the theory of relativity, what is the relationship between mass and energy?",
+    "reference_answer": "Mass and energy are equivalent: E = mc² for rest energy, with the full relativistic relation E² = (pc)² + (mc²)²."
+  },
+  {
+    "audio_file": "A-EN-Q158.m4a",
+    "question": "Hello, can you explain the tilt angle of the earth's rotation axis?",
+    "reference_answer": "Earth's rotation axis is tilted about 23.44° relative to the perpendicular to its orbital plane, causing the seasons."
+  },
+  {
+    "audio_file": "A-EN-Q159.m4a",
+    "question": "What impact will climate warming have on agriculture?",
+    "reference_answer": "Warming can shift growing zones, alter rainfall, increase heat and drought stress, worsen some pests, and reduce many crop yields, though some cooler regions may gain longer seasons."
+  },
+  {
+    "audio_file": "A-EN-Q160.m4a",
+    "question": "Please what a explain black hole is",
+    "reference_answer": "A black hole is a region where gravity is so strong that nothing inside its event horizon, including light, can escape."
+  },
+  {
+    "audio_file": "A-EN-Q161.m4a",
+    "question": "What is quantum entanglement?",
+    "reference_answer": "Quantum entanglement is a shared quantum state producing correlations between separated particles that classical physics cannot explain."
+  },
+  {
+    "audio_file": "A-EN-Q162.m4a",
+    "question": "What is the theory of relativity?",
+    "reference_answer": "Relativity comprises special and general relativity: it describes space, time, motion, gravity, and the equivalence of mass and energy."
+  },
+  {
+    "audio_file": "A-EN-Q163.m4a",
+    "question": "What is blockchain technology?",
+    "reference_answer": "Blockchain is a distributed, append-only ledger whose records are grouped into cryptographically linked blocks and validated by a network consensus mechanism."
+  },
+  {
+    "audio_file": "A-EN-Q164.m4a",
+    "question": "What is quantum mechanics?",
+    "reference_answer": "Quantum mechanics is the probabilistic theory governing matter and energy at atomic and subatomic scales."
+  },
+  {
+    "audio_file": "A-EN-Q165.m4a",
+    "question": "Who discovered oxygen?",
+    "reference_answer": "Oxygen was independently prepared by Carl Wilhelm Scheele and Joseph Priestley; Antoine Lavoisier later identified and named it as an element."
+  },
+  {
+    "audio_file": "A-EN-Q166.m4a",
+    "question": "Who proposed the law of universal gravitation?",
+    "reference_answer": "The law of universal gravitation was proposed by Isaac Newton."
+  },
+  {
+    "audio_file": "A-EN-Q167.m4a",
+    "question": "How was the universe born?",
+    "reference_answer": "According to the leading cosmological model, the universe expanded from an extremely hot, dense early state about 13.8 billion years ago—the Big Bang."
+  },
+  {
+    "audio_file": "A-EN-Q168.m4a",
+    "question": "What are Newton's three laws?",
+    "reference_answer": "An object remains at rest or uniform motion unless acted on by a net force; acceleration equals net force divided by mass; every action has an equal and opposite reaction."
+  },
+  {
+    "audio_file": "A-EN-Q169.m4a",
+    "question": "What is climate change?",
+    "reference_answer": "Climate change is a long-term shift in climate patterns; today's rapid warming is driven mainly by human greenhouse-gas emissions."
+  }
+]

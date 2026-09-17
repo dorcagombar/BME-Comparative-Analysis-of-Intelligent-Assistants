@@ -1,0 +1,847 @@
+[
+  {
+    "audio_file": "B-DE-Q001.m4a",
+    "question": "Was für eine Auszeichnung ist ein Turing Award?",
+    "reference_answer": "Der Turing Award ist die höchste Auszeichnung der ACM in der Informatik und wird oft als Nobelpreis der Informatik bezeichnet."
+  },
+  {
+    "audio_file": "B-DE-Q002.m4a",
+    "question": "Was sind die vier großen Erfindungen des alten Chinas?",
+    "reference_answer": "Die vier großen Erfindungen des alten China sind Papierherstellung, Buchdruck, Schießpulver und Kompass."
+  },
+  {
+    "audio_file": "B-DE-Q003.m4a",
+    "question": "Wer schrieb \"Die Geschichte der Drei Reiche\"?",
+    "reference_answer": "Die Geschichte der Drei Reiche wurde von Luo Guanzhong geschrieben."
+  },
+  {
+    "audio_file": "B-DE-Q004.m4a",
+    "question": "Ist Athen eine antike Zivilisation?",
+    "reference_answer": "Athen ist eine Stadt, keine Zivilisation; es war ein bedeutender Stadtstaat der antiken griechischen Zivilisation."
+  },
+  {
+    "audio_file": "B-DE-Q005.m4a",
+    "question": "Ist Hua Mulan eine reale Figur in der chinesischen Geschichte?",
+    "reference_answer": "Wahrscheinlich nicht; Mulan ist eine legendäre Heldin, deren historische Existenz nicht eindeutig belegt ist."
+  },
+  {
+    "audio_file": "B-DE-Q006.m4a",
+    "question": "Was ist der Gründungshintergrund des Internationalen Roten Kreuzes?",
+    "reference_answer": "Das Rote Kreuz entstand nach Henry Dunants Erlebnissen bei der Schlacht von Solferino 1859; daraus gingen 1863 das IKRK und 1864 die erste Genfer Konvention hervor."
+  },
+  {
+    "audio_file": "B-DE-Q007.m4a",
+    "question": "In welchem Jahr wurde die Ming-Dynastie gegründet?",
+    "reference_answer": "Die Ming-Dynastie wurde 1368 gegründet."
+  },
+  {
+    "audio_file": "B-DE-Q008.m4a",
+    "question": "Welcher ist der höchste Berg der Welt?",
+    "reference_answer": "Der höchste Berg der Welt ist der Mount Everest."
+  },
+  {
+    "audio_file": "B-DE-Q009.m4a",
+    "question": "Paris ist die Haupstadt vom welchem Land?",
+    "reference_answer": "Paris ist die Hauptstadt Frankreichs."
+  },
+  {
+    "audio_file": "B-DE-Q010.m4a",
+    "question": "Wie viele ethnische Gruppen gibt es in China?",
+    "reference_answer": "China erkennt offiziell 56 ethnische Gruppen an."
+  },
+  {
+    "audio_file": "B-DE-Q011.m4a",
+    "question": "Wer war der erste Präsident der Vereinigten Staaten?",
+    "reference_answer": "Der erste Präsident der Vereinigten Staaten war George Washington."
+  },
+  {
+    "audio_file": "B-DE-Q012.m4a",
+    "question": "Was ist der Siedepunkt von Wasser?",
+    "reference_answer": "Der Siedepunkt von Wasser liegt bei normalem Luftdruck bei 100 °C."
+  },
+  {
+    "audio_file": "B-DE-Q013.m4a",
+    "question": "Was ist die Hauptstadt von Italien?",
+    "reference_answer": "Die Hauptstadt Italiens ist Rom."
+  },
+  {
+    "audio_file": "B-DE-Q014.m4a",
+    "question": "Sind alle Passagiere auf der Titanic gestorben?",
+    "reference_answer": "Nein; etwa 710 Menschen überlebten, während ungefähr 1.500 starben."
+  },
+  {
+    "audio_file": "B-DE-Q015.m4a",
+    "question": "Was war der erste künstliche Satellit, der jemals ins All geschossen wurde?",
+    "reference_answer": "Der erste künstliche Satellit war Sputnik 1, den die Sowjetunion am 4. Oktober 1957 startete."
+  },
+  {
+    "audio_file": "B-DE-Q016.m4a",
+    "question": "Wie viele Mitgliedstaaten hat die Europäische Union derzeit?",
+    "reference_answer": "Die Europäische Union hat derzeit 27 Mitgliedstaaten."
+  },
+  {
+    "audio_file": "B-DE-Q017.m4a",
+    "question": "Was ist die Hauptstadt von Indien?",
+    "reference_answer": "Die Hauptstadt Indiens ist Neu-Delhi."
+  },
+  {
+    "audio_file": "B-DE-Q018.m4a",
+    "question": "Wo befindet sich Shanghai geografisch?",
+    "reference_answer": "Shanghai liegt an Chinas Ostküste, an der Mündung des Jangtse in das Ostchinesische Meer."
+  },
+  {
+    "audio_file": "B-DE-Q019.m4a",
+    "question": "Welches ist das kleinste Land der Welt? Wie groß ist seine Fläche?",
+    "reference_answer": "Der kleinste Staat der Welt ist die Vatikanstadt mit etwa 0,49 Quadratkilometern Fläche."
+  },
+  {
+    "audio_file": "B-DE-Q020.m4a",
+    "question": "Warum ist der Panama-Kanal wichtig und welche Auswirkungen hätte eine Schließung auf den weltweiten Handel?",
+    "reference_answer": "Der Panamakanal verbindet Atlantik und Pazifik und erspart die Umfahrung Südamerikas; eine Schließung würde Lieferzeiten, Kosten und Staus im Welthandel erhöhen."
+  },
+  {
+    "audio_file": "B-DE-Q021.m4a",
+    "question": "Welches sind die drei größten Provinzen in China?",
+    "reference_answer": "Nach Fläche sind Xinjiang, Tibet und die Innere Mongolei am größten; alle drei sind autonome Gebiete, keine Provinzen im engeren Sinn."
+  },
+  {
+    "audio_file": "B-DE-Q022.m4a",
+    "question": "Welche Stadt ist die Hauptstadt des Iran?",
+    "reference_answer": "Die Hauptstadt Irans ist Teheran."
+  },
+  {
+    "audio_file": "B-DE-Q023.m4a",
+    "question": "Welches sind die Planeten im Sonnensystem?",
+    "reference_answer": "Die Planeten sind Merkur, Venus, Erde, Mars, Jupiter, Saturn, Uranus und Neptun."
+  },
+  {
+    "audio_file": "B-DE-Q024.m4a",
+    "question": "Wer war der erste Kaiser des antiken Roms?",
+    "reference_answer": "Der erste Kaiser des antiken Rom war Augustus."
+  },
+  {
+    "audio_file": "B-DE-Q025.m4a",
+    "question": "Wann war das Gründungsdatum der Volksrepublik China?",
+    "reference_answer": "Die Volksrepublik China wurde am 1. Oktober 1949 gegründet."
+  },
+  {
+    "audio_file": "B-DE-Q026.m4a",
+    "question": "Wann ist die Sowjetunion auseinandergebrochen?",
+    "reference_answer": "Die Sowjetunion wurde am 26. Dezember 1991 formell aufgelöst."
+  },
+  {
+    "audio_file": "B-DE-Q027.m4a",
+    "question": "Wann genau war die Landung der Alliierten in der Normandie im Zweiten Weltkrieg?",
+    "reference_answer": "Die alliierte Landung in der Normandie fand am 6. Juni 1944, dem D-Day, statt."
+  },
+  {
+    "audio_file": "B-DE-Q028.m4a",
+    "question": "Wie lang ist die Chinesische Mauer?",
+    "reference_answer": "Die amtlich vermessene Gesamtlänge aller Abschnitte beträgt etwa 21.196 Kilometer."
+  },
+  {
+    "audio_file": "B-DE-Q029.m4a",
+    "question": "Was waren die wichtigsten revolutionären Ereignisse in Europa im Jahr 1848?",
+    "reference_answer": "Zu den Revolutionen von 1848 gehörten die Februarrevolution in Frankreich sowie Aufstände in den deutschen und italienischen Staaten und im Habsburgerreich."
+  },
+  {
+    "audio_file": "B-DE-Q030.m4a",
+    "question": "In welcher Dynastie wurde die Seidenstraße erstmals eröffnet?",
+    "reference_answer": "Die Seidenstraße wurde in der Han-Dynastie, besonders unter Kaiser Wu im 2. Jahrhundert v. Chr., erschlossen."
+  },
+  {
+    "audio_file": "B-DE-Q031.m4a",
+    "question": "Wie entsteht Gicht?",
+    "reference_answer": "Gicht entsteht, wenn sich bei dauerhaft erhöhtem Harnsäurespiegel Uratkristalle in Gelenken ablagern."
+  },
+  {
+    "audio_file": "B-DE-Q032.m4a",
+    "question": "Was ist das längste Kapitel in der Bibel?",
+    "reference_answer": "Das längste Kapitel der Bibel ist Psalm 119 mit 176 Versen."
+  },
+  {
+    "audio_file": "B-DE-Q033.m4a",
+    "question": "Was ist das Haustier von SpongeBob?",
+    "reference_answer": "SpongeBobs Haustier ist die Schnecke Gary."
+  },
+  {
+    "audio_file": "B-DE-Q034.m4a",
+    "question": "Wie viele Kaiser gab es in der Ming-Dynastie?",
+    "reference_answer": "In der Ming-Dynastie herrschten 16 Kaiser."
+  },
+  {
+    "audio_file": "B-DE-Q035.m4a",
+    "question": "Wie entstehen Schwarze Löcher?",
+    "reference_answer": "Die meisten Schwarzen Löcher entstehen beim Kollaps massereicher Sterne; weitere können durch Verschmelzungen oder direkten Kollaps entstehen."
+  },
+  {
+    "audio_file": "B-DE-Q036.m4a",
+    "question": "Was ist die Amtssprache von Frankreich?",
+    "reference_answer": "Die Amtssprache Frankreichs ist Französisch."
+  },
+  {
+    "audio_file": "B-DE-Q037.m4a",
+    "question": "Was ist die Hauptreligion in Frankreich?",
+    "reference_answer": "Das Christentum, historisch vor allem der Katholizismus, ist die größte Religion, obwohl Frankreich stark säkularisiert ist."
+  },
+  {
+    "audio_file": "B-DE-Q038.m4a",
+    "question": "Können Sie mir einige historische Hintergründe zu den Alpen geben?",
+    "reference_answer": "Die Alpen entstanden durch die Kollision der afrikanischen und eurasischen Platte und prägten seit der Antike Handel, Kriege, Besiedlung und Tourismus Europas."
+  },
+  {
+    "audio_file": "B-DE-Q039.m4a",
+    "question": "Bitte beschreiben Sie ausführlich die ökologische Umwelt der Alpen.",
+    "reference_answer": "Die Alpen besitzen Höhenklimazonen, Wälder, Alpwiesen, Gletscher, Seen und viele endemische Arten; die Erwärmung lässt Gletscher und Lebensräume rasch schrumpfen."
+  },
+  {
+    "audio_file": "B-DE-Q040.m4a",
+    "question": "Nennen Sie die fünf wichtigsten Länder in den Alpen.",
+    "reference_answer": "Die fünf wichtigsten Alpenländer sind Frankreich, Schweiz, Italien, Österreich und Deutschland; außerdem gehören Slowenien, Liechtenstein und Monaco zur Alpenregion."
+  },
+  {
+    "audio_file": "B-DE-Q041.m4a",
+    "question": "Wer ist der 39. Präsident der Vereinigten Staaten?",
+    "reference_answer": "Der 39. Präsident der Vereinigten Staaten war Jimmy Carter."
+  },
+  {
+    "audio_file": "B-DE-Q042.m4a",
+    "question": "Welche Zeitzone gilt in New York City?",
+    "reference_answer": "New York liegt in der Eastern Time: UTC−5 im Winter und UTC−4 während der Sommerzeit."
+  },
+  {
+    "audio_file": "B-DE-Q043.m4a",
+    "question": "Wie groß ist der Zeitunterschied zwischen der Zeitzone von New York City und China?",
+    "reference_answer": "Während der New Yorker Normalzeit ist China 13 Stunden voraus."
+  },
+  {
+    "audio_file": "B-DE-Q044.m4a",
+    "question": "Gibt es in New York im Sommer eine Sommerzeit? Wie groß ist der Zeitunterschied zu China während der Sommerzeit?",
+    "reference_answer": "Ja; während der Sommerzeit in New York ist China 12 Stunden voraus."
+  },
+  {
+    "audio_file": "B-DE-Q045.m4a",
+    "question": "Aus welchen Teilen bestehen menschliche Zellen?",
+    "reference_answer": "Eine typische menschliche Zelle besteht aus Zellmembran, Zytoplasma mit Organellen und meist einem Zellkern mit DNA."
+  },
+  {
+    "audio_file": "B-DE-Q046.m4a",
+    "question": "In welcher Epoche Chinas wurde die Westliche Han-Dynastie gegründet?",
+    "reference_answer": "Die Westliche Han-Dynastie wurde 202 v. Chr. nach dem Fall der Qin-Dynastie und dem Chu-Han-Krieg gegründet."
+  },
+  {
+    "audio_file": "B-DE-Q047.m4a",
+    "question": "Was war der Codename für die Invasion in der Normandie?",
+    "reference_answer": "Der Codename der Invasion war Operation Overlord; die amphibische Angriffsphase hieß Operation Neptune."
+  },
+  {
+    "audio_file": "B-DE-Q048.m4a",
+    "question": "Wann wurde der Louvre gebaut?",
+    "reference_answer": "Der Louvre begann um 1190 als Festung; der heutige Palast entstand durch große Umbauten ab dem 16. Jahrhundert."
+  },
+  {
+    "audio_file": "B-DE-Q049.m4a",
+    "question": "Welcher Dynastie gehörte die Kaiserin Wu Zetian in der chinesischen Geschichte an?",
+    "reference_answer": "Wu Zetian herrschte in der Zeit der Tang-Dynastie, gründete aber von 690 bis 705 ihre eigene Zhou-Dynastie."
+  },
+  {
+    "audio_file": "B-DE-Q050.m4a",
+    "question": "Was ist das größte Organ des menschlichen Körpers?",
+    "reference_answer": "Das größte Organ des menschlichen Körpers ist die Haut."
+  },
+  {
+    "audio_file": "B-DE-Q051.m4a",
+    "question": "Was ist die durchschnittliche Entfernung zwischen der Erde und dem Mond?",
+    "reference_answer": "Die mittlere Entfernung zwischen Erde und Mond beträgt etwa 384.400 Kilometer."
+  },
+  {
+    "audio_file": "B-DE-Q052.m4a",
+    "question": "Besteht der Erdkern vollständig aus Eisen?",
+    "reference_answer": "Nein; der Erdkern besteht hauptsächlich aus Eisen, aber auch aus Nickel und leichteren Elementen."
+  },
+  {
+    "audio_file": "B-DE-Q053.m4a",
+    "question": "Welche Religion hat derzeit die meisten Anhänger auf der Welt?",
+    "reference_answer": "Das Christentum hat derzeit weltweit die meisten Anhänger."
+  },
+  {
+    "audio_file": "B-DE-Q054.m4a",
+    "question": "Was ist ein Quantencomputer?",
+    "reference_answer": "Ein Quantencomputer nutzt Qubits und Effekte wie Superposition und Verschränkung für bestimmte Berechnungen."
+  },
+  {
+    "audio_file": "B-DE-Q055.m4a",
+    "question": "Wie viele regierungsunmittelbare Städte gibt es in China laut Verwaltungsgliederung?",
+    "reference_answer": "China hat vier regierungsunmittelbare Städte: Peking, Shanghai, Tianjin und Chongqing."
+  },
+  {
+    "audio_file": "B-DE-Q056.m4a",
+    "question": "Woher stammen Süßmandeln und Bittermandeln?",
+    "reference_answer": "Süße und bittere Mandeln stammen von Varianten des Mandelbaums Prunus dulcis; bittere Sorten enthalten mehr Amygdalin."
+  },
+  {
+    "audio_file": "B-DE-Q057.m4a",
+    "question": "In welcher Reihenfolge sind die Elemente im Periodensystem der chemischen Elemente angeordnet?",
+    "reference_answer": "Die Elemente sind nach steigender Ordnungszahl, also der Protonenzahl im Kern, angeordnet."
+  },
+  {
+    "audio_file": "B-DE-Q058.m4a",
+    "question": "In welchem Teil der Pflanze findet die Fotosynthese statt?",
+    "reference_answer": "Die Photosynthese findet hauptsächlich in den Chloroplasten statt, besonders in den Mesophyllzellen der Blätter."
+  },
+  {
+    "audio_file": "B-DE-Q059.m4a",
+    "question": "Wann ereignete sich das Erdbeben von Wenchuan im Jahr 2008?",
+    "reference_answer": "Das Wenchuan-Erdbeben ereignete sich am 12. Mai 2008 um 14:28 Uhr chinesischer Standardzeit."
+  },
+  {
+    "audio_file": "B-DE-Q060.m4a",
+    "question": "Welcher ist der höchste Berg der Welt?",
+    "reference_answer": "Der höchste Berg der Welt ist der Mount Everest."
+  },
+  {
+    "audio_file": "B-DE-Q061.m4a",
+    "question": "Was ist die Hauptstadt von Singapur?",
+    "reference_answer": "Die Hauptstadt Singapurs ist Singapur."
+  },
+  {
+    "audio_file": "B-DE-Q062.m4a",
+    "question": "Was ist der Unterschied zwischen Sol und Lotion?",
+    "reference_answer": "Ein Sol ist eine kolloidale Suspension fester Teilchen in einer Flüssigkeit; eine Lotion ist eine Flüssigkeit oder Emulsion zur Anwendung auf der Haut."
+  },
+  {
+    "audio_file": "B-DE-Q063.m4a",
+    "question": "Wie viele Tore hat die Verbotene Stadt? Wie heißen sie? Was sind die Hauptgebäude auf der zentralen Achse der Verbotenen Stadt?",
+    "reference_answer": "Die vier Haupttore sind Meridian-, Göttliche-Macht-, Ostglanz- und Westglanztor; auf der Mittelachse liegen unter anderem die Hallen der Höchsten Harmonie und der Palast der Himmlischen Reinheit."
+  },
+  {
+    "audio_file": "B-DE-Q064.m4a",
+    "question": "Welche der vier großen Erfindungen war die früheste?",
+    "reference_answer": "Die Papierherstellung gilt allgemein als die früheste der vier großen Erfindungen."
+  },
+  {
+    "audio_file": "B-DE-Q065.m4a",
+    "question": "Ist die Stadt Ankang die Hauptstadt der Provinz Shaanxi?",
+    "reference_answer": "Nein; Ankang ist eine bezirksfreie Stadt, während Xi'an die Hauptstadt von Shaanxi ist."
+  },
+  {
+    "audio_file": "B-DE-Q066.m4a",
+    "question": "In welcher Dynastie wurde die Kanzleischrift zur offiziellen Schriftart? Aus welcher Schriftart hat sie sich entwickelt?",
+    "reference_answer": "Die Kanzleischrift wurde in der Han-Dynastie amtliche Schrift und entwickelte sich aus der Siegelschrift."
+  },
+  {
+    "audio_file": "B-DE-Q067.m4a",
+    "question": "Wann ist der Todestag von Mao Zedong?",
+    "reference_answer": "Der Todestag Mao Zedongs ist der 9. September; er starb am 9. September 1976."
+  },
+  {
+    "audio_file": "B-DE-Q068.m4a",
+    "question": "Welches ist der längste Knochen in der menschlichen Anatomie?",
+    "reference_answer": "Der längste Knochen des menschlichen Körpers ist der Oberschenkelknochen."
+  },
+  {
+    "audio_file": "B-DE-Q069.m4a",
+    "question": "In welchem Jahr wurde die Tower Bridge gebaut?",
+    "reference_answer": "Der Bau der Tower Bridge begann 1886; eröffnet wurde sie 1894."
+  },
+  {
+    "audio_file": "B-DE-Q070.m4a",
+    "question": "Was sind die Schritte des TCP-Drei-Wege-Handschlag-Verfahrens?",
+    "reference_answer": "Der Client sendet SYN, der Server antwortet mit SYN-ACK und der Client bestätigt mit ACK."
+  },
+  {
+    "audio_file": "B-DE-Q071.m4a",
+    "question": "Welche Genehmigung kann ich erhalten, um den Mount Everest zu besteigen?",
+    "reference_answer": "Für die Südroute braucht man eine Genehmigung des nepalesischen Tourismusministeriums, für die Nordroute eine Genehmigung der Tibet Mountaineering Association."
+  },
+  {
+    "audio_file": "B-DE-Q072.m4a",
+    "question": "Wann war das genaue Datum des Zweiten Opiumkriegs?",
+    "reference_answer": "Der Zweite Opiumkrieg dauerte vom 8. Oktober 1856 bis zum 24. Oktober 1860."
+  },
+  {
+    "audio_file": "B-DE-Q073.m4a",
+    "question": "Woher stammt die 12-Stunden-Zeitzählung?",
+    "reference_answer": "Die Zwölfstundenzählung entwickelte sich aus antiken Systemen, die Tag und Nacht in je zwölf Abschnitte teilten, besonders in Ägypten und später in der griechisch-römischen Welt."
+  },
+  {
+    "audio_file": "B-DE-Q074.m4a",
+    "question": "Wie viele Quadratzahlen gibt es zwischen 5 und 7?",
+    "reference_answer": "Zwischen 5 und 7 liegt keine ganze Quadratzahl."
+  },
+  {
+    "audio_file": "B-DE-Q075.m4a",
+    "question": "Was ist die Funktion der Schweißdrüsen bei Säugetieren?",
+    "reference_answer": "Schweißdrüsen kühlen den Körper durch Verdunstung und scheiden geringe Mengen Wasser, Salze und Abfallstoffe aus."
+  },
+  {
+    "audio_file": "B-DE-Q076.m4a",
+    "question": "Welcher ist der höchste Berg der Welt?",
+    "reference_answer": "Der höchste Berg über dem Meeresspiegel ist der Mount Everest."
+  },
+  {
+    "audio_file": "B-DE-Q077.m4a",
+    "question": "Was sind die vier antiken Hochkulturen?",
+    "reference_answer": "Die vier alten Hochkulturen sind Mesopotamien, Ägypten, das Industal und China."
+  },
+  {
+    "audio_file": "B-DE-Q078.m4a",
+    "question": "Können Sie mir etwas über die Funktion der Schilddrüse erzählen?",
+    "reference_answer": "Die Schilddrüse bildet vor allem T4 und T3 und reguliert damit Stoffwechsel, Wachstum, Temperatur und Energieverbrauch; außerdem bildet sie Calcitonin."
+  },
+  {
+    "audio_file": "B-DE-Q079.m4a",
+    "question": "Wo befindet sich die Hauptzentrale von Apple?",
+    "reference_answer": "Apples Hauptsitz befindet sich im Apple Park, One Apple Park Way, Cupertino, Kalifornien, USA."
+  },
+  {
+    "audio_file": "B-DE-Q080.m4a",
+    "question": "Was ist der dritte Planet im Sonnensystem?",
+    "reference_answer": "Der dritte Planet im Sonnensystem ist die Erde."
+  },
+  {
+    "audio_file": "B-DE-Q081.m4a",
+    "question": "Was ist die Bill of Rights?",
+    "reference_answer": "Eine Bill of Rights ist ein formeller Katalog geschützter Freiheitsrechte; in den USA sind damit die ersten zehn Verfassungszusätze gemeint."
+  },
+  {
+    "audio_file": "B-DE-Q082.m4a",
+    "question": "Können Sie erklären, was Quantenverschränkung ist?",
+    "reference_answer": "Quantenverschränkung ist ein gemeinsamer Quantenzustand, bei dem Messungen getrennter Teilchen klassisch nicht erklärbare Korrelationen zeigen."
+  },
+  {
+    "audio_file": "B-DE-Q083.m4a",
+    "question": "Was ist die Hauptstadt der Malediven?",
+    "reference_answer": "Die Hauptstadt der Malediven ist Malé."
+  },
+  {
+    "audio_file": "B-DE-Q084.m4a",
+    "question": "Welche Währung wird auf den Malediven verwendet?",
+    "reference_answer": "Die Währung der Malediven ist die Maledivische Rufiyaa mit dem Kürzel MVR."
+  },
+  {
+    "audio_file": "B-DE-Q085.m4a",
+    "question": "Was sind die Haupttouristenattraktionen auf den Malediven?",
+    "reference_answer": "Zu den wichtigsten Attraktionen zählen Resortinseln, Korallenriffe, Tauch- und Schnorchelplätze, Strände, die Hanifaru-Bucht und Kulturstätten in Malé."
+  },
+  {
+    "audio_file": "B-DE-Q086.m4a",
+    "question": "Was ist das Montrealer Protokoll?",
+    "reference_answer": "Das Montrealer Protokoll ist ein Abkommen von 1987 zum schrittweisen Verbot ozonschädigender Stoffe."
+  },
+  {
+    "audio_file": "B-DE-Q087.m4a",
+    "question": "Was sind die Hauptinhalte der Charta der Vereinten Nationen?",
+    "reference_answer": "Die UN-Charta regelt Ziele und Grundsätze, Mitgliedschaft, Organe, friedliche Streitbeilegung, kollektive Sicherheit, Zusammenarbeit sowie Änderung und Ratifizierung."
+  },
+  {
+    "audio_file": "B-DE-Q088.m4a",
+    "question": "Wann wurde das Internationale Rote Kreuz gegründet?",
+    "reference_answer": "Das Internationale Komitee vom Roten Kreuz wurde am 17. Februar 1863 gegründet."
+  },
+  {
+    "audio_file": "B-DE-Q089.m4a",
+    "question": "Hat der Turing-Award den Begriff der künstlichen Intelligenz eingeführt?",
+    "reference_answer": "Nein; der Turing Award würdigt Leistungen in der Informatik, während der Begriff künstliche Intelligenz unabhängig davon, besonders 1956 in Dartmouth, geprägt wurde."
+  },
+  {
+    "audio_file": "B-DE-Q090.m4a",
+    "question": "Was sind die grundlegenden Eigenschaften des Universums?",
+    "reference_answer": "Das Universum expandiert und ist auf sehr großen Skalen weitgehend homogen und isotrop; es umfasst Materie, Energie, Raumzeit und fundamentale Kräfte."
+  },
+  {
+    "audio_file": "B-DE-Q091.m4a",
+    "question": "Was ist Flugsicherung?",
+    "reference_answer": "Die Flugsicherung koordiniert Flugzeuge am Boden und im kontrollierten Luftraum, um Kollisionen zu verhindern und den Verkehr sicher zu führen."
+  },
+  {
+    "audio_file": "B-DE-Q092.m4a",
+    "question": "Welche Arten von Mikroskopen gibt es?",
+    "reference_answer": "Haupttypen sind Lichtmikroskope, Elektronenmikroskope, Rastersondenmikroskope und Röntgenmikroskope."
+  },
+  {
+    "audio_file": "B-DE-Q093.m4a",
+    "question": "Shanghai ist die Hauptstadt welcher chinesischen Provinz?",
+    "reference_answer": "Keine; Shanghai ist eine regierungsunmittelbare Stadt und keine Provinzhauptstadt."
+  },
+  {
+    "audio_file": "B-DE-Q094.m4a",
+    "question": "Bitte erklären Sie, was Klimaneutralität bedeutet.",
+    "reference_answer": "Kohlenstoffneutralität bedeutet, verursachte CO₂-Emissionen durch gleich große Entnahmen auszugleichen, sodass netto null entsteht."
+  },
+  {
+    "audio_file": "B-DE-Q095.m4a",
+    "question": "Wie lange braucht die Erde für eine Drehung um die eigene Achse?",
+    "reference_answer": "Eine Erdrotation dauert gegenüber den Sternen etwa 23 Stunden 56 Minuten; der mittlere Sonnentag dauert 24 Stunden."
+  },
+  {
+    "audio_file": "B-DE-Q096.m4a",
+    "question": "Wie viele Goldmedaillen gewinnt China bei den Olympischen Winterspielen 2022?",
+    "reference_answer": "China gewann bei den Olympischen Winterspielen 2022 neun Goldmedaillen."
+  },
+  {
+    "audio_file": "B-DE-Q097.m4a",
+    "question": "Was ist das Prinzip der Maglev-Magnetschwebebahn?",
+    "reference_answer": "Magnetschwebebahnen nutzen Magnetkräfte zum Schweben und Führen; ein veränderliches Magnetfeld erzeugt den Vortrieb."
+  },
+  {
+    "audio_file": "B-DE-Q098.m4a",
+    "question": "Welche Rolle spielt Selen bei der enzymatischen Katalyseaktivität?",
+    "reference_answer": "Selen steckt als Selenocystein in Enzymen wie Glutathionperoxidase und ermöglicht Redoxkatalyse und antioxidativen Schutz."
+  },
+  {
+    "audio_file": "B-DE-Q099.m4a",
+    "question": "Wie lautet die Adresse der Peking-Universität?",
+    "reference_answer": "Die Adresse der Peking-Universität lautet Yiheyuan Road 5, Haidian, Peking 100871, China."
+  },
+  {
+    "audio_file": "B-DE-Q100.m4a",
+    "question": "Wann wurde die Peking-Universität gegründet?",
+    "reference_answer": "Die Peking-Universität wurde 1898 als Kaiserliche Universität Peking gegründet."
+  },
+  {
+    "audio_file": "B-DE-Q101.m4a",
+    "question": "Welche berühmten Bauwerke haben die ägyptischen Pharaonen gebaut?",
+    "reference_answer": "Die Pharaonen errichteten vor allem Pyramiden sowie monumentale Tempel- und Grabanlagen, darunter Gizeh, Karnak und Luxor."
+  },
+  {
+    "audio_file": "B-DE-Q102.m4a",
+    "question": "In welchem Land liegt Dresden?",
+    "reference_answer": "Dresden liegt in Deutschland."
+  },
+  {
+    "audio_file": "B-DE-Q103.m4a",
+    "question": "Welches ist das höchste Gebäude der Welt?",
+    "reference_answer": "Das höchste Gebäude der Welt ist der 828 Meter hohe Burj Khalifa in Dubai."
+  },
+  {
+    "audio_file": "B-DE-Q104.m4a",
+    "question": "Wo in China befindet sich der größte Salzsee?",
+    "reference_answer": "Der Qinghai-See in der Provinz Qinghai ist Chinas größter Salzwassersee."
+  },
+  {
+    "audio_file": "B-DE-Q105.m4a",
+    "question": "Sind chinesische Ingenieure an der Entwicklung von Bitcoin beteiligt?",
+    "reference_answer": "Bitcoin wurde unter dem Pseudonym Satoshi Nakamoto vorgestellt; es gibt keinen bestätigten Nachweis, dass die ursprünglichen Entwickler chinesische Ingenieure waren."
+  },
+  {
+    "audio_file": "B-DE-Q106.m4a",
+    "question": "Wie wurde Athene in der griechischen Mythologie geboren?",
+    "reference_answer": "Der Sage nach entsprang Athena erwachsen und bewaffnet dem Kopf des Zeus, nachdem er ihre Mutter Metis verschlungen hatte."
+  },
+  {
+    "audio_file": "B-DE-Q107.m4a",
+    "question": "Wo sind die Hauptlebensräume des Kronenkranichs (Mandschurenkranichs)?",
+    "reference_answer": "Mandschurenkraniche brüten vor allem in Nordostchina und im russischen Fernen Osten; weitere Populationen leben in Hokkaido oder überwintern in China und Korea."
+  },
+  {
+    "audio_file": "B-DE-Q108.m4a",
+    "question": "Wo befindet sich die Kathedrale Notre-Dame?",
+    "reference_answer": "Notre-Dame steht auf der Île de la Cité in Paris, Frankreich."
+  },
+  {
+    "audio_file": "B-DE-Q109.m4a",
+    "question": "Wie lange hat der Bau von Notre-Dame de Paris gedauert?",
+    "reference_answer": "Der Bau begann 1163 und war Mitte des 14. Jahrhunderts weitgehend abgeschlossen, also nach ungefähr 180 Jahren."
+  },
+  {
+    "audio_file": "B-DE-Q110.m4a",
+    "question": "Ich habe gehört, dass viel Wassertrinken die Haut nicht unbedingt weniger trocken macht. Stimmt das?",
+    "reference_answer": "Ja; sofern keine Dehydrierung besteht, behebt mehr Wasser trockene Haut meist nicht, während Feuchtigkeitscremes und die Behandlung der Ursache wirksamer sind."
+  },
+  {
+    "audio_file": "B-DE-Q111.m4a",
+    "question": "Was ist das \"Erdungskabel\" in der Elektrotechnik?",
+    "reference_answer": "Ein Schutzleiter verbindet berührbare leitfähige Teile mit Erde oder einem Bezugspotential und bietet bei Fehlern einen niederohmigen Stromweg."
+  },
+  {
+    "audio_file": "B-DE-Q112.m4a",
+    "question": "Was ist eine Möglichkeit, Geräte in Stromsystemen vor komplexen elektromagnetischen Störungen zu schützen?",
+    "reference_answer": "Elektromagnetische Abschirmung zusammen mit korrekter Erdung und Filterung schützt empfindliche Geräte vor Störungen."
+  },
+  {
+    "audio_file": "B-DE-Q113.m4a",
+    "question": "Wie war das politische System des antiken Roms?",
+    "reference_answer": "Rom entwickelte sich von der Monarchie über die Republik zum Kaiserreich; die Republik besaß Magistrate, Senat und Volksversammlungen, später bündelten Kaiser die Macht."
+  },
+  {
+    "audio_file": "B-DE-Q114.m4a",
+    "question": "Wer war der höchste Verwalter während der republikanischen Zeit im antiken Rom?",
+    "reference_answer": "Die beiden jährlich gewählten Konsuln waren die höchsten regulären Amtsträger der römischen Republik."
+  },
+  {
+    "audio_file": "B-DE-Q115.m4a",
+    "question": "Was ist Morbus Crohn? Was sind die Symptome und wie wird es diagnostiziert?",
+    "reference_answer": "Morbus Crohn ist eine chronisch-entzündliche Darmerkrankung mit Bauchschmerzen, Durchfall, Gewichtsverlust und Müdigkeit; diagnostiziert wird sie durch Anamnese, Labor, Endoskopie mit Biopsie und Bildgebung."
+  },
+  {
+    "audio_file": "B-DE-Q116.m4a",
+    "question": "Führt Morbus Crohn leicht zu Anämie?",
+    "reference_answer": "Ja; Blutverlust, Entzündung und eine schlechte Aufnahme von Eisen, Vitamin B12 oder Folat können Anämie verursachen."
+  },
+  {
+    "audio_file": "B-DE-Q117.m4a",
+    "question": "Was sind die Hauptreligionen in China?",
+    "reference_answer": "Zu den Religionen Chinas gehören Buddhismus, Daoismus, Islam, Protestantismus, Katholizismus und Volksreligionen; viele Menschen sind konfessionslos."
+  },
+  {
+    "audio_file": "B-DE-Q118.m4a",
+    "question": "Bitte erklären Sie die Konzepte und Unterschiede zwischen natürlicher Konvektion und erzwingender Konvektion.",
+    "reference_answer": "Natürliche Konvektion entsteht durch Auftrieb infolge temperaturbedingter Dichteunterschiede; erzwungene Konvektion wird durch Ventilator, Pumpe oder eine andere äußere Strömung erzeugt."
+  },
+  {
+    "audio_file": "B-DE-Q119.m4a",
+    "question": "Was ist die Definition von supraleitendem Material?",
+    "reference_answer": "Ein Supraleiter hat unterhalb einer kritischen Temperatur innerhalb bestimmter Feld- und Stromgrenzen keinen elektrischen Widerstand und verdrängt Magnetfluss."
+  },
+  {
+    "audio_file": "B-DE-Q120.m4a",
+    "question": "Welcher Kaiser in der chinesischen Geschichte war die einzige Frau, die auf dem Mount Tai verehrt wurde?",
+    "reference_answer": "Wu Zetian war die einzige chinesische Kaiserin, die mit der Weihezeremonie am Berg Tai verbunden war."
+  },
+  {
+    "audio_file": "B-DE-Q121.m4a",
+    "question": "Was bedeutet Kubikmeter?",
+    "reference_answer": "Ein Kubikmeter ist das Volumen eines Würfels mit einem Meter Kantenlänge."
+  },
+  {
+    "audio_file": "B-DE-Q122.m4a",
+    "question": "Was ist die Beziehung zwischen Kubikmetern und Kubikzentimetern?",
+    "reference_answer": "Ein Kubikmeter entspricht 1.000.000 Kubikzentimetern."
+  },
+  {
+    "audio_file": "B-DE-Q123.m4a",
+    "question": "Wie viel wiegt ungefähr ein Kubikmeter Wasser?",
+    "reference_answer": "Ein Kubikmeter Wasser wiegt bei Raumtemperatur ungefähr 1.000 Kilogramm beziehungsweise eine Tonne."
+  },
+  {
+    "audio_file": "B-DE-Q124.m4a",
+    "question": "Was ist die Hauptstadt von Norwegen?",
+    "reference_answer": "Die Hauptstadt Norwegens ist Oslo."
+  },
+  {
+    "audio_file": "B-DE-Q125.m4a",
+    "question": "Warum darf man keine Metallgefäße in der Mikrowelle verwenden?",
+    "reference_answer": "Metall kann Mikrowellen reflektieren und an Kanten Funken oder Lichtbögen erzeugen, die den Ofen beschädigen oder einen Brand auslösen können."
+  },
+  {
+    "audio_file": "B-DE-Q126.m4a",
+    "question": "Was war der Vorgänger von Google Maps? Wie hieß es, bevor Google es übernommen hat?",
+    "reference_answer": "Google Maps ging aus dem Desktop-Kartenprogramm Expedition von Where 2 Technologies hervor, das Google 2004 übernahm."
+  },
+  {
+    "audio_file": "B-DE-Q127.m4a",
+    "question": "Wissen Sie, wie groß die Masse von Pluto ist?",
+    "reference_answer": "Die Masse Plutos beträgt etwa 1,303 × 10²² Kilogramm."
+  },
+  {
+    "audio_file": "B-DE-Q128.m4a",
+    "question": "Was ist das Internet-Protokoll?",
+    "reference_answer": "Das Internetprotokoll adressiert und leitet Datenpakete durch verbundene Netze; die wichtigsten Versionen sind IPv4 und IPv6."
+  },
+  {
+    "audio_file": "B-DE-Q129.m4a",
+    "question": "Haben Tiere Empathie?",
+    "reference_answer": "Ja; bei Primaten, Elefanten, Nagern und einigen Vögeln wurden empathieähnliche Verhaltensweisen beobachtet."
+  },
+  {
+    "audio_file": "B-DE-Q130.m4a",
+    "question": "Wie oft werden die Nobelpreise jedes Jahr verliehen?",
+    "reference_answer": "Die Nobelpreise werden einmal pro Jahr in sechs Kategorien vergeben."
+  },
+  {
+    "audio_file": "B-DE-Q131.m4a",
+    "question": "Gibt es ein Beispiel dafür, dass sich mehrere Personen denselben Preis bei dieser jährlichen Nobelpreisverleihung teilen?",
+    "reference_answer": "Ja; ein Nobelpreis kann von bis zu drei Preisträgern geteilt werden, was häufig geschehen ist."
+  },
+  {
+    "audio_file": "B-DE-Q132.m4a",
+    "question": "Wann begann und endete die 18. Dynastie des alten Ägyptens?",
+    "reference_answer": "Die 18. Dynastie Ägyptens wird gewöhnlich auf etwa 1550 bis 1292 v. Chr. datiert."
+  },
+  {
+    "audio_file": "B-DE-Q133.m4a",
+    "question": "Wer war der erste Kaiser des antiken Römischen Reiches?",
+    "reference_answer": "Der erste Kaiser des Römischen Reiches war Augustus."
+  },
+  {
+    "audio_file": "B-DE-Q134.m4a",
+    "question": "Entschuldigung, was ist das Plancksche Wirkungsquantum?",
+    "reference_answer": "Die Planck-Konstante ist h = 6,62607015 × 10⁻³⁴ Joulesekunden und verknüpft die Energie eines Photons mit seiner Frequenz."
+  },
+  {
+    "audio_file": "B-DE-Q135.m4a",
+    "question": "In welchem Jahrhundert begann man, das geozentrische Weltbild zu nutzen?",
+    "reference_answer": "Geozentrische Modelle stammen aus der Antike; systematische griechische Formen gab es im 4. Jahrhundert v. Chr., Ptolemäus formalisierte sie im 2. Jahrhundert n. Chr."
+  },
+  {
+    "audio_file": "B-DE-Q136.m4a",
+    "question": "Hat Newton früher die Prinzipien des geozentrischen Weltbilds aufrechterhalten?",
+    "reference_answer": "Nein; Newton vertrat das heliozentrische System und lieferte mit Mechanik und Gravitation seine physikalische Grundlage."
+  },
+  {
+    "audio_file": "B-DE-Q137.m4a",
+    "question": "Das entsprechende Mondkalenderdatum für den 1. Oktober 2023 im Gregorianischen Kalender ist",
+    "reference_answer": "Der 1. Oktober 2023 entsprach dem 17. Tag des achten Mondmonats im Jahr des Hasen."
+  },
+  {
+    "audio_file": "B-DE-Q138.m4a",
+    "question": "Was ist das Sternzeichen für den 1. Oktober 2023 im Gregorianischen Kalender?",
+    "reference_answer": "Das Tierkreiszeichen für den 1. Oktober 2023 ist Waage."
+  },
+  {
+    "audio_file": "B-DE-Q139.m4a",
+    "question": "Wo finden am 1. Oktober 2023 im Gregorianischen Kalender lebhaftere Feierlichkeiten statt?",
+    "reference_answer": "In China finden besonders in Peking und am Tian'anmen-Platz große Nationalfeiern statt; auch viele Touristenstädte veranstalten Feiern."
+  },
+  {
+    "audio_file": "B-DE-Q140.m4a",
+    "question": "Kennen Sie die berühmten Sehenswürdigkeiten in Paris?",
+    "reference_answer": "Berühmte Pariser Sehenswürdigkeiten sind Eiffelturm, Louvre, Notre-Dame, Triumphbogen, Champs-Élysées, Sacré-Cœur, Musée d'Orsay und Seine."
+  },
+  {
+    "audio_file": "B-DE-Q141.m4a",
+    "question": "Wann wurde der Louvre erbaut?",
+    "reference_answer": "Der Louvre begann um 1190 als Festung; der heutige Palast entstand durch große Umbauten ab dem 16. Jahrhundert."
+  },
+  {
+    "audio_file": "B-DE-Q142.m4a",
+    "question": "Ist Mumbai die Hauptstadt von Indien?",
+    "reference_answer": "Nein; Neu-Delhi ist Indiens Hauptstadt, Mumbai dagegen die Hauptstadt Maharashtras."
+  },
+  {
+    "audio_file": "B-DE-Q143.m4a",
+    "question": "In welchem Bundesstaat Indiens liegt Varanasi?",
+    "reference_answer": "Varanasi liegt im indischen Bundesstaat Uttar Pradesh."
+  },
+  {
+    "audio_file": "B-DE-Q144.m4a",
+    "question": "Was ist ein elastischer Stoß?",
+    "reference_answer": "Bei einem elastischen Stoß bleiben sowohl der Gesamtimpuls als auch die gesamte kinetische Energie erhalten."
+  },
+  {
+    "audio_file": "B-DE-Q145.m4a",
+    "question": "Wie viele Arrondissements gibt es in Paris?",
+    "reference_answer": "Paris hat 20 Arrondissements."
+  },
+  {
+    "audio_file": "B-DE-Q146.m4a",
+    "question": "Welche anderen Lebensmittel außer Meeresfrüchten und Innereien stehen im Zusammenhang mit Gicht?",
+    "reference_answer": "Weitere mit Gicht verbundene Lebensmittel und Getränke sind rotes Fleisch, zucker- oder fruktosehaltige Getränke, Bier, anderer Alkohol sowie manche purinreichen Fische und Wild."
+  },
+  {
+    "audio_file": "B-DE-Q147.m4a",
+    "question": "Was ist Quantenmechanik?",
+    "reference_answer": "Die Quantenmechanik beschreibt Materie und Energie auf atomarer und subatomarer Ebene mit quantisierten Zuständen, Wellenfunktionen und Wahrscheinlichkeiten."
+  },
+  {
+    "audio_file": "B-DE-Q148.m4a",
+    "question": "Was ist ein Quantencomputer?",
+    "reference_answer": "Ein Quantencomputer nutzt Qubits sowie Superposition und Verschränkung, um bestimmte Probleme anders als klassische Computer zu lösen."
+  },
+  {
+    "audio_file": "B-DE-Q149.m4a",
+    "question": "Stellen Sie die grundlegenden Konzepte von ChatGPT vor.",
+    "reference_answer": "ChatGPT ist ein dialogorientiertes KI-System auf Basis eines großen Sprachmodells; es erzeugt Antworten aus erlernten Sprachmustern, kann aber Fehler machen."
+  },
+  {
+    "audio_file": "B-DE-Q150.m4a",
+    "question": "Aus welchen Elementen besteht Wasser?",
+    "reference_answer": "Wasser besteht aus Wasserstoff und Sauerstoff im Verhältnis zwei zu eins: H₂O."
+  },
+  {
+    "audio_file": "B-DE-Q151.m4a",
+    "question": "Zu welchem Land gehört der Baikalsee?",
+    "reference_answer": "Der Baikalsee liegt in Russland."
+  },
+  {
+    "audio_file": "B-DE-Q152.m4a",
+    "question": "Was sind die häufigsten Elemente in der Natur?",
+    "reference_answer": "In der Erdkruste sind Sauerstoff und Silizium am häufigsten; im Universum dominieren Wasserstoff und Helium."
+  },
+  {
+    "audio_file": "B-DE-Q153.m4a",
+    "question": "Was sind die wichtigsten Meere in Europa?",
+    "reference_answer": "Zu Europas wichtigsten Meeren gehören Mittelmeer, Ostsee, Nordsee, Norwegische See, Barentssee, Schwarzes Meer, Adria, Ägäis, Ionisches, Tyrrhenisches und Keltisches Meer."
+  },
+  {
+    "audio_file": "B-DE-Q154.m4a",
+    "question": "Zu welchem Fachgebiet gehört die Relativitätstheorie?",
+    "reference_answer": "Die Relativitätstheorie gehört zur Physik."
+  },
+  {
+    "audio_file": "B-DE-Q155.m4a",
+    "question": "Vitamin E ist ein starkes Antioxidans, aber warum ist es beim Schutz der Zellen vor oxidativem Stress weniger wirksam als Selen?",
+    "reference_answer": "Vitamin E unterbricht Oxidationsketten in Membranen, während Selen Bestandteil katalytischer Enzyme ist, die Peroxide wiederholt abbauen; beide wirken ergänzend."
+  },
+  {
+    "audio_file": "B-DE-Q156.m4a",
+    "question": "Was ist das Fermi-Paradoxon?",
+    "reference_answer": "Das Fermi-Paradoxon bezeichnet den Widerspruch zwischen der erwarteten Häufigkeit außerirdischer Zivilisationen und dem Fehlen bestätigter Hinweise oder Kontakte."
+  },
+  {
+    "audio_file": "B-DE-Q157.m4a",
+    "question": "Was ist laut Relativitätstheorie die Beziehung zwischen Masse und Energie?",
+    "reference_answer": "Masse und Energie sind äquivalent: Für die Ruheenergie gilt E = mc²."
+  },
+  {
+    "audio_file": "B-DE-Q158.m4a",
+    "question": "Hallo, können Sie den Neigungswinkel der Erdrotationsachse erklären?",
+    "reference_answer": "Die Erdachse ist etwa 23,44° gegen die Senkrechte ihrer Bahnebene geneigt; dadurch entstehen die Jahreszeiten."
+  },
+  {
+    "audio_file": "B-DE-Q159.m4a",
+    "question": "Welche Auswirkungen wird die Erderwärmung auf die Landwirtschaft haben?",
+    "reference_answer": "Die Erwärmung verschiebt Anbauzonen, verändert Niederschläge, verstärkt Hitze, Dürre und Schädlinge und kann viele Erträge senken, während manche kühle Regionen längere Saisons erhalten."
+  },
+  {
+    "audio_file": "B-DE-Q160.m4a",
+    "question": "Bitte erklären Sie Schwarze Löcher.",
+    "reference_answer": "Ein Schwarzes Loch ist eine Region, deren Gravitation so stark ist, dass innerhalb des Ereignishorizonts nichts, auch kein Licht, entkommen kann."
+  },
+  {
+    "audio_file": "B-DE-Q161.m4a",
+    "question": "Was ist Quantenverschränkung?",
+    "reference_answer": "Quantenverschränkung ist ein gemeinsamer Quantenzustand, der zwischen getrennten Teilchen klassisch nicht erklärbare Korrelationen erzeugt."
+  },
+  {
+    "audio_file": "B-DE-Q162.m4a",
+    "question": "Was ist die Relativitätstheorie?",
+    "reference_answer": "Die Relativitätstheorie umfasst spezielle und allgemeine Relativität und beschreibt Raum, Zeit, Bewegung, Gravitation sowie die Äquivalenz von Masse und Energie."
+  },
+  {
+    "audio_file": "B-DE-Q163.m4a",
+    "question": "Was ist Blockchain-Technologie?",
+    "reference_answer": "Eine Blockchain ist ein verteiltes, nur ergänzbares Register, dessen Datensätze in kryptografisch verketteten Blöcken liegen und durch Netzwerkkonsens bestätigt werden."
+  },
+  {
+    "audio_file": "B-DE-Q164.m4a",
+    "question": "Was ist Quantenmechanik?",
+    "reference_answer": "Die Quantenmechanik ist die probabilistische Theorie von Materie und Energie auf atomarer und subatomarer Ebene."
+  },
+  {
+    "audio_file": "B-DE-Q165.m4a",
+    "question": "Wer hat Sauerstoff entdeckt?",
+    "reference_answer": "Carl Wilhelm Scheele und Joseph Priestley stellten Sauerstoff unabhängig her; Antoine Lavoisier erkannte und benannte ihn später als Element."
+  },
+  {
+    "audio_file": "B-DE-Q166.m4a",
+    "question": "Wer hat das Gravitationsgesetz vorgeschlagen?",
+    "reference_answer": "Das Gesetz der allgemeinen Gravitation wurde von Isaac Newton formuliert."
+  },
+  {
+    "audio_file": "B-DE-Q167.m4a",
+    "question": "Wie ist das Universum entstanden?",
+    "reference_answer": "Nach dem führenden kosmologischen Modell expandierte das Universum vor etwa 13,8 Milliarden Jahren aus einem extrem heißen, dichten Anfangszustand, dem Urknall."
+  },
+  {
+    "audio_file": "B-DE-Q168.m4a",
+    "question": "Was sind die drei Newtonschen Gesetze?",
+    "reference_answer": "Ein Körper bleibt ohne Nettokraft in Ruhe oder gleichförmiger Bewegung; Beschleunigung ist Kraft durch Masse; jede Wirkung hat eine gleich große entgegengesetzte Gegenwirkung."
+  },
+  {
+    "audio_file": "B-DE-Q169.m4a",
+    "question": "Was ist der Klimawandel?",
+    "reference_answer": "Klimawandel ist eine langfristige Veränderung von Klimamustern; die heutige rasche Erwärmung wird hauptsächlich durch menschliche Treibhausgasemissionen verursacht."
+  }
+]

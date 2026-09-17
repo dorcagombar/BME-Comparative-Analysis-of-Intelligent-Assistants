@@ -85,30 +85,58 @@ def _build_audio_files_map(folder_name: str, selected_files: list[str]) -> dict[
     }
 
 
-def _read_csv_audio_filenames(dataset_path: str) -> list[str]:
-    """Read the audio filenames declared by the selected CSV."""
-    if not dataset_path or Path(str(dataset_path)).suffix.lower() != ".csv":
+def _read_dataset_audio_filenames(dataset_path: str) -> list[str]:
+    """Read audio filenames declared by a CSV, JSON, or JSONL QA dataset."""
+    if not dataset_path:
         return []
 
+    path = Path(str(dataset_path))
+    ext = path.suffix.lower()
+
     try:
-        with open(str(dataset_path), encoding="utf-8-sig", newline="") as f:
-            reader = csv_module.DictReader(f)
-            headers = list(reader.fieldnames or [])
+        if ext == ".csv":
+            with open(path, encoding="utf-8-sig", newline="") as f:
+                reader = csv_module.DictReader(f)
+                headers = list(reader.fieldnames or [])
+                audio_col = _find_col(headers, _AUDIO_FILE_ALIASES)
+                if not audio_col:
+                    return []
+                return [
+                    Path((row.get(audio_col) or "").strip()).name
+                    for row in reader
+                    if (row.get(audio_col) or "").strip()
+                ]
+
+        if ext in {".json", ".jsonl"}:
+            import json as json_module
+            with open(path, encoding="utf-8-sig") as f:
+                if ext == ".json":
+                    data = json_module.load(f)
+                    rows = data if isinstance(data, list) else [data]
+                else:
+                    rows = [json_module.loads(line) for line in f if line.strip()]
+
+            rows = [row for row in rows if isinstance(row, dict)]
+            if not rows:
+                return []
+            headers = list(rows[0].keys())
             audio_col = _find_col(headers, _AUDIO_FILE_ALIASES)
             if not audio_col:
                 return []
             return [
-                Path((row.get(audio_col) or "").strip()).name
-                for row in reader
-                if (row.get(audio_col) or "").strip()
+                Path(str(row.get(audio_col) or "").strip()).name
+                for row in rows
+                if str(row.get(audio_col) or "").strip()
             ]
     except Exception:
         return []
 
+    return []
+
 
 def _match_dataset_audio(dataset_path: str):
     """Find the voice-sample folder with the largest real filename overlap."""
-    csv_files = _read_csv_audio_filenames(dataset_path)
+    csv_files = _read_dataset_audio_filenames(dataset_path)
     if not csv_files:
         return None, [], 0
 
@@ -148,7 +176,7 @@ def _audio_auto_status(folder_name, matches, total):
         )
     if not folder_name or not matches:
         return _status_err(
-            f"0 / {total} CSV audio files were found in data/voice_samples/."
+            f"0 / {total} dataset audio files were found in data/voice_samples/."
         )
 
     missing = total - len(matches)
@@ -432,6 +460,36 @@ def _validate_dataset_file(path) -> dict:
     )
 
 
+def _auto_skip_bertscore_for_dataset(path):
+    """Auto-check Skip BERTScore when the selected dataset is non-QA.
+
+    A dataset is treated as non-QA when it loads successfully and none of its
+    rows contains a question. QA datasets leave BERTScore enabled by default.
+    """
+    if not path:
+        return gr.update()
+
+    try:
+        runner = EvalRunner([], Evaluator())
+        pairs = runner.load_dataset(str(path))
+    except Exception:
+        # Dataset validation reports parse errors separately; do not change the
+        # user's metric choice when the file cannot be inspected.
+        return gr.update()
+
+    if not pairs:
+        return gr.update()
+
+    is_non_qa = all(not (p.question or "").strip() for p in pairs)
+    return gr.update(value=is_non_qa)
+
+
+def _auto_skip_bertscore_for_source(source, uploaded, existing):
+    """Apply the same auto-setting when switching dataset source."""
+    path = uploaded if source == "Upload file" else existing
+    return _auto_skip_bertscore_for_dataset(path)
+
+
 def _validate_audio_csv(file) -> dict:
     """
     Validate audio metadata CSV column names.
@@ -563,7 +621,7 @@ def run_evaluation(
 
         if csv_audio_count == 0:
             yield (
-                "Audio mode requires a CSV containing an audio filename column."
+                "Audio mode requires a dataset containing an audio filename field/column."
             ), None, None, gr.update(interactive=True)
             return
 
@@ -1332,7 +1390,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                                 _initial_audio_total,
                             )
                             if _initial_dataset
-                            else _status_warn("Select a CSV dataset to match audio automatically.")
+                            else _status_warn("Select a dataset with audio_file values to match audio automatically.")
                         )
                     )
                     initial_voice_files = _initial_audio_files
@@ -1442,6 +1500,26 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                         label="Skip BERTScore",
                         info="Recommended for faster runs",
                     )
+
+                # Keep the metric choice aligned with the selected dataset.
+                # Non-QA datasets automatically skip BERTScore; QA datasets
+                # automatically enable it. Users can still change the checkbox
+                # manually after the dataset selection has settled.
+                dataset_picker.change(
+                    _auto_skip_bertscore_for_dataset,
+                    inputs=dataset_picker,
+                    outputs=no_bertscore_box,
+                )
+                existing_box.change(
+                    _auto_skip_bertscore_for_dataset,
+                    inputs=existing_box,
+                    outputs=no_bertscore_box,
+                )
+                dataset_source.change(
+                    _auto_skip_bertscore_for_source,
+                    inputs=[dataset_source, dataset_picker, existing_box],
+                    outputs=no_bertscore_box,
+                )
 
                 run_btn = gr.Button(
                     "Run evaluation",
