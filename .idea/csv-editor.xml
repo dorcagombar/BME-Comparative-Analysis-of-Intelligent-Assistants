@@ -3,14 +3,14 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="$USER_HOME$/Downloads/esim_roaming_multiturn_scenario.csv">
+        <entry key="$USER_HOME$/Downloads/revised_multiturn_code/data/multi_turn/scenario_one_esim.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="$USER_HOME$/Downloads/router_power_on_multiturn_scenario.csv">
+        <entry key="$USER_HOME$/Downloads/revised_multiturn_code/data/multi_turn/scenario_two_router.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -52,7 +52,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/data/multi_turn/scenario_one_esim.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/multi_turn/scenario_two_router.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/results/eval_results.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/results/scenario_eval_results.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

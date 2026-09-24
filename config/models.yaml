@@ -1,32 +1,60 @@
 defaults:
   timeout: 120
-  max_tokens: 2048
+  max_tokens: 16384
   temperature: 0.0
 models:
 - name: MiniMax M3
   type: fireworks
   model_id: accounts/fireworks/models/minimax-m3
   api_key: ${FIREWORKS_API_KEY}
+  max_tokens: 16384
+  extra:
+    max_output_tokens_limit: 16384
+    structured_max_output_tokens_limit: 16384
 - name: DeepSeek V4.1 Flash
   type: fireworks
   model_id: accounts/fireworks/models/deepseek-v4p1-flash
   api_key: ${FIREWORKS_API_KEY}
+  max_tokens: 16384
+  extra:
+    max_output_tokens_limit: 16384
+    structured_max_output_tokens_limit: 16384
 - name: Qwen 3.8 Max
   type: fireworks
   model_id: accounts/fireworks/models/qwen3p8-max
   api_key: ${FIREWORKS_API_KEY}
+  max_tokens: 16384
+  extra:
+    max_output_tokens_limit: 16384
+    structured_max_output_tokens_limit: 16384
 - name: GPT-4o
   type: openai
   model_id: gpt-4o
   api_key: ${OPENAI_API_KEY}
+  max_tokens: 16384
+  extra:
+    max_output_tokens_limit: 16384
+    structured_max_output_tokens_limit: 16384
 - name: Gemini-3.1-pro-preview
   type: gemini
   model_id: gemini-3.1-pro-preview
   api_key: ${GOOGLE_API_KEY}
+  max_tokens: 16384
+  temperature: 0.0
+  extra:
+    max_output_tokens_limit: 16384
+    structured_max_output_tokens_limit: 16384
+    thinking_level: low
 - name: Claude-Sonnet
   type: claude
   model_id: claude-sonnet-5
   api_key: ${ANTHROPIC_API_KEY}
+  max_tokens: 16384
+  temperature: 0.0
+  extra:
+    max_output_tokens_limit: 16384
+    structured_max_output_tokens_limit: 16384
+    effort: medium
 evaluation:
   bertscore_lang: en
   bertscore_model: null

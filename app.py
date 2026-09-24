@@ -15,6 +15,7 @@ Required environment variables (set before launching):
 """
 
 import csv as csv_module
+import math
 import os
 import queue as queue_module
 import re
@@ -24,10 +25,12 @@ from dotenv import load_dotenv
 load_dotenv()  # loads .env from the current working directory
 import threading
 import traceback
+from itertools import combinations
 from pathlib import Path
 
 import gradio as gr
 import pandas as pd
+import research_statistics
 import yaml
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -52,6 +55,7 @@ from src.llm_eval.runner import (
 CONFIG_PATH = "config/models.yaml"
 RESULTS_DIR = "results"
 DATA_DIR    = "data"
+MULTITURN_SCENARIO_DIR = Path(DATA_DIR) / "multi_turn"
 VOICE_SAMPLES_DIR = Path(DATA_DIR) / "voice_samples"
 SUPPORTED_AUDIO = {".wav", ".mp3", ".m4a", ".ogg", ".flac", ".webm"}
 
@@ -346,7 +350,31 @@ def _existing_datasets() -> list[str]:
     p = Path(DATA_DIR)
     if not p.exists():
         return []
-    return sorted(str(f) for f in p.iterdir() if f.suffix in exts)
+    return sorted(
+        str(f) for f in p.iterdir()
+        if f.suffix.lower() in exts and not _looks_like_scenario_file(f)
+    )
+
+
+def _looks_like_scenario_file(path) -> bool:
+    """Return True when a supported file follows the scenario-turn schema."""
+    try:
+        EvalRunner([], Evaluator()).load_scenario(str(path))
+        return True
+    except Exception:
+        return False
+
+
+def _existing_scenarios() -> list[str]:
+    """Load benchmark scenarios only from the project's data/multi_turn folder."""
+    root = MULTITURN_SCENARIO_DIR
+    if not root.exists():
+        return []
+    candidates = (
+        f for f in root.rglob("*")
+        if f.is_file() and f.suffix.lower() in {".csv", ".json", ".jsonl"}
+    )
+    return sorted(str(f) for f in candidates if _looks_like_scenario_file(f))
 
 
 # ---------------------------------------------------------------------------
@@ -400,6 +428,177 @@ def _build_summary(df: pd.DataFrame, use_bertscore: bool) -> pd.DataFrame:
     if sort_col in summary.columns:
         summary = summary.sort_values(sort_col, ascending=False)
     return summary.reset_index(drop=True)
+
+
+def _scored_runs(df: pd.DataFrame) -> pd.DataFrame:
+    """Return only validly executed and validly judged scenario runs."""
+    if df.empty:
+        return df.copy()
+    if "evaluation_status" in df:
+        return df[df["evaluation_status"] == "scored"].copy()
+    system_ok = df.get("system_error", pd.Series(None, index=df.index)).isna()
+    judge_ok = df.get("judge_error", pd.Series(None, index=df.index)).isna()
+    return df[system_ok & judge_ok].copy()
+
+
+def _format_binary_rate(values, *, denominator: int | None = None) -> str:
+    """Descriptive numerator/denominator only; no independence-based run-level CI."""
+    series = pd.to_numeric(pd.Series(values), errors="coerce").dropna()
+    n = len(series) if denominator is None else denominator
+    return f"{int(series.eq(1).sum())}/{n} ({series.eq(1).sum()/n*100:.1f}%)" if n else "—"
+
+
+def _macro_scenario_mean(scored: pd.DataFrame, column: str) -> float | None:
+    """Average scenario-level means so longer/repeated scenarios do not dominate."""
+    if scored.empty or column not in scored:
+        return None
+    work = scored[["scenario_id", column]].copy()
+    work[column] = pd.to_numeric(work[column], errors="coerce")
+    by_scenario = work.dropna().groupby("scenario_id")[column].mean()
+    return None if by_scenario.empty else float(by_scenario.mean())
+
+
+def _build_scenario_validity_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Summarise run validity without mixing infrastructure and behaviour."""
+    columns = [
+        "Model", "Attempts", "Execution success", "Examiner success",
+        "Valid evaluated runs", "Timeouts", "Execution errors", "Judge errors",
+        "Median latency (ms)", "P95 latency (ms)",
+    ]
+    if df.empty or "model_name" not in df:
+        return pd.DataFrame(columns=columns)
+    rows = []
+    for model_name, model_df in df.groupby("model_name", sort=False):
+        attempts = len(model_df)
+        execution = pd.to_numeric(model_df.get("execution_success"), errors="coerce")
+        judge_attempted = pd.to_numeric(model_df.get("judge_attempted"), errors="coerce")
+        judge_success = pd.to_numeric(model_df.get("judge_success"), errors="coerce")
+        valid = pd.to_numeric(
+            model_df.get("valid_evaluated_run", judge_success), errors="coerce"
+        )
+        submitted = int((judge_attempted == 1).sum())
+        latency = pd.to_numeric(model_df.get("mean_latency_ms"), errors="coerce").dropna()
+        error_categories = model_df.get(
+            "error_category", pd.Series("", index=model_df.index)
+        ).fillna("").astype(str)
+        rows.append({
+            "Model": model_name,
+            "Attempts": attempts,
+            "Execution success": _format_binary_rate(execution, denominator=attempts),
+            "Examiner success": _format_binary_rate(
+                judge_success[judge_attempted == 1], denominator=submitted
+            ),
+            "Valid evaluated runs": _format_binary_rate(valid, denominator=attempts),
+            "Timeouts": int(error_categories.eq("timeout").sum()),
+            "Execution errors": int((execution == 0).sum()),
+            "Judge errors": int(((judge_attempted == 1) & (judge_success == 0)).sum()),
+            "Median latency (ms)": round(float(latency.median()), 1) if not latency.empty else "—",
+            "P95 latency (ms)": round(float(latency.quantile(0.95)), 1) if not latency.empty else "—",
+        })
+    return pd.DataFrame(rows, columns=columns)
+
+
+def _build_scenario_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Audited, scenario-weighted estimates; valid runs only."""
+    return research_statistics.model_summary(df)
+
+
+def _build_scenario_run_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Show outcome and process measures separately for every scenario run."""
+    columns = [
+        "Model", "Scenario", "Rep", "Status", "Execution", "Examiner",
+        "Goal", "Safe", "Terminal", "Checkpoints", "Critical checkpoints",
+        "Critical failure", "Turns", "Latency (ms)", "Error category",
+    ]
+    if df.empty:
+        return pd.DataFrame(columns=columns)
+
+    def binary_label(value) -> str:
+        if value is None or pd.isna(value):
+            return "—"
+        try:
+            return "Yes" if int(value) == 1 else "No"
+        except (TypeError, ValueError):
+            return "—"
+
+    rows = []
+    for _, row in df.sort_values(["model_name", "scenario_id", "repetition"], kind="stable").iterrows():
+        goal = row.get("goal_achieved", row.get("task_success"))
+        completion = pd.to_numeric(row.get("checkpoint_completion"), errors="coerce")
+        quality = pd.to_numeric(row.get("checkpoint_quality"), errors="coerce")
+        critical_completion = pd.to_numeric(
+            row.get("critical_checkpoint_completion"), errors="coerce"
+        )
+        latency = pd.to_numeric(row.get("mean_latency_ms"), errors="coerce")
+        rows.append({
+            "Model": row.get("model_name", ""),
+            "Scenario": row.get("scenario_title") or row.get("scenario_id", ""),
+            "Rep": row.get("repetition", ""),
+            "Status": row.get("evaluation_status", "scored"),
+            "Execution": binary_label(row.get("execution_success", 1)),
+            "Examiner": binary_label(row.get("judge_success")),
+            "Goal": binary_label(goal),
+            "Safe": binary_label(row.get("safe_completion")),
+            "Terminal": binary_label(row.get("terminal_state_valid")),
+            "Checkpoints": f"{float(completion) * 100:.1f}%" if pd.notna(completion) else "—",
+            "Critical checkpoints": f"{float(critical_completion) * 100:.1f}%" if pd.notna(critical_completion) else "N/A",
+            "Critical failure": binary_label(row.get("critical_failure")),
+            "Turns": f"{row.get('actual_turns', '—')}/{row.get('target_turns', '—')}",
+            "Latency (ms)": round(float(latency), 1) if pd.notna(latency) else "—",
+            "Error category": row.get("error_category") or "",
+        })
+    return pd.DataFrame(rows, columns=columns)
+
+
+def _build_scenario_dimension_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Summarise ordinal dimensions without treating N/A as zero."""
+    dimensions = {
+        "information_gathering": "Information gathering",
+        "instruction_following": "Instruction following",
+        "state_constraint_tracking": "State and constraint tracking",
+        "correction_recovery": "Correction and recovery",
+        "domain_accuracy": "Domain accuracy",
+        "relevance_efficiency": "Relevance and efficiency",
+        "clarity_actionability": "Clarity and actionability",
+        "safety_cost_awareness": "Safety and cost awareness",
+        "conversational_coherence": "Conversational coherence",
+    }
+    if df.empty or "model_name" not in df.columns:
+        return pd.DataFrame(columns=["Model", "Dimension", "Median", "IQR", "Mean ± SD", "N"])
+    valid = _scored_runs(df)
+    rows = []
+    for model_name, model_df in valid.groupby("model_name", sort=False):
+        for column, label in dimensions.items():
+            if column not in model_df:
+                continue
+            values = pd.to_numeric(model_df[column], errors="coerce").dropna()
+            if values.empty:
+                continue
+            rows.append({
+                "Model": model_name,
+                "Dimension": label,
+                "Median": round(float(values.median()), 2),
+                "IQR": f"{values.quantile(0.25):.2f}–{values.quantile(0.75):.2f}",
+                "Mean ± SD": (
+                    f"{values.mean():.2f} ± {values.std(ddof=1):.2f}"
+                    if len(values) > 1 else f"{values.mean():.2f} ± N/A"
+                ),
+                "N": len(values),
+            })
+    return pd.DataFrame(
+        rows, columns=["Model", "Dimension", "Median", "IQR", "Mean ± SD", "N"]
+    )
+
+
+def _build_scenario_stability_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Within-scenario repetition summary, with failures retained in denominators."""
+    return research_statistics.repetition_summary(df)
+
+
+
+def _build_paired_model_comparisons(df: pd.DataFrame) -> pd.DataFrame:
+    """Scenario-paired descriptive differences; no unplanned significance tests."""
+    return research_statistics.paired_comparison_table(df)
 
 
 def _non_audio_models(selected: list[str], model_types: dict[str, str]) -> list[str]:
@@ -461,11 +660,7 @@ def _validate_dataset_file(path) -> dict:
 
 
 def _auto_skip_bertscore_for_dataset(path):
-    """Auto-check Skip BERTScore when the selected dataset is non-QA.
-
-    A dataset is treated as non-QA when it loads successfully and none of its
-    rows contains a question. QA datasets leave BERTScore enabled by default.
-    """
+    """Force BERTScore off when reference answers are unavailable."""
     if not path:
         return gr.update()
 
@@ -480,8 +675,23 @@ def _auto_skip_bertscore_for_dataset(path):
     if not pairs:
         return gr.update()
 
-    is_non_qa = all(not (p.question or "").strip() for p in pairs)
-    return gr.update(value=is_non_qa)
+    references_missing = any(not (p.reference_answer or "").strip() for p in pairs)
+    if references_missing:
+        return gr.update(value=True, interactive=False)
+    return gr.update(value=False, interactive=True)
+
+
+def _dataset_requires_bertscore_skip(path) -> bool:
+    """Backend guard matching the UI lock for missing references."""
+    if not path:
+        return False
+    try:
+        pairs = EvalRunner([], Evaluator()).load_dataset(str(path))
+    except Exception:
+        return False
+    return bool(pairs) and any(
+        not (pair.reference_answer or "").strip() for pair in pairs
+    )
 
 
 def _auto_skip_bertscore_for_source(source, uploaded, existing):
@@ -610,7 +820,9 @@ def run_evaluation(
     for w in key_warnings:
         gr.Warning(f"⚠ Missing API key: {w}")
 
-    use_bertscore = not no_bertscore
+    # Do not allow a stale or manipulated UI value to run BERTScore without
+    # reference answers; the same rule is enforced by the disabled checkbox.
+    use_bertscore = not no_bertscore and not _dataset_requires_bertscore_skip(dataset_path)
 
     audio_files_map: dict = {}
     if input_mode == "Audio":
@@ -653,9 +865,15 @@ def run_evaluation(
                 q.put(("error", "None of the selected models were found in config."))
                 return
 
+            applied_token_caps = {}
             for m in models:
-                m.config.max_tokens = int(max_tokens)
-                m.config.temperature = float(temperature)
+                if hasattr(m, "configure_generation"):
+                    applied = m.configure_generation(int(max_tokens), float(temperature))
+                else:
+                    applied = min(max(1, int(max_tokens)), 4096)
+                    m.config.max_tokens = applied
+                    m.config.temperature = float(temperature)
+                applied_token_caps[m.name] = applied
 
             whisper_fn = None
             if input_mode == "Audio" and use_whisper:
@@ -681,6 +899,7 @@ def run_evaluation(
             q.put(("log", f"Dataset  : {dataset_path}  ({len(dataset)} questions)"))
             q.put(("log", f"Mode     : {mode_str}"))
             q.put(("log", f"Models   : {[m.name for m in models]}"))
+            q.put(("log", f"Token caps: {applied_token_caps}"))
             q.put(("log", f"Metrics  : BLEU · METEOR · Token-F1 · ROUGE" +
                           (" · BERTScore" if use_bertscore else " (BERTScore skipped)")))
             q.put(("log", "-" * 60))
@@ -738,6 +957,248 @@ def run_evaluation(
             return
 
     yield "\n".join(log_lines), None, None, gr.update(interactive=True)
+
+
+def run_scenario_evaluation(
+    scenario_source,
+    uploaded_scenarios,
+    selected_existing_scenarios,
+    selected_models,
+    judge_model_name,
+    response_max_tokens,
+    judge_max_tokens,
+    temperature,
+    repetitions,
+):
+    """Run reusable scripted multi-turn scenarios and judge full transcripts."""
+    def empty_output(message: str, interactive: bool = True):
+        return (
+            message, None, None, None, None, None, None, None,
+            gr.update(interactive=interactive), None,
+        )
+
+    if scenario_source == "Upload files":
+        raw_paths = uploaded_scenarios or []
+    else:
+        raw_paths = selected_existing_scenarios or []
+    if not isinstance(raw_paths, list):
+        raw_paths = [raw_paths]
+    scenario_paths = [str(path) for path in raw_paths if path]
+
+    if not scenario_paths:
+        yield empty_output("Please select or upload at least one scenario.")
+        return
+    if not selected_models:
+        yield empty_output("Please select at least one model to evaluate.")
+        return
+    if not judge_model_name:
+        yield empty_output("Please select a judge model.")
+        return
+    if judge_model_name in selected_models:
+        yield empty_output(
+            "The judge model must be different from every model being evaluated. "
+            "Select an independent judge to avoid self-evaluation bias."
+        )
+        return
+
+    try:
+        repetitions = int(repetitions)
+        if repetitions < 3:
+            raise ValueError
+    except (TypeError, ValueError):
+        yield empty_output(
+            "Use at least three repetitions per model–scenario combination "
+            "to estimate within-scenario stability."
+        )
+        return
+    try:
+        response_max_tokens = int(response_max_tokens)
+        judge_max_tokens = int(judge_max_tokens)
+        if not 64 <= response_max_tokens <= 16384:
+            raise ValueError
+        if not 512 <= judge_max_tokens <= 16384:
+            raise ValueError
+    except (TypeError, ValueError):
+        yield empty_output(
+            "Response tokens must be 64–16384 and judge tokens 512–16384."
+        )
+        return
+
+    type_map = _read_model_types()
+    for warning in _check_api_keys(
+        list(dict.fromkeys(list(selected_models) + [judge_model_name])), type_map
+    ):
+        gr.Warning(f"⚠ Missing API key: {warning}")
+    q: queue_module.Queue = queue_module.Queue()
+
+    def _thread():
+        try:
+            all_models = load_models_from_config(CONFIG_PATH)
+            by_name = {model.name: model for model in all_models}
+            missing = [name for name in selected_models if name not in by_name]
+            if judge_model_name not in by_name:
+                missing.append(judge_model_name)
+            if missing:
+                q.put(("error", f"Models not found in config: {sorted(set(missing))}"))
+                return
+
+            examinees = [by_name[name] for name in selected_models]
+            judge = by_name[judge_model_name]
+            response_generation_settings = {}
+            for model in examinees:
+                if hasattr(model, "configure_generation"):
+                    applied = model.configure_generation(
+                        response_max_tokens, float(temperature)
+                    )
+                else:
+                    applied = response_max_tokens
+                    model.config.max_tokens = applied
+                    model.config.temperature = float(temperature)
+                extra = getattr(model.config, "extra", {})
+                if not isinstance(extra, dict):
+                    extra = {}
+                response_generation_settings[model.name] = {
+                    "max_output_tokens": applied,
+                    "temperature": float(model.config.temperature),
+                    "thinking_level": extra.get("thinking_level"),
+                    "effort": extra.get("effort"),
+                }
+                if applied < response_max_tokens:
+                    raise RuntimeError(
+                        f"{model.name}: requested {response_max_tokens} response "
+                        f"tokens, but the configured model cap applied {applied}. "
+                        "The run was stopped before data collection. Update "
+                        "extra.max_output_tokens_limit."
+                    )
+            if hasattr(judge, "configure_generation"):
+                applied_judge_tokens = judge.configure_generation(
+                    judge_max_tokens, 0.0
+                )
+            else:
+                applied_judge_tokens = judge_max_tokens
+                judge.config.max_tokens = applied_judge_tokens
+                judge.config.temperature = 0.0
+            judge_extra = getattr(judge.config, "extra", {})
+            if not isinstance(judge_extra, dict):
+                judge_extra = {}
+            judge_generation_settings = {
+                "max_output_tokens": applied_judge_tokens,
+                "temperature": float(judge.config.temperature),
+                "thinking_level": judge_extra.get("thinking_level"),
+                "effort": judge_extra.get("effort"),
+            }
+            if applied_judge_tokens < judge_max_tokens:
+                raise RuntimeError(
+                    f"{judge.name}: requested {judge_max_tokens} judge tokens, "
+                    f"but the configured model cap applied {applied_judge_tokens}. "
+                    "The run was stopped before data collection. Update "
+                    "extra.structured_max_output_tokens_limit."
+                )
+
+            runner = EvalRunner(examinees, Evaluator())
+            scenarios = runner.load_scenarios(scenario_paths)
+            q.put(("log", f"Scenarios : {[scenario.scenario_id for scenario in scenarios]}"))
+            q.put(("log", f"Examinees : {[model.name for model in examinees]}"))
+            q.put(("log", f"Judge     : {judge.name}"))
+            q.put(("log", f"Repetitions: {repetitions}"))
+            q.put(("log", f"Response generation: {response_generation_settings}"))
+            q.put(("log", f"Judge generation: {judge_generation_settings}"))
+            q.put(("log", "Mode      : scripted text multi-turn"))
+            q.put(("log", "-" * 60))
+
+            def on_progress(fraction: float, description: str):
+                q.put(("progress", fraction, description))
+
+            df = runner.run_scenarios(
+                scenarios,
+                judge_model=judge,
+                repetitions=repetitions,
+                on_progress=on_progress,
+            )
+            os.makedirs(RESULTS_DIR, exist_ok=True)
+            csv_path = os.path.join(RESULTS_DIR, "scenario_eval_results.csv")
+            df.to_csv(csv_path, index=False)
+            q.put(("done", df, csv_path))
+        except Exception:
+            q.put(("error", traceback.format_exc()))
+
+    thread = threading.Thread(target=_thread, daemon=True)
+    thread.start()
+    log_lines: list[str] = []
+    yield empty_output("Starting scenario evaluation…", interactive=False)
+
+    while True:
+        try:
+            item = q.get(timeout=0.3)
+        except queue_module.Empty:
+            if not thread.is_alive():
+                break
+            yield empty_output("\n".join(log_lines) or "Running…", interactive=False)
+            continue
+
+        kind = item[0]
+        if kind in ("log", "progress"):
+            message = item[1] if kind == "log" else item[2]
+            log_lines.append(message)
+            yield empty_output("\n".join(log_lines[-80:]), interactive=False)
+        elif kind == "done":
+            _, df, csv_path = item
+            if "evaluation_status" in df:
+                scored_mask = df["evaluation_status"] == "scored"
+                system_mask = df["evaluation_status"] == "system_error"
+                judge_error_mask = df["evaluation_status"] == "judge_error"
+            else:
+                system_mask = df["system_error"].notna()
+                judge_error_mask = df["judge_error"].notna() & ~system_mask
+                scored_mask = ~(system_mask | judge_error_mask)
+            judged = int(scored_mask.sum())
+            system_failures = int(system_mask.sum())
+            judge_failures = int(judge_error_mask.sum())
+            log_lines.extend([
+                "",
+                f"Scenario evaluation complete: {judged} scored, "
+                f"{system_failures} execution failures, {judge_failures} judge failures "
+                f"out of {len(df)} runs.",
+            ])
+            if system_failures:
+                log_lines.append("⚠ Model execution errors (excluded from behavioural scores):")
+                for _, row in df[system_mask].head(5).iterrows():
+                    log_lines.append(
+                        f"- {row['model_name']} · {row['scenario_id']} · "
+                        f"rep {row['repetition']}: {row['system_error']}"
+                    )
+            if judge_failures:
+                log_lines.append("⚠ Judge errors:")
+                failed = df[judge_error_mask]
+                for _, row in failed.head(5).iterrows():
+                    log_lines.append(
+                        f"- {row['model_name']} · {row['scenario_id']}: "
+                        f"{row['judge_error']}"
+                    )
+                log_lines.append(
+                    "The full CSV contains the raw judge response for diagnosis."
+                )
+            if not system_failures and not judge_failures:
+                log_lines.append("✅ All scenario runs were scored successfully.")
+            yield (
+                "\n".join(log_lines),
+                _build_scenario_validity_summary(df),
+                _build_scenario_summary(df),
+                _build_scenario_run_summary(df),
+                _build_scenario_dimension_summary(df),
+                _build_scenario_stability_summary(df),
+                _build_paired_model_comparisons(df),
+                csv_path,
+                gr.update(interactive=True),
+                research_statistics.checkpoint_summary_table(df),
+            )
+            return
+        elif kind == "error":
+            log_lines.append(f"\n❌ Error:\n{item[1]}")
+            yield empty_output("\n".join(log_lines))
+            return
+
+    yield empty_output("\n".join(log_lines))
 
 
 # ---------------------------------------------------------------------------
@@ -1253,10 +1714,15 @@ _ensure_claude_model_config()
 model_names    = _read_model_names()
 model_types    = _read_model_types()
 existing_files = _existing_datasets()
+existing_scenario_files = _existing_scenarios()
 
 # Resolve audio for the initially selected existing dataset immediately.
 # Gradio does not fire .change() just because a Dropdown starts with a value.
 _initial_dataset = existing_files[0] if existing_files else None
+_initial_bertscore_lock = (
+    _dataset_requires_bertscore_skip(_initial_dataset)
+    if _initial_dataset else False
+)
 _initial_audio_folder, _initial_audio_files, _initial_audio_total = (
     _match_dataset_audio(_initial_dataset) if _initial_dataset else (None, [], 0)
 )
@@ -1485,7 +1951,9 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                 )
                 with gr.Row(elem_classes=["settings-row"]):
                     max_tokens_box = gr.Number(
-                        value=512, label="Max tokens", precision=0, minimum=1
+                        value=512, label="Max tokens", precision=0,
+                        minimum=1, maximum=4096,
+                        info="Provider/model output limits are enforced automatically.",
                     )
                     temperature_box = gr.Number(
                         value=0.0, label="Temperature", precision=2, minimum=0.0
@@ -1499,12 +1967,12 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                         value=True,
                         label="Skip BERTScore",
                         info="Recommended for faster runs",
+                        interactive=not _initial_bertscore_lock,
                     )
 
                 # Keep the metric choice aligned with the selected dataset.
-                # Non-QA datasets automatically skip BERTScore; QA datasets
-                # automatically enable it. Users can still change the checkbox
-                # manually after the dataset selection has settled.
+                # Datasets with missing references force BERTScore off and lock
+                # the checkbox; reference-answer datasets leave it editable.
                 dataset_picker.change(
                     _auto_skip_bertscore_for_dataset,
                     inputs=dataset_picker,
@@ -1569,7 +2037,173 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
             )
 
         # ================================================================
-        # Tab 2: Noise Robustness
+        # Tab 2: Scenario Benchmark
+        # ================================================================
+        with gr.Tab("Scenario Benchmark"):
+            gr.Markdown(
+                """
+                ## Scripted multi-turn scenario evaluation
+
+                Run any CSV, JSON, or JSONL scenario that defines a sequence of
+                **user messages** and **expected assistant actions**. The assistant
+                receives the complete dialogue history, while a separately selected
+                judge scores the finished transcript.
+
+                This evaluates semantic multi-turn performance. Streaming audio-only
+                measures such as interruption handling and speech naturalness remain
+                `N/A` until a real-time duplex audio adapter is used.
+                """
+            )
+
+            with gr.Row(equal_height=True):
+                with gr.Column(scale=1):
+                    scenario_source = gr.Radio(
+                        choices=["Use existing files", "Upload files"],
+                        value=("Use existing files" if existing_scenario_files else "Upload files"),
+                        label="Scenario source",
+                    )
+                    with gr.Group(visible=not existing_scenario_files) as scenario_upload_group:
+                        scenario_uploads = gr.File(
+                            label="Scenario files",
+                            file_types=[".csv", ".json", ".jsonl"],
+                            file_count="multiple",
+                        )
+                    with gr.Group(visible=bool(existing_scenario_files)) as scenario_existing_group:
+                        scenario_existing = gr.CheckboxGroup(
+                            choices=existing_scenario_files,
+                            value=existing_scenario_files,
+                            label="Scenarios",
+                            info="Valid scenario files found under data/multi_turn/",
+                        )
+
+                with gr.Column(scale=1):
+                    scenario_models = gr.CheckboxGroup(
+                        choices=model_names,
+                        value=[model_names[0]] if model_names else [],
+                        label="Models to evaluate",
+                    )
+                    scenario_judge = gr.Dropdown(
+                        choices=model_names,
+                        value=(
+                            model_names[1] if len(model_names) > 1
+                            else (model_names[0] if model_names else None)
+                        ),
+                        label="Judge model",
+                        info="Must be a capable model that is not one of the examinees.",
+                    )
+
+            scenario_source.change(
+                fn=lambda choice: (
+                    gr.update(visible=(choice == "Upload files")),
+                    gr.update(visible=(choice == "Use existing files")),
+                ),
+                inputs=scenario_source,
+                outputs=[scenario_upload_group, scenario_existing_group],
+            )
+
+            with gr.Row():
+                scenario_max_tokens = gr.Number(
+                    value=4096, precision=0, minimum=64, maximum=16384,
+                    label="Response token limit",
+                    info=(
+                        "Applied per assistant turn; provider/model caps are enforced. "
+                        "Thinking models may require a larger total output budget."
+                    ),
+                )
+                scenario_judge_max_tokens = gr.Number(
+                    value=8192, precision=0, minimum=512, maximum=16384,
+                    label="Judge token limit",
+                    info="Separate deterministic budget for the structured evaluation JSON.",
+                )
+                scenario_temperature = gr.Slider(
+                    minimum=0.0, maximum=1.5, value=0.0, step=0.1,
+                    label="Temperature",
+                    info="Use 0 for the primary reproducible experiment.",
+                )
+                scenario_repetitions = gr.Number(
+                    value=3, precision=0, minimum=3, label="Repetitions",
+                    info="Repeated runs estimate stability; they are not independent scenarios.",
+                )
+
+            scenario_run_btn = gr.Button(
+                "Run scenario evaluation", variant="primary", size="lg"
+            )
+            scenario_log = gr.Textbox(
+                label="Run log", lines=9, max_lines=18, interactive=False
+            )
+            gr.Markdown(
+                "Results are separated into **run validity**, **primary outcomes**, "
+                "and **diagnostic measures**. Behavioural scores use only validly "
+                "executed and judged runs; end-to-end success retains execution failures."
+            )
+            scenario_validity_results = gr.Dataframe(
+                label="1. Run validity", interactive=False, wrap=True
+            )
+            scenario_results = gr.Dataframe(
+                label="2. Primary outcomes", interactive=False, wrap=True
+            )
+            with gr.Accordion("3. Per-run diagnostics", open=False):
+                scenario_run_results = gr.Dataframe(
+                    label="Individual runs — grouped by model, then scenario, then repetition", interactive=False, wrap=False
+                )
+            with gr.Accordion("4. Behavioural dimensions (1–5)", open=False):
+                scenario_dimension_results = gr.Dataframe(
+                    label="Ordinal score summaries",
+                    interactive=False,
+                    wrap=True,
+                )
+            with gr.Accordion("5. Repeated-run stability", open=False):
+                scenario_stability_results = gr.Dataframe(
+                    label="Within-scenario stability",
+                    interactive=False,
+                    wrap=True,
+                )
+            with gr.Accordion("6. Model comparisons on the same scenarios (descriptive only)", open=False):
+                gr.Markdown("Each model is first averaged across its valid repetitions **within each scenario**. Only scenarios with scores for both models are included. The table then averages these scenario scores equally. The difference is Model A minus Model B, in **percentage points**; it is an observed difference, not a significance test or a prediction. Different numbers of valid repetitions can contribute to the two model averages.")
+                scenario_comparison_results = gr.Dataframe(
+                    label="Observed model differences across the same scenarios",
+                    interactive=False,
+                    wrap=True,
+                )
+            with gr.Accordion("7. Individual checkpoint consistency across repetitions", open=False):
+                gr.Markdown(
+                    "**One row per checkpoint for each model and scenario.** "
+                    "The 'Met / valid repetitions' column counts how often that exact requirement "
+                    "was satisfied when the same scenario was repeated. For example, 2 / 3 means "
+                    "the checkpoint was met twice in three valid runs (66.67%). "
+                    "'Outcome varies' is Yes if the checkpoint was met in some runs and missed in others. "
+                    "A No can mean either consistently met or consistently missed; check the count. "
+                    "Failed or unjudged runs are excluded from the checkpoint denominator. "
+                    "Use Section 3 for the overall result of each run; this table reveals "
+                    "*which specific requirements* are consistently met or missed."
+                )
+                scenario_checkpoint_summary = gr.Dataframe(
+                    label="Checkpoint success by model and scenario (valid repetitions only)",
+                    interactive=False, wrap=True,
+                )
+            scenario_download = gr.File(
+                label="Export full scenario results (CSV)", interactive=False
+            )
+
+            scenario_run_btn.click(
+                fn=run_scenario_evaluation,
+                inputs=[
+                    scenario_source, scenario_uploads, scenario_existing,
+                    scenario_models, scenario_judge, scenario_max_tokens,
+                    scenario_judge_max_tokens, scenario_temperature,
+                    scenario_repetitions,
+                ],
+                outputs=[
+                    scenario_log, scenario_validity_results, scenario_results,
+                    scenario_run_results, scenario_dimension_results,
+                    scenario_stability_results, scenario_comparison_results,
+                    scenario_download, scenario_run_btn,
+                    scenario_checkpoint_summary,
+                ],
+            )
+
+        # ================================================================
+        # Tab 3: Noise Robustness
         # ================================================================
         with gr.Tab("Noise Robustness"):
             gr.Markdown(
@@ -1617,7 +2251,10 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                         value=True,
                         label="Enable Whisper transcription for non-audio models",
                     )
-                    nr_max_tokens = gr.Number(value=512, label="Max tokens", precision=0, minimum=1)
+                    nr_max_tokens = gr.Number(
+                        value=512, label="Max tokens", precision=0,
+                        minimum=1, maximum=4096,
+                    )
                     nr_temperature = gr.Number(value=0.0, label="Temperature", precision=2, minimum=0.0)
 
             nr_run_btn = gr.Button("▶  Run Noise Robustness Test", variant="primary", size="lg")
@@ -1679,9 +2316,17 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                             q.put(("error", "None of the selected models found in config."))
                             return
 
+                        applied_token_caps = {}
                         for m in models:
-                            m.config.max_tokens = int(nr_max_tok)
-                            m.config.temperature = float(nr_temp)
+                            if hasattr(m, "configure_generation"):
+                                applied = m.configure_generation(
+                                    int(nr_max_tok), float(nr_temp)
+                                )
+                            else:
+                                applied = min(max(1, int(nr_max_tok)), 4096)
+                                m.config.max_tokens = applied
+                                m.config.temperature = float(nr_temp)
+                            applied_token_caps[m.name] = applied
 
                         uploads = nr_files if isinstance(nr_files, list) else [nr_files]
                         audio_files_map = {Path(p).name: p for p in uploads if p}
@@ -1699,6 +2344,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                         runner = EvalRunner(models, evaluator)
                         dataset = runner.load_audio_dataset(str(nr_csv), audio_files_map)
                         q.put(("log", f"Dataset: {len(dataset)} audio files loaded."))
+                        q.put(("log", f"Token caps: {applied_token_caps}"))
 
                         noise_dir = str(Path(tempfile.gettempdir()) / "llm_eval_noise")
                         all_dfs = []
