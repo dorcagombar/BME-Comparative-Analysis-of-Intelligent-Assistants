@@ -28,7 +28,7 @@ def make_whisper_transcriber(api_key: str = None, model: str = None) -> Callable
     Raises ValueError if no key is available.
     """
     key = api_key or os.environ.get("OPENAI_API_KEY", "")
-    transcription_model = model or os.environ.get("OPENAI_TRANSCRIPTION_MODEL", "gpt-4o-transcribe")
+    transcription_model = model or os.environ.get("OPENAI_TRANSCRIPTION_MODEL") or "whisper-1"
     if not key:
         raise ValueError(
             "Whisper transcription requires OPENAI_API_KEY to be set. "
@@ -40,9 +40,12 @@ def make_whisper_transcriber(api_key: str = None, model: str = None) -> Callable
 
     def transcribe(audio_path: str) -> Tuple[str, float]:
         with open(audio_path, "rb") as f:
+            # Whisper's verbose response includes the segment metadata used below.
+            options = {"response_format": "verbose_json"} if transcription_model == "whisper-1" else {}
             result = client.audio.transcriptions.create(
                 model=transcription_model,
                 file=f,
+                **options,
             )
 
         text = result.text if hasattr(result, "text") else ""

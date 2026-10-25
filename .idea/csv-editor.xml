@@ -38,14 +38,56 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="/data/multi_turn/scenario_one_esim.csv">
+        <entry key="/data/multi_turn/scenario_one_esim_de.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/data/multi_turn/scenario_two_router.csv">
+        <entry key="/data/multi_turn/scenario_one_esim_en.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/multi_turn/scenario_one_esim_he.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/multi_turn/scenario_one_esim_hu.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/multi_turn/scenario_two_router_de.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/multi_turn/scenario_two_router_en.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/multi_turn/scenario_two_router_he.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/data/multi_turn/scenario_two_router_hu.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -53,6 +95,13 @@
           </value>
         </entry>
         <entry key="/results/eval_results.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/results/eval_results_summary.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

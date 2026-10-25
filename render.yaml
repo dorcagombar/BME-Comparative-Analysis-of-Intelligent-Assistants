@@ -5,6 +5,8 @@ services:
     plan: free
     healthCheckPath: /
     envVars:
+      - key: OPENAI_TRANSCRIPTION_MODEL
+        value: whisper-1
       - key: REQUIRE_APP_AUTH
         value: "1"
       - key: APP_USERNAME

@@ -15,6 +15,7 @@ Required environment variables (set before launching):
 """
 
 import csv as csv_module
+import json as json_module
 import math
 import os
 import queue as queue_module
@@ -377,6 +378,51 @@ def _existing_scenarios() -> list[str]:
     return sorted(str(f) for f in candidates if _looks_like_scenario_file(f))
 
 
+SCENARIO_LANGUAGES = {
+    "English": "en", "Hungarian": "hu", "Hebrew": "he", "German": "de",
+}
+SCENARIO_VOICE_DEFAULTS = {
+    "English": "A-EN", "Hungarian": "A-HU", "Hebrew": "C-HE", "German": "B-DE",
+}
+
+
+def _scenario_language_code(scenario):
+    aliases = {
+        "en": "en", "english": "en", "angol": "en",
+        "hu": "hu", "hungarian": "hu", "magyar": "hu",
+        "he": "he", "hebrew": "he", "עברית": "he",
+        "de": "de", "german": "de", "deutsch": "de", "német": "de",
+    }
+    raw = str(getattr(scenario, "language", "")).strip().casefold()
+    if raw in aliases:
+        return aliases[raw]
+    # Filename fallback only for older files without explicit language metadata.
+    if raw not in {"", "unspecified", "unknown"}:
+        return None
+    stem = Path(getattr(scenario, "source_path", "")).stem
+    match = re.search(r"_(en|hu|he|de)(?:\(\d+\))?$", stem, re.I)
+    return match.group(1).lower() if match else None
+
+
+def _scenarios_for_language(language):
+    wanted = SCENARIO_LANGUAGES.get(language)
+    loader = EvalRunner([], Evaluator())
+    result = []
+    for path in _existing_scenarios():
+        try:
+            if _scenario_language_code(loader.load_scenario(path)) == wanted:
+                result.append(path)
+        except (ValueError, OSError):
+            continue
+    return result
+
+
+def _change_scenario_language(language):
+    paths = _scenarios_for_language(language)
+    return (gr.update(choices=paths, value=paths),
+            gr.update(value=SCENARIO_VOICE_DEFAULTS[language]))
+
+
 # ---------------------------------------------------------------------------
 # Metric summary builder
 # ---------------------------------------------------------------------------
@@ -500,6 +546,20 @@ def _build_scenario_validity_summary(df: pd.DataFrame) -> pd.DataFrame:
 
 def _build_scenario_summary(df: pd.DataFrame) -> pd.DataFrame:
     """Audited, scenario-weighted estimates; valid runs only."""
+    if (
+        not df.empty
+        and "repetition_mode" in df
+        and df["repetition_mode"].eq("feedback_training").all()
+    ):
+        # The post-feedback endpoint is the last attempt, not an average of
+        # pre- and post-feedback behaviour. Failed final attempts remain in
+        # the table so the endpoint is not selectively reported.
+        endpoint = (
+            df.sort_values("repetition", kind="stable")
+            .groupby(["model_name", "scenario_id"], sort=False, as_index=False)
+            .tail(1)
+        )
+        return research_statistics.model_summary(endpoint)
     return research_statistics.model_summary(df)
 
 
@@ -507,8 +567,10 @@ def _build_scenario_run_summary(df: pd.DataFrame) -> pd.DataFrame:
     """Show outcome and process measures separately for every scenario run."""
     columns = [
         "Model", "Scenario", "Rep", "Status", "Execution", "Examiner",
-        "Goal", "Safe", "Terminal", "Checkpoints", "Critical checkpoints",
-        "Critical failure", "Turns", "Latency (ms)", "Error category",
+        "Goal", "Strict success", "Terminal", "Checkpoints", "Critical checkpoints",
+        "Critical failure", "Checkpoint validation", "Evidence warnings",
+        "Turns", "Latency (ms)",
+        "Error category",
     ]
     if df.empty:
         return pd.DataFrame(columns=columns)
@@ -538,12 +600,20 @@ def _build_scenario_run_summary(df: pd.DataFrame) -> pd.DataFrame:
             "Execution": binary_label(row.get("execution_success", 1)),
             "Examiner": binary_label(row.get("judge_success")),
             "Goal": binary_label(goal),
-            "Safe": binary_label(row.get("safe_completion")),
+            "Strict success": binary_label(
+                row.get("strict_success", row.get("end_to_end_success"))
+            ),
             "Terminal": binary_label(row.get("terminal_state_valid")),
             "Checkpoints": f"{float(completion) * 100:.1f}%" if pd.notna(completion) else "—",
             "Critical checkpoints": f"{float(critical_completion) * 100:.1f}%" if pd.notna(critical_completion) else "N/A",
             "Critical failure": binary_label(row.get("critical_failure")),
-            "Turns": f"{row.get('actual_turns', '—')}/{row.get('target_turns', '—')}",
+            "Checkpoint validation": row.get(
+                "checkpoint_verification_status", "—"
+            ),
+            "Evidence warnings": int(
+                row.get("checkpoint_evidence_warning_count") or 0
+            ),
+            "Turns": f"{row.get('actual_turns', '—')}/{row.get('maximum_turns', '—')}",
             "Latency (ms)": round(float(latency), 1) if pd.notna(latency) else "—",
             "Error category": row.get("error_category") or "",
         })
@@ -591,7 +661,59 @@ def _build_scenario_dimension_summary(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _build_scenario_stability_summary(df: pd.DataFrame) -> pd.DataFrame:
-    """Within-scenario repetition summary, with failures retained in denominators."""
+    """Summarise either independent stability or feedback-guided progress."""
+    if (
+        not df.empty
+        and "repetition_mode" in df
+        and df["repetition_mode"].eq("feedback_training").all()
+    ):
+        columns = [
+            "Model", "Scenario", "Rep", "Learner package", "Chain valid",
+            "Completion", "Δ (pp)", "Best so far", "Retention",
+            "Regression", "Acquisition", "Quality", "Goal",
+        ]
+        rows = []
+        for (model, scenario), group in df.groupby(
+            ["model_name", "scenario_id"], sort=False
+        ):
+            ordered = group.sort_values("repetition", kind="stable")
+            for _, item in ordered.iterrows():
+                def percentage(column):
+                    value = pd.to_numeric(item.get(column), errors="coerce")
+                    return f"{float(value) * 100:.1f}%" if pd.notna(value) else "—"
+
+                delta = pd.to_numeric(
+                    item.get("checkpoint_completion_delta"), errors="coerce"
+                )
+                quality = pd.to_numeric(item.get("checkpoint_quality"), errors="coerce")
+                rows.append({
+                    "Model": model,
+                    "Scenario": scenario,
+                    "Rep": int(item.get("repetition") or 0),
+                    "Learner package": (
+                        f"{int(item.get('cumulative_feedback_count') or 0)} / "
+                        f"{int(item.get('expected_prior_feedback_count') or 0)}"
+                    ),
+                    "Chain valid": (
+                        "Yes" if int(item.get("feedback_chain_valid") or 0) == 1
+                        else "No"
+                    ),
+                    "Completion": percentage("checkpoint_completion"),
+                    "Δ (pp)": (
+                        round(float(delta) * 100, 1) if pd.notna(delta) else "—"
+                    ),
+                    "Best so far": percentage(
+                        "best_so_far_checkpoint_completion"
+                    ),
+                    "Retention": percentage("checkpoint_retention_rate"),
+                    "Regression": percentage("checkpoint_regression_rate"),
+                    "Acquisition": percentage("checkpoint_acquisition_rate"),
+                    "Quality": round(float(quality), 2) if pd.notna(quality) else "—",
+                    "Goal": (
+                        "Yes" if int(item.get("goal_achieved") or 0) == 1 else "No"
+                    ),
+                })
+        return pd.DataFrame(rows, columns=columns)
     return research_statistics.repetition_summary(df)
 
 
@@ -969,12 +1091,19 @@ def run_scenario_evaluation(
     judge_max_tokens,
     temperature,
     repetitions,
+    scenario_input_mode="Text",
+    audio_manifest=None,
+    scenario_audio_files=None,
+    scenario_audio_folder="data/voice_samples",
+    scenario_voice_profile="A-EN",
+    selected_scenario_language="English",
+    repetition_mode="feedback_training",
 ):
     """Run reusable scripted multi-turn scenarios and judge full transcripts."""
     def empty_output(message: str, interactive: bool = True):
         return (
             message, None, None, None, None, None, None, None,
-            gr.update(interactive=interactive), None,
+            None, gr.update(interactive=interactive), None,
         )
 
     if scenario_source == "Upload files":
@@ -1097,13 +1226,62 @@ def run_scenario_evaluation(
 
             runner = EvalRunner(examinees, Evaluator())
             scenarios = runner.load_scenarios(scenario_paths)
+            wanted = SCENARIO_LANGUAGES.get(selected_scenario_language)
+            if wanted is None:
+                raise ValueError("Select a supported scenario language.")
+            wrong = [scenario.scenario_id for scenario in scenarios
+                     if _scenario_language_code(scenario) != wanted]
+            if wrong:
+                raise ValueError("Scenario language differs from the selected language: " + ", ".join(wrong))
+            ids = [scenario.scenario_id for scenario in scenarios]
+            if len(ids) != len(set(ids)):
+                raise ValueError("Select only one file per scenario in the chosen language.")
+            if scenario_input_mode == "Audio (ASR + text)":
+                profile = str(scenario_voice_profile or "").strip()
+                if not profile.upper().endswith("-" + wanted.upper()):
+                    raise ValueError("Voice profile must end in -" + wanted.upper() + " for the selected language.")
+            q.put(("log", f"Language  : {selected_scenario_language}"))
+            q.put(("log", "Protocol  : telecom_multiturn_v2"))
             q.put(("log", f"Scenarios : {[scenario.scenario_id for scenario in scenarios]}"))
+            q.put(("log", "Scenario versions: " + str({
+                scenario.scenario_id: scenario.version for scenario in scenarios
+            })))
+            q.put(("log", "Scenario splits: " + str({
+                scenario.scenario_id: scenario.split for scenario in scenarios
+            })))
+            q.put(("log", "Scenario SHA-256: " + str({
+                scenario.scenario_id: scenario.source_hash for scenario in scenarios
+            })))
             q.put(("log", f"Examinees : {[model.name for model in examinees]}"))
             q.put(("log", f"Judge     : {judge.name}"))
             q.put(("log", f"Repetitions: {repetitions}"))
+            mode_labels = {
+                "independent": "independent repetitions (history reset)",
+                "feedback_training": (
+                    "rubric-free feedback-guided practice (in-context coaching)"
+                ),
+                "history_stress": "conversation-history stress test (no evaluation feedback)",
+            }
+            if repetition_mode not in mode_labels:
+                raise ValueError("Select a valid repetition mode.")
+            q.put(("log", "Repetition mode: " + mode_labels[repetition_mode]))
             q.put(("log", f"Response generation: {response_generation_settings}"))
             q.put(("log", f"Judge generation: {judge_generation_settings}"))
-            q.put(("log", "Mode      : scripted text multi-turn"))
+            audio_context = None
+            if scenario_input_mode == "Audio (ASR + text)":
+                import inspect
+                if "audio_context" not in inspect.signature(runner.run_scenarios).parameters:
+                    raise RuntimeError("Replace src/llm_eval/runner.py with the supplied updated runner.py.")
+                from src.llm_eval.runner import ScenarioAudioContext
+                from src.llm_eval.transcriber import make_whisper_transcriber
+                audio_context = ScenarioAudioContext(
+                    scenarios, str(audio_manifest) if audio_manifest else None, scenario_audio_files,
+                    scenario_audio_folder, make_whisper_transcriber(),
+                    os.environ.get("OPENAI_TRANSCRIPTION_MODEL") or "whisper-1",
+                    voice_profile=scenario_voice_profile,
+                )
+                audio_context.prepare_all(lambda text: q.put(("log", text)))
+            q.put(("log", "Mode      : " + ("scripted audio / shared ASR + text" if audio_context else "scripted text multi-turn")))
             q.put(("log", "-" * 60))
 
             def on_progress(fraction: float, description: str):
@@ -1114,11 +1292,148 @@ def run_scenario_evaluation(
                 judge_model=judge,
                 repetitions=repetitions,
                 on_progress=on_progress,
+                carry_history_across_repetitions=(repetition_mode == "history_stress"),
+                repetition_mode=repetition_mode,
+                **({"audio_context": audio_context} if audio_context else {}),
             )
+            if repetition_mode == "feedback_training":
+                observed_policies = sorted(
+                    set(df.get("feedback_policy_version", pd.Series(dtype=str))
+                        .dropna().astype(str))
+                )
+                expected_policy = EvalRunner.FEEDBACK_POLICY_VERSION
+                if observed_policies != [expected_policy]:
+                    raise RuntimeError(
+                        "Learner-package policy verification failed. Expected "
+                        f"{expected_policy}, observed {observed_policies or 'none'}. "
+                        "Confirm that src/llm_eval/runner.py was deployed and restart "
+                        "the application."
+                    )
+                q.put(("log", f"Learner-package policy: {expected_policy} (verified)"))
+            df["repetition_history_mode"] = df["repetition_mode"].map({
+                "independent": "reset_each_repetition",
+                "feedback_training": "cumulative_learner_package_new_case",
+                "history_stress": "carried_across_repetitions",
+            })
+            if audio_context:
+                df = audio_context.annotate_results(df)
             os.makedirs(RESULTS_DIR, exist_ok=True)
             csv_path = os.path.join(RESULTS_DIR, "scenario_eval_results.csv")
             df.to_csv(csv_path, index=False)
-            q.put(("done", df, csv_path))
+
+            audit_runs = []
+            for _, row in df.sort_values(
+                ["model_name", "scenario_id", "repetition"], kind="stable"
+            ).iterrows():
+                def parse_json_field(name, default):
+                    raw = row.get(name)
+                    if raw is None or (isinstance(raw, float) and pd.isna(raw)):
+                        return default
+                    try:
+                        return json_module.loads(str(raw))
+                    except (TypeError, ValueError, json_module.JSONDecodeError):
+                        return default
+
+                audit_runs.append({
+                    "model": row.get("model_name"),
+                    "judge_model": row.get("judge_model"),
+                    "scenario_id": row.get("scenario_id"),
+                    "scenario_title": row.get("scenario_title"),
+                    "benchmark_protocol_version": row.get(
+                        "benchmark_protocol_version", "telecom_multiturn_v2"
+                    ),
+                    "scenario_version": row.get("scenario_version"),
+                    "scenario_family": row.get("scenario_family"),
+                    "scenario_split": row.get("scenario_split"),
+                    "scenario_variant_id": row.get("scenario_variant_id"),
+                    "scenario_source_hash": row.get("scenario_source_hash"),
+                    "judge_prompt_version": row.get("judge_prompt_version"),
+                    "critical_failure_rules": parse_json_field(
+                        "critical_failure_rules_json", []
+                    ),
+                    "repetition": int(row.get("repetition") or 0),
+                    "history_policy": row.get("history_policy", "legacy"),
+                    "repetition_mode": row.get("repetition_mode"),
+                    "reflection_enabled": bool(row.get("reflection_enabled", False)),
+                    "history_received": parse_json_field("history_received_json", []),
+                    "conversation_stack": parse_json_field("conversation_stack_json", []),
+                    "learner_package_received": parse_json_field(
+                        "learner_package_json", {}
+                    ),
+                    "branch_events": parse_json_field("branch_events_json", []),
+                    "final_state": parse_json_field("final_state_json", {}),
+                    "routing_responses": parse_json_field("routing_responses_json", []),
+                    "current_conversation": parse_json_field(
+                        "transcript_json", []
+                    ),
+                    "current_evaluation": {
+                        "evaluation_status": row.get("evaluation_status"),
+                        "goal_achieved": row.get("goal_achieved"),
+                        "goal_rationale": row.get("goal_rationale"),
+                        "strict_success": row.get("strict_success"),
+                        "terminal_state_valid": row.get("terminal_state_valid"),
+                        "checkpoint_completion": row.get("checkpoint_completion"),
+                        "checkpoint_quality": row.get("checkpoint_quality"),
+                        "critical_failure": row.get("critical_failure"),
+                        "critical_failure_type": row.get("critical_failure_type"),
+                        "checkpoint_results": parse_json_field(
+                            "checkpoint_results_json", []
+                        ),
+                        "checkpoint_verification_status": row.get(
+                            "checkpoint_verification_status"
+                        ),
+                        "checkpoint_evidence_warning_count": int(
+                            row.get("checkpoint_evidence_warning_count") or 0
+                        ),
+                        "checkpoint_disagreement_count": row.get(
+                            "checkpoint_disagreement_count"
+                        ),
+                        "checkpoint_verifier_response": row.get(
+                            "checkpoint_verifier_response"
+                        ),
+                        "judge_notes": row.get("judge_notes"),
+                    },
+                    "package_audit": ({
+                        "applicable": True,
+                        "policy_version": row.get(
+                            "learner_package_policy_version",
+                            row.get("feedback_policy_version"),
+                        ),
+                        "actual_prior_attempts": int(
+                            row.get("learner_package_attempt_count") or 0
+                        ),
+                        "expected_prior_attempts": int(
+                            row.get("expected_prior_feedback_count") or 0
+                        ),
+                        "chain_valid": int(
+                            row.get("learner_package_chain_valid") or 0
+                        ),
+                    } if repetition_mode == "feedback_training" else {
+                        "applicable": False,
+                        "reason": "No learner package is used in this repetition mode.",
+                    }),
+                })
+            audit_document = {
+                "schema_version": "3.0",
+                "benchmark_protocol_version": "telecom_multiturn_v2",
+                "purpose": (
+                    "Full conversations and the exact prior conversation history supplied to each repetition. "
+                    "Evaluations enter prompts only in evaluation-based feedback mode."
+                ),
+                "learner_package_policy_version": (
+                    EvalRunner.FEEDBACK_POLICY_VERSION
+                    if repetition_mode == "feedback_training" else None
+                ),
+                "runs": audit_runs,
+            }
+            audit_path = os.path.join(
+                RESULTS_DIR, "scenario_conversation_audit.json"
+            )
+            with open(audit_path, "w", encoding="utf-8") as audit_file:
+                json_module.dump(
+                    audit_document, audit_file, ensure_ascii=False, indent=2
+                )
+            q.put(("done", df, csv_path, audit_path))
         except Exception:
             q.put(("error", traceback.format_exc()))
 
@@ -1142,7 +1457,7 @@ def run_scenario_evaluation(
             log_lines.append(message)
             yield empty_output("\n".join(log_lines[-80:]), interactive=False)
         elif kind == "done":
-            _, df, csv_path = item
+            _, df, csv_path, audit_path = item
             if "evaluation_status" in df:
                 scored_mask = df["evaluation_status"] == "scored"
                 system_mask = df["evaluation_status"] == "system_error"
@@ -1189,8 +1504,9 @@ def run_scenario_evaluation(
                 _build_scenario_stability_summary(df),
                 _build_paired_model_comparisons(df),
                 csv_path,
+                audit_path,
                 gr.update(interactive=True),
-                research_statistics.checkpoint_summary_table(df),
+                (pd.DataFrame() if (df["evaluation_mode"] == "branch_state_text_multiturn").all() else research_statistics.checkpoint_summary_table(df[df["evaluation_mode"] != "branch_state_text_multiturn"])),
             )
             return
         elif kind == "error":
@@ -1714,7 +2030,7 @@ _ensure_claude_model_config()
 model_names    = _read_model_names()
 model_types    = _read_model_types()
 existing_files = _existing_datasets()
-existing_scenario_files = _existing_scenarios()
+existing_scenario_files = _scenarios_for_language("English")
 
 # Resolve audio for the initially selected existing dataset immediately.
 # Gradio does not fire .change() just because a Dropdown starts with a value.
@@ -2044,7 +2360,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                 """
                 ## Scripted multi-turn scenario evaluation
 
-                Run any CSV, JSON, or JSONL scenario that defines a sequence of
+                Scripted CSV/JSON/JSONL files define a sequence of
                 **user messages** and **expected assistant actions**. The assistant
                 receives the complete dialogue history, while a separately selected
                 judge scores the finished transcript.
@@ -2057,6 +2373,11 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
 
             with gr.Row(equal_height=True):
                 with gr.Column(scale=1):
+                    scenario_language = gr.Dropdown(
+                        choices=list(SCENARIO_LANGUAGES), value="English",
+                        label="Scenario language",
+                        info="Shows one language at a time. Uploaded files must match this selection.",
+                    )
                     scenario_source = gr.Radio(
                         choices=["Use existing files", "Upload files"],
                         value=("Use existing files" if existing_scenario_files else "Upload files"),
@@ -2073,7 +2394,7 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                             choices=existing_scenario_files,
                             value=existing_scenario_files,
                             label="Scenarios",
-                            info="Valid scenario files found under data/multi_turn/",
+                            info="Scenario files for the selected language, from data/multi_turn/",
                         )
 
                 with gr.Column(scale=1):
@@ -2091,6 +2412,33 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                         label="Judge model",
                         info="Must be a capable model that is not one of the examinees.",
                     )
+
+            scenario_input_mode = gr.Radio(
+                choices=["Text", "Audio (ASR + text)"], value="Text", label="Turn input mode"
+            )
+            with gr.Group(visible=False) as scenario_audio_group:
+                gr.Markdown(
+                    "**One recording per user turn.** Automatic names: "
+                    "`A-EN-multi-esim-01.m4a`, `A-EN-multi-router-01.m4a`, etc. "
+                    "The final number is the turn. Folders below the selected audio root are searched. "
+                    "A mapping CSV is optional for other naming conventions. "
+                    "All models use shared ASR + text with retained history, not native audio or live duplex."
+                )
+                audio_manifest = gr.File(label="Optional turn-to-audio mapping CSV", file_types=[".csv"], type="filepath")
+                scenario_audio_files = gr.File(label="Turn recordings", file_count="multiple", type="filepath",
+                    file_types=[".wav", ".mp3", ".m4a", ".ogg", ".flac", ".webm"])
+                scenario_audio_folder = gr.Textbox(label="Audio folder on this server (alternative to uploads)",
+                    value="data/voice_samples")
+                scenario_voice_profile = gr.Textbox(label="Voice profile", value="A-EN",
+                    info="Matches the filename prefix. Select one profile per benchmark run.")
+            scenario_language.change(
+                fn=_change_scenario_language, inputs=scenario_language,
+                outputs=[scenario_existing, scenario_voice_profile],
+            )
+            scenario_input_mode.change(
+                lambda mode: gr.update(visible=mode == "Audio (ASR + text)"),
+                inputs=scenario_input_mode, outputs=scenario_audio_group,
+            )
 
             scenario_source.change(
                 fn=lambda choice: (
@@ -2122,7 +2470,25 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                 )
                 scenario_repetitions = gr.Number(
                     value=3, precision=0, minimum=3, label="Repetitions",
-                    info="Repeated runs estimate stability; they are not independent scenarios.",
+                    info=(
+                        "Independent runs estimate stability. Learner-package attempts form a "
+                        "dependent learning sequence and are analysed as first-to-last change."
+                    ),
+                )
+                repetition_mode = gr.Radio(
+                    choices=[
+                        ("Independent repetitions", "independent"),
+                        ("Conversation-history stress test (no evaluation feedback)", "history_stress"),
+                        ("Feedback-guided practice (conversation + rubric-free coaching)", "feedback_training"),
+                    ],
+                    value="feedback_training",
+                    label="Repetition mode",
+                    info=(
+                        "Feedback-guided practice supplies prior conversations and rubric-free "
+                        "judge coaching before the next fresh attempt; it is in-context learning, "
+                        "not model-weight training. History stress carries conversations without "
+                        "scores. Independent repetitions always start with empty context."
+                    ),
                 )
 
             scenario_run_btn = gr.Button(
@@ -2133,8 +2499,11 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
             )
             gr.Markdown(
                 "Results are separated into **run validity**, **primary outcomes**, "
-                "and **diagnostic measures**. Behavioural scores use only validly "
-                "executed and judged runs; end-to-end success retains execution failures."
+                "and **diagnostic measures**. In sequential learner-package mode, primary outcomes "
+                "report the final attempt and the repeated-attempt table reports first-to-last "
+                "change, checkpoint retention, regression and acquisition. The raw completion "
+                "score may decrease; **best so far** is the monotonic descriptive envelope. "
+                "This is in-context adaptation, not model-weight training."
             )
             scenario_validity_results = gr.Dataframe(
                 label="1. Run validity", interactive=False, wrap=True
@@ -2152,9 +2521,9 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                     interactive=False,
                     wrap=True,
                 )
-            with gr.Accordion("5. Repeated-run stability", open=False):
+            with gr.Accordion("5. Repeated-attempt analysis", open=False):
                 scenario_stability_results = gr.Dataframe(
-                    label="Within-scenario stability",
+                    label="Stability or learner-package progress",
                     interactive=False,
                     wrap=True,
                 )
@@ -2184,6 +2553,10 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
             scenario_download = gr.File(
                 label="Export full scenario results (CSV)", interactive=False
             )
+            scenario_audit_download = gr.File(
+                label="Export conversations and learner packages (JSON)",
+                interactive=False,
+            )
 
             scenario_run_btn.click(
                 fn=run_scenario_evaluation,
@@ -2191,13 +2564,16 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
                     scenario_source, scenario_uploads, scenario_existing,
                     scenario_models, scenario_judge, scenario_max_tokens,
                     scenario_judge_max_tokens, scenario_temperature,
-                    scenario_repetitions,
+                    scenario_repetitions, scenario_input_mode, audio_manifest,
+                    scenario_audio_files, scenario_audio_folder, scenario_voice_profile,
+                    scenario_language,
+                    repetition_mode,
                 ],
                 outputs=[
                     scenario_log, scenario_validity_results, scenario_results,
                     scenario_run_results, scenario_dimension_results,
                     scenario_stability_results, scenario_comparison_results,
-                    scenario_download, scenario_run_btn,
+                    scenario_download, scenario_audit_download, scenario_run_btn,
                     scenario_checkpoint_summary,
                 ],
             )
@@ -2660,6 +3036,6 @@ with gr.Blocks(title="LLM Evaluation", theme=gr.themes.Soft(), css=APP_CSS) as d
 if __name__ == "__main__":
     demo.launch(
         server_name="0.0.0.0",
-        server_port=6006,
+        server_port=6008,
         share=False,
     )
